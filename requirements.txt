@@ -1,0 +1,2 @@
+# Optional dependencies only.
+# The MVP runs on Python standard library by default.

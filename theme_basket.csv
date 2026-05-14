@@ -1,0 +1,31 @@
+ticker,name,theme
+NVDA,NVIDIA,AI基础设施
+ANET,Arista Networks,AI基础设施
+MRVL,Marvell Technology,AI基础设施
+AMD,Advanced Micro Devices,半导体
+ASML,ASML,半导体
+AMAT,Applied Materials,半导体
+MSFT,Microsoft,软件
+ADBE,Adobe,软件
+TEAM,Atlassian,软件
+CRWD,CrowdStrike,网络安全
+PANW,Palo Alto Networks,网络安全
+ZS,Zscaler,网络安全
+AMZN,Amazon,消费互联网
+BKNG,Booking Holdings,消费互联网
+MELI,MercadoLibre,消费互联网
+AAPL,Apple,平台科技
+META,Meta Platforms,平台科技
+GOOGL,Alphabet,平台科技
+NFLX,Netflix,媒体娱乐
+TMUS,T-Mobile,通信
+VRTX,Vertex Pharmaceuticals,生物科技
+REGN,Regeneron Pharmaceuticals,生物科技
+ISRG,Intuitive Surgical,医疗器械
+DXCM,DexCom,医疗器械
+TSLA,Tesla,新能源车
+LIN,Linde,工业
+HON,Honeywell,工业
+CEG,Constellation Energy,电力公用
+COST,Costco,消费
+PEP,PepsiCo,防御消费

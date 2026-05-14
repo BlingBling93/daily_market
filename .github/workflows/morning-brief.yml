@@ -1,0 +1,56 @@
+name: Nasdaq Morning Brief
+
+on:
+  schedule:
+    # 08:55 Beijing time, daily. GitHub cron uses UTC.
+    - cron: "55 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate-and-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+      FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+      FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+      FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+      NODE_BIN: node
+      NODE_MODULES: ${{ github.workspace }}/node_modules
+      CHROME_PATH: auto
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install playwright
+          npx playwright install --with-deps chromium
+
+      - name: Generate and push Feishu image
+        run: |
+          python -B -m nasdaq_morning_brief --config config.example.yaml
+
+      - name: Upload generated card artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nasdaq-morning-brief
+          path: |
+            output/brief.html
+            output/brief.png
+            output/*.log
+          if-no-files-found: ignore

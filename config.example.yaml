@@ -1,0 +1,39 @@
+portfolio:
+  instrument: QQQ
+  current_allocation: 0.60
+  min_allocation: 0.20
+  max_allocation: 0.90
+  step_allocation: 0.05
+  risk_profile: balanced
+
+valuation:
+  trailing_pe: null
+  forward_pe: null
+  trailing_pe_band:
+    low: 18.0
+    high: 32.0
+  forward_pe_band:
+    low: 16.0
+    high: 28.0
+
+render:
+  output_dir: output
+  title: 纳指100晨报
+  node_bin: /Users/blingbili/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node
+  node_modules: /Users/blingbili/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules
+  chrome_path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+  viewport_width: 1100
+  viewport_height: 1600
+
+push:
+  wecom_webhook: null
+  feishu_webhook: null
+  feishu_secret: null
+  feishu_app_id: null
+  feishu_app_secret: null
+
+signals:
+  hot_temperature: 72
+  cold_temperature: 32
+  high_vxn: 24
+  low_vxn: 16
