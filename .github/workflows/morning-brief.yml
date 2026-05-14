@@ -12,6 +12,7 @@ jobs:
     timeout-minutes: 20
 
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
       FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
       FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
@@ -32,7 +33,14 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
+
+      - name: Check Feishu secrets
+        run: |
+          test -n "$FEISHU_WEBHOOK" || (echo "::error::FEISHU_WEBHOOK repository secret is missing"; exit 1)
+          test -n "$FEISHU_APP_ID" || (echo "::error::FEISHU_APP_ID repository secret is missing"; exit 1)
+          test -n "$FEISHU_APP_SECRET" || (echo "::error::FEISHU_APP_SECRET repository secret is missing"; exit 1)
+          echo "Feishu secrets are present."
 
       - name: Install Playwright
         run: |
@@ -42,7 +50,7 @@ jobs:
 
       - name: Generate and push Feishu image
         run: |
-          python -B -m nasdaq_morning_brief --config config.example.yaml
+          python -B -m nasdaq_morning_brief --config config.example.yaml --require-push
 
       - name: Upload generated card artifact
         if: always()

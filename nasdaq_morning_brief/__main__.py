@@ -39,6 +39,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--no-push", action="store_true", help="Generate HTML/PNG without pushing.")
     parser.add_argument(
+        "--require-push",
+        action="store_true",
+        help="Exit with an error if no image push succeeds.",
+    )
+    parser.add_argument(
         "--send-latest-image",
         default=None,
         help="Skip data generation and send an existing PNG image to Feishu.",
@@ -124,14 +129,15 @@ def main() -> int:
         print("Push skipped: yes")
         return 0
 
-    feishu_pushed = push_to_feishu(
-        config.push.feishu_webhook,
-        config.push.feishu_secret,
-        brief,
-        image_path=png_path,
-        app_id=config.push.feishu_app_id,
-        app_secret=config.push.feishu_app_secret,
-    )
+    feishu_pushed = False
+    if config.push.feishu_webhook:
+        feishu_pushed = push_image_to_feishu(
+            config.push.feishu_webhook,
+            config.push.feishu_secret,
+            png_path,
+            config.push.feishu_app_id,
+            config.push.feishu_app_secret,
+        )
     wecom_pushed = False
     if not feishu_pushed:
         wecom_pushed = push_to_wecom(config.push.wecom_webhook, brief, image_path=png_path)
@@ -139,6 +145,8 @@ def main() -> int:
     print(f"PNG brief written to {png_path}")
     print(f"Feishu pushed: {'yes' if feishu_pushed else 'no'}")
     print(f"WeCom pushed: {'yes' if wecom_pushed else 'no'}")
+    if args.require_push and not (feishu_pushed or wecom_pushed):
+        raise SystemExit("Push required but no Feishu/WeCom push succeeded. Check repository secrets.")
     return 0
 
 
