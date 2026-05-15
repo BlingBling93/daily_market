@@ -64,14 +64,14 @@ Set these repository secrets before enabling it:
 - `FEISHU_SECRET` if your bot uses signature verification
 
 GitHub's native `schedule` trigger can be delayed or skipped, so this project uses
-an external cron service to call the workflow manually through the GitHub API.
+an external cron service to trigger the workflow through the GitHub API.
 
 Recommended external cron setup:
 
 - Timezone: `Asia/Shanghai`
 - Schedule: every day at `08:50`
 - Method: `POST`
-- URL: `https://api.github.com/repos/BlingBling93/daily_market/actions/workflows/morning-brief.yml/dispatches`
+- URL: `https://api.github.com/repos/BlingBling93/daily_market/dispatches`
 - Headers:
   - `Accept: application/vnd.github+json`
   - `Authorization: Bearer <YOUR_GITHUB_PAT>`
@@ -80,8 +80,8 @@ Recommended external cron setup:
 - Body:
 
   ```json
-  {"ref":"main"}
+  {"event_type":"morning-brief"}
   ```
 
 Create `<YOUR_GITHUB_PAT>` as a GitHub fine-grained personal access token scoped
-only to this repository, with `Actions: Read and write` permission.
+only to this repository, with `Contents: Read and write` permission.

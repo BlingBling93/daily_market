@@ -1,8 +1,10 @@
 name: Nasdaq Morning Brief
 
 on:
-  # Triggered by an external cron service through the GitHub workflow_dispatch API.
+  # Triggered manually or by an external cron service through the GitHub API.
   workflow_dispatch:
+  repository_dispatch:
+    types: [morning-brief]
 
 jobs:
   generate-and-push:
