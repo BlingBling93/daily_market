@@ -63,4 +63,25 @@ Set these repository secrets before enabling it:
 - `FEISHU_APP_SECRET`
 - `FEISHU_SECRET` if your bot uses signature verification
 
-The schedule runs at `00:55 UTC`, which is `08:55 Asia/Shanghai`.
+GitHub's native `schedule` trigger can be delayed or skipped, so this project uses
+an external cron service to call the workflow manually through the GitHub API.
+
+Recommended external cron setup:
+
+- Timezone: `Asia/Shanghai`
+- Schedule: every day at `08:50`
+- Method: `POST`
+- URL: `https://api.github.com/repos/BlingBling93/daily_market/actions/workflows/morning-brief.yml/dispatches`
+- Headers:
+  - `Accept: application/vnd.github+json`
+  - `Authorization: Bearer <YOUR_GITHUB_PAT>`
+  - `X-GitHub-Api-Version: 2022-11-28`
+  - `Content-Type: application/json`
+- Body:
+
+  ```json
+  {"ref":"main"}
+  ```
+
+Create `<YOUR_GITHUB_PAT>` as a GitHub fine-grained personal access token scoped
+only to this repository, with `Actions: Read and write` permission.

@@ -1,9 +1,7 @@
 name: Nasdaq Morning Brief
 
 on:
-  schedule:
-    # Temporary schedule test: 15:30 Beijing time, daily. GitHub cron uses UTC.
-    - cron: "30 7 * * *"
+  # Triggered by an external cron service through the GitHub workflow_dispatch API.
   workflow_dispatch:
 
 jobs:
