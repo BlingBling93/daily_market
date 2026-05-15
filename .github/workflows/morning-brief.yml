@@ -2,8 +2,9 @@ name: Nasdaq Morning Brief
 
 on:
   schedule:
-    # 08:55 Beijing time, daily. GitHub cron uses UTC.
-    - cron: "55 0 * * *"
+    # 08:47 Beijing time, daily. GitHub cron uses UTC.
+    # Avoid crowded top-of-hour slots, where scheduled runs may be delayed or dropped.
+    - cron: "47 0 * * *"
   workflow_dispatch:
 
 jobs:
