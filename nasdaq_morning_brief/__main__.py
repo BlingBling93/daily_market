@@ -7,6 +7,7 @@ from subprocess import CalledProcessError
 from urllib.error import HTTPError, URLError
 
 from .advice import generate_advice
+from .ashare import build_ashare_snapshot
 from .config import load_config
 from .data import (
     fetch_auto_valuation,
@@ -22,9 +23,9 @@ from .indicators import (
     rank_theme_heat,
     summarize_valuation,
 )
-from .feishu import push_image_to_feishu, push_to_feishu
+from .feishu import push_image_to_feishu, push_images_to_feishu
 from .models import Brief
-from .render import write_html, write_png
+from .render import write_ashare_html, write_html, write_png
 from .wechat import push_to_wecom
 
 
@@ -72,6 +73,7 @@ def build_brief(config_path: str, market_days_ago: int = 0) -> Brief:
     temperature = compute_temperature(qqq, vxn, vix, valuation, config.signals)
     cross_asset_notes = build_cross_asset_notes(gold, us10y, oil)
     advice = generate_advice(config.portfolio, qqq, vxn, temperature, valuation)
+    ashare = build_ashare_snapshot(config.ashare, market_days_ago=market_days_ago)
     observation_points = build_observation_points(
         advice.triggers,
         temperature.rationale,
@@ -94,6 +96,7 @@ def build_brief(config_path: str, market_days_ago: int = 0) -> Brief:
         hot_themes=hot_themes,
         cooling_themes=cooling_themes,
         advice=advice,
+        ashare=ashare,
     )
 
 
@@ -102,14 +105,23 @@ def main() -> int:
     config = load_config(args.config)
 
     if args.send_latest_image:
-        image_path = Path(args.send_latest_image)
-        pushed = push_image_to_feishu(
-            config.push.feishu_webhook,
-            config.push.feishu_secret,
-            image_path,
-            config.push.feishu_app_id,
-            config.push.feishu_app_secret,
-        )
+        image_paths = [Path(item.strip()) for item in args.send_latest_image.split(",") if item.strip()]
+        if len(image_paths) > 1:
+            pushed = push_images_to_feishu(
+                config.push.feishu_webhook,
+                config.push.feishu_secret,
+                image_paths,
+                config.push.feishu_app_id,
+                config.push.feishu_app_secret,
+            )
+        else:
+            pushed = push_image_to_feishu(
+                config.push.feishu_webhook,
+                config.push.feishu_secret,
+                image_paths[0],
+                config.push.feishu_app_id,
+                config.push.feishu_app_secret,
+            )
         print(f"Feishu image pushed: {'yes' if pushed else 'no'}")
         return 0
 
@@ -119,22 +131,30 @@ def main() -> int:
         raise SystemExit(f"Failed to build brief from live market data: {exc}")
     output_path = write_html(brief, config)
     try:
-        png_path = write_png(output_path, config)
+        png_path = write_png(output_path, config, "brief.png")
+        ashare_output_path = write_ashare_html(brief, config)
+        ashare_png_path = write_png(ashare_output_path, config, "ashare.png") if ashare_output_path else None
     except CalledProcessError as exc:
         raise SystemExit(f"Failed to render PNG screenshot: {exc}")
 
     if args.no_push:
         print(f"HTML brief written to {output_path}")
         print(f"PNG brief written to {png_path}")
+        if ashare_output_path and ashare_png_path:
+            print(f"A-share HTML written to {ashare_output_path}")
+            print(f"A-share PNG written to {ashare_png_path}")
         print("Push skipped: yes")
         return 0
 
     feishu_pushed = False
     if config.push.feishu_webhook:
-        feishu_pushed = push_image_to_feishu(
+        image_paths = [png_path]
+        if ashare_png_path:
+            image_paths.append(ashare_png_path)
+        feishu_pushed = push_images_to_feishu(
             config.push.feishu_webhook,
             config.push.feishu_secret,
-            png_path,
+            image_paths,
             config.push.feishu_app_id,
             config.push.feishu_app_secret,
         )
@@ -143,6 +163,9 @@ def main() -> int:
         wecom_pushed = push_to_wecom(config.push.wecom_webhook, brief, image_path=png_path)
     print(f"HTML brief written to {output_path}")
     print(f"PNG brief written to {png_path}")
+    if ashare_output_path and ashare_png_path:
+        print(f"A-share HTML written to {ashare_output_path}")
+        print(f"A-share PNG written to {ashare_png_path}")
     print(f"Feishu pushed: {'yes' if feishu_pushed else 'no'}")
     print(f"WeCom pushed: {'yes' if wecom_pushed else 'no'}")
     if args.require_push and not (feishu_pushed or wecom_pushed):

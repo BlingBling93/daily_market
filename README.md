@@ -7,6 +7,7 @@ Lightweight daily Nasdaq 100 brief generator for a single passive index position
 - Pulls market data for `QQQ`, `^NDX`, `^VIX`, and `^VXN`
 - Estimates short-term market temperature from price trend and volatility
 - Ranks Nasdaq 100 sectors / themes by short-term heat
+- Scores a local A-share watchlist for active stock research candidates
 - Produces an HTML card ready for browser screenshot or automation capture
 - Sends the card summary to WeCom webhook when configured
 - Sends the card summary to Feishu webhook when configured
@@ -45,12 +46,27 @@ Lightweight daily Nasdaq 100 brief generator for a single passive index position
 - manual valuation override for P/E metrics
 - webhook for WeCom bot push
 - webhook for Feishu bot push
+- A-share active allocation target and watchlist path
 - output directory
 
 ## Notes
 
 - Index valuation sources are uneven on free endpoints, so the first version supports manual override in config.
 - Theme heat is computed from a maintained Nasdaq-oriented theme basket plus 1d / 5d / 20d returns.
+- A-share ideas are research candidates only. Edit `ashare_watchlist.csv` to update your universe, fundamentals, catalysts, and risk flags.
+- The US sleeve remains passive-index oriented; the A-share module does not recommend US single stocks.
+
+## A-share active module
+
+The A-share module is intentionally local-first:
+
+- `ashare_watchlist.csv` stores the initial candidate universe and qualitative notes
+- Yahoo symbols such as `600519.SS` and `300750.SZ` are used only for price momentum
+- Scores combine fundamentals, valuation percentile, catalysts, momentum, and risk/governance
+- Ratings are `S/A/B/C/D/X`, where `S/A` are candidates, `B` is waitlist, and `X` is avoid
+
+This keeps the daily card useful before connecting a paid source such as Wind,
+Choice, iFinD, Tushare Pro, JQData, or Ricequant.
 
 ## GitHub Actions
 

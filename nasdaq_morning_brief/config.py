@@ -59,12 +59,29 @@ class SignalConfig:
 
 
 @dataclass
+class AShareConfig:
+    enabled: bool
+    watchlist_path: Path
+    theme_etf_path: Path
+    observation_state_path: Path
+    theme_heat_history_path: Path
+    top_n: int
+    direction_top_n: int
+    current_allocation: float
+    target_allocation: float
+    max_single_position: float
+    max_industry_allocation: float
+    min_cash: float
+
+
+@dataclass
 class AppConfig:
     portfolio: PortfolioConfig
     valuation: ValuationConfig
     render: RenderConfig
     push: PushConfig
     signals: SignalConfig
+    ashare: AShareConfig
 
 
 def _load_yaml(path: Path) -> Dict[str, Any]:
@@ -146,6 +163,7 @@ def load_config(path: str) -> AppConfig:
     render = raw["render"]
     push = raw.get("push", {})
     signals = raw["signals"]
+    ashare = raw.get("ashare", {})
 
     return AppConfig(
         portfolio=PortfolioConfig(**portfolio),
@@ -172,4 +190,18 @@ def load_config(path: str) -> AppConfig:
             feishu_app_secret=_env("FEISHU_APP_SECRET", push.get("feishu_app_secret")),
         ),
         signals=SignalConfig(**signals),
+        ashare=AShareConfig(
+            enabled=bool(ashare.get("enabled", False)),
+            watchlist_path=Path(ashare.get("watchlist_path", "ashare_watchlist.csv")),
+            theme_etf_path=Path(ashare.get("theme_etf_path", "ashare_theme_etf.csv")),
+            observation_state_path=Path(ashare.get("observation_state_path", "ashare_observation_state.json")),
+            theme_heat_history_path=Path(ashare.get("theme_heat_history_path", "ashare_theme_heat_history.csv")),
+            top_n=int(ashare.get("top_n", 5)),
+            direction_top_n=int(ashare.get("direction_top_n", 3)),
+            current_allocation=float(ashare.get("current_allocation", 0.0)),
+            target_allocation=float(ashare.get("target_allocation", 0.0)),
+            max_single_position=float(ashare.get("max_single_position", 0.05)),
+            max_industry_allocation=float(ashare.get("max_industry_allocation", 0.25)),
+            min_cash=float(ashare.get("min_cash", 0.10)),
+        ),
     )

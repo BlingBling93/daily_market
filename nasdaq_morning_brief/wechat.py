@@ -14,6 +14,12 @@ def build_text_summary(brief: Brief) -> str:
     hot = ", ".join(item.theme for item in brief.hot_themes)
     us10y_value = brief.us10y.price / 10.0 if brief.us10y.price > 20 else brief.us10y.price
     cross_asset_summary = "；".join(brief.cross_asset_notes[:2])
+    ashare_summary = ""
+    if brief.ashare and brief.ashare.enabled and brief.ashare.top_ideas:
+        ideas = "；".join(
+            f"{item.name}{item.rating}({item.action})" for item in brief.ashare.top_ideas[:3]
+        )
+        ashare_summary = f"\nA股候选：{ideas}\nA股提示：{brief.ashare.market_note}"
     return (
         f"Nasdaq 100晨报 {brief.as_of.isoformat()}\n"
         f"市场温度：{brief.temperature.score}（{brief.temperature.label}）\n"
@@ -25,6 +31,7 @@ def build_text_summary(brief: Brief) -> str:
         f"热度方向：{hot}\n"
         f"跨资产结论：{cross_asset_summary}\n"
         f"建议：{brief.advice.summary}"
+        f"{ashare_summary}"
     )
 
 

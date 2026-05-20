@@ -3,3 +3,6 @@ output/
 .pycache/
 __pycache__/
 *.pyc
+ashare_lowfreq_cache.json
+ashare_observation_state.json
+ashare_theme_heat_history.csv

@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import os
 import subprocess
-from datetime import datetime
+from datetime import date, datetime
+from html import escape
 from pathlib import Path
 
 from .config import AppConfig
-from .models import Brief, QuoteSnapshot, ThemeHeat
+from .models import AShareDirection, AShareIdea, AShareSnapshot, Brief, QuoteSnapshot, ThemeHeat
 
 
 def _fmt_pct(value: float) -> str:
@@ -86,6 +87,140 @@ def _theme_line(theme: ThemeHeat) -> str:
         f"<strong class=\"{_move_class(theme.avg_return_5d)}\">{_fmt_pct(theme.avg_return_5d)}</strong>"
         f"<small>1日 {_fmt_pct(theme.avg_day_change_pct)} · 上涨占比 {theme.winners_ratio:.0%}</small></li>"
     )
+
+
+def _fmt_optional_pct(value: float | None) -> str:
+    if value is None:
+        return "暂无"
+    return _fmt_pct(value)
+
+
+def _fmt_optional_price(value: float | None) -> str:
+    if value is None:
+        return "暂无"
+    return _fmt_price(value)
+
+
+def _fmt_optional_ratio(value: float | None) -> str:
+    if value is None:
+        return "暂无"
+    return f"{value:.1f}x"
+
+
+def _idea_class(rating: str) -> str:
+    if rating in {"S", "A"}:
+        return "up"
+    if rating in {"D", "X"}:
+        return "down"
+    return "flat"
+
+
+def _action_class(action: str) -> str:
+    if action in {"核心候选", "可建仓"}:
+        return "action-buy"
+    if action in {"强关注", "轻仓试探"}:
+        return "action-watch"
+    if action in {"减仓/回避", "回避", "不追高"}:
+        return "action-avoid"
+    return "action-hold"
+
+
+def _direction_class(action: str) -> str:
+    if action == "重点跟踪":
+        return "direction-open"
+    if action == "观察":
+        return "direction-watch"
+    if action == "暂缓":
+        return "direction-avoid"
+    return "direction-track"
+
+
+def _etf_action_class(action: str) -> str:
+    if action == "可小幅加仓":
+        return "etf-buy"
+    if action in {"持有观察", "等回调"}:
+        return "etf-watch"
+    if action in {"减仓降温", "暂不配置"}:
+        return "etf-avoid"
+    return "etf-hold"
+
+
+def _ashare_direction_line(direction: AShareDirection) -> str:
+    return f"""
+      <li class="{_direction_class(direction.action)}">
+        <div class="direction-head">
+          <strong>{escape(direction.name)}</strong>
+          <span>{escape(direction.action)}</span>
+        </div>
+        <div class="direction-score">{direction.score}</div>
+        <div class="etf-action {_etf_action_class(direction.etf_action)}">ETF {escape(direction.etf_action)}</div>
+        <p>{escape(direction.rationale)}</p>
+        <div class="direction-metrics">
+          <span>20日 {_fmt_optional_pct(direction.return_20d)}</span>
+          <span>成交 {_fmt_optional_ratio(direction.volume_ratio)}</span>
+          <span>回撤 {_fmt_optional_pct(direction.drawdown_60d_pct)}</span>
+        </div>
+        <small>{escape(direction.proxy_name)} {escape(direction.proxy_ticker)} · {direction.member_count} 只 · 代表 {escape(direction.top_stock)}</small>
+      </li>
+    """
+
+
+def _ashare_idea_line(idea: AShareIdea) -> str:
+    return f"""
+      <li>
+        <div class="idea-main">
+          <span class="rating {_idea_class(idea.rating)}">{escape(idea.rating)}</span>
+          <div>
+            <strong>{escape(idea.name)} <small>{escape(idea.ticker)}</small></strong>
+            <em>{escape(idea.list_type)} · {escape(idea.theme)} · {escape(idea.style)}</em>
+          </div>
+          <b>{idea.score}</b>
+        </div>
+        <p>{escape(idea.thesis)}</p>
+        <div class="idea-meta">
+          <span class="action-pill {_action_class(idea.action)}">动作 {escape(idea.action)}</span>
+          <span class="pressure-pill">{escape(idea.pressure_label)}</span>
+          <span>现价 {_fmt_optional_price(idea.price)}</span>
+          <span>20日 {_fmt_optional_pct(idea.return_20d)}</span>
+        </div>
+        <small class="idea-risk">催化：{escape(idea.catalysts)}；失效：{escape(idea.invalidation or idea.risks)}；{escape(idea.data_note)}</small>
+      </li>
+    """
+
+
+def _ashare_table_row(idea: AShareIdea) -> str:
+    return f"""
+      <tr>
+        <td>
+          <div class="stock-name">{escape(idea.name)} <small>{escape(idea.ticker)}</small></div>
+          <div class="stock-meta">{escape(idea.list_type)} · {escape(idea.theme)} · {escape(idea.style)}</div>
+        </td>
+        <td><span class="rating {_idea_class(idea.rating)}">{escape(idea.rating)}</span></td>
+        <td class="score">{idea.score}</td>
+        <td>{_fmt_optional_price(idea.price)}</td>
+        <td><span class="table-action {_action_class(idea.action)}">{escape(idea.action)}</span></td>
+        <td>{idea.current_weight:.1%}</td>
+        <td>{idea.suggested_weight:.1%}</td>
+        <td>{_fmt_optional_pct(idea.return_20d)}</td>
+      </tr>
+    """
+
+
+def _tracking_row(idea: AShareIdea) -> str:
+    return f"""
+      <tr>
+        <td>
+          <div class="stock-name">{escape(idea.name)} <small>{escape(idea.ticker)}</small></div>
+          <div class="stock-meta">{escape(idea.theme)} · {escape(idea.style)}</div>
+        </td>
+        <td><span class="rating {_idea_class(idea.rating)}">{escape(idea.rating)}</span></td>
+        <td class="score">{idea.score}</td>
+        <td>{_fmt_optional_price(idea.price)}</td>
+        <td><span class="table-action {_action_class(idea.action)}">{escape(idea.action)}</span></td>
+        <td>{escape(idea.pressure_label)}</td>
+        <td>{_fmt_optional_pct(idea.return_20d)}</td>
+      </tr>
+    """
 
 
 def _momentum_width(value: float) -> float:
@@ -589,6 +724,490 @@ def build_html(brief: Brief, config: AppConfig) -> str:
 """
 
 
+def build_ashare_html(ashare: AShareSnapshot, config: AppConfig, as_of: str) -> str:
+    ideas = ashare.top_ideas if ashare.enabled else []
+    directions = ashare.directions[:3] if ashare.enabled else []
+    direction_html = "".join(_ashare_direction_line(item) for item in directions)
+    idea_html = "".join(_ashare_idea_line(item) for item in ideas)
+    retained_html = "".join(_tracking_row(item) for item in ashare.retained_ideas)
+    if not retained_html:
+        retained_html = '<tr><td colspan="7" class="empty-row">暂无保留观察标的</td></tr>'
+    long_term_html = "".join(_tracking_row(item) for item in ashare.long_term_ideas)
+    if not long_term_html:
+        long_term_html = '<tr><td colspan="7" class="empty-row">暂无长期追踪标的</td></tr>'
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>A股主动候选</title>
+  <style>
+    * {{ box-sizing: border-box; }}
+    body {{
+      margin: 0;
+      background: #f4f2ed;
+      color: #11151c;
+      font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    }}
+    .card {{
+      width: 960px;
+      margin: 0 auto;
+      padding: 34px 38px 30px;
+      background:
+        linear-gradient(135deg, rgba(194, 70, 62, 0.09), transparent 34%),
+        linear-gradient(180deg, #fffdf8 0%, #f1f2eb 100%);
+    }}
+    .topbar {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }}
+    .label {{
+      display: inline-flex;
+      padding: 9px 20px;
+      border-radius: 999px;
+      background: #11151c;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }}
+    .date-pill {{
+      padding: 9px 22px;
+      border: 1px solid #d2d0c9;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      color: #555d68;
+      font-size: 16px;
+    }}
+    h1 {{
+      margin: 8px 0 10px;
+      font-size: 48px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }}
+    .subtitle {{
+      margin: 0 0 22px;
+      color: #68707a;
+      font-size: 16px;
+      line-height: 1.42;
+      font-weight: 700;
+    }}
+    .summary {{
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }}
+    .summary-box {{
+      min-height: 96px;
+      padding: 14px;
+      border: 1px solid #ddd9cf;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
+    }}
+    .summary-box span {{
+      display: block;
+      color: #68707a;
+      font-size: 13px;
+      font-weight: 800;
+    }}
+    .summary-box strong {{
+      display: block;
+      margin-top: 7px;
+      font-size: 20px;
+      line-height: 1.22;
+    }}
+    .summary-box.note strong {{
+      font-size: 18px;
+    }}
+    .direction-list {{
+      margin: 0 0 18px;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }}
+    .direction-list li {{
+      min-height: 166px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #ddd9cf;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 5px 18px rgba(24, 28, 34, 0.04);
+    }}
+    .direction-head {{
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }}
+    .direction-head strong {{
+      font-size: 19px;
+      line-height: 1.15;
+    }}
+    .direction-head span {{
+      display: inline-flex;
+      justify-content: center;
+      min-width: 54px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+    }}
+    .direction-score {{
+      margin-top: 8px;
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 900;
+    }}
+    .etf-action {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 9px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+    }}
+    .etf-buy {{
+      color: #0f7a58;
+      background: rgba(22, 131, 95, 0.15);
+      border: 1px solid rgba(22, 131, 95, 0.34);
+    }}
+    .etf-watch {{
+      color: #9b6b00;
+      background: rgba(214, 170, 42, 0.20);
+      border: 1px solid rgba(214, 170, 42, 0.42);
+    }}
+    .etf-hold {{
+      color: #415064;
+      background: rgba(104, 112, 122, 0.15);
+      border: 1px solid rgba(104, 112, 122, 0.30);
+    }}
+    .etf-avoid {{
+      color: #a8324f;
+      background: rgba(182, 61, 91, 0.15);
+      border: 1px solid rgba(182, 61, 91, 0.34);
+    }}
+    .direction-list p {{
+      margin: 8px 0 0;
+      color: #29313b;
+      font-size: 13px;
+      line-height: 1.34;
+      min-height: 36px;
+    }}
+    .direction-metrics {{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 9px;
+    }}
+    .direction-metrics span {{
+      padding: 6px 4px;
+      border-radius: 7px;
+      background: #f2f1ec;
+      color: #4c5560;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }}
+    .direction-list small {{
+      display: block;
+      margin-top: 8px;
+      color: #68707a;
+      font-size: 12px;
+      font-weight: 800;
+    }}
+    .direction-open .direction-head span {{
+      color: #0f7a58;
+      background: rgba(22, 131, 95, 0.15);
+      border: 1px solid rgba(22, 131, 95, 0.34);
+    }}
+    .direction-watch .direction-head span {{
+      color: #9b6b00;
+      background: rgba(214, 170, 42, 0.20);
+      border: 1px solid rgba(214, 170, 42, 0.42);
+    }}
+    .direction-track .direction-head span {{
+      color: #415064;
+      background: rgba(104, 112, 122, 0.15);
+      border: 1px solid rgba(104, 112, 122, 0.30);
+    }}
+    .direction-avoid .direction-head span {{
+      color: #a8324f;
+      background: rgba(182, 61, 91, 0.15);
+      border: 1px solid rgba(182, 61, 91, 0.34);
+    }}
+    .idea-list {{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }}
+    .section-title {{
+      margin: 0 0 12px;
+      font-size: 20px;
+      letter-spacing: 0;
+    }}
+    .idea-list li {{
+      min-height: 174px;
+      padding: 15px;
+      border: 1px solid #ddd9cf;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 5px 18px rgba(24, 28, 34, 0.05);
+    }}
+    .idea-main {{
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }}
+    .rating {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      font-weight: 900;
+      background: rgba(255, 255, 255, 0.78);
+    }}
+    .rating.up {{
+      color: #0f7a58;
+      background: rgba(22, 131, 95, 0.14);
+    }}
+    .rating.down {{
+      color: #a8324f;
+      background: rgba(182, 61, 91, 0.14);
+    }}
+    .rating.flat {{
+      color: #48515d;
+      background: rgba(104, 112, 122, 0.14);
+    }}
+    .up {{ color: #16835f; }}
+    .down {{ color: #b63d5b; }}
+    .flat {{ color: #6d7480; }}
+    .idea-main strong {{
+      display: block;
+      font-size: 18px;
+      line-height: 1.1;
+    }}
+    .idea-main small, .stock-name small {{
+      color: #68707a;
+      font-size: 12px;
+    }}
+    .idea-main em {{
+      display: block;
+      margin-top: 4px;
+      color: #68707a;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 800;
+    }}
+    .idea-main b {{
+      font-size: 25px;
+    }}
+    .idea-list p {{
+      margin: 10px 0 0;
+      color: #29313b;
+      font-size: 13px;
+      line-height: 1.38;
+      min-height: 38px;
+    }}
+    .idea-meta {{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }}
+    .idea-meta span {{
+      padding: 6px 5px;
+      border-radius: 7px;
+      background: #f2f1ec;
+      color: #4c5560;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }}
+    .idea-meta .action-pill,
+    .idea-meta .pressure-pill,
+    .table-action {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      border-radius: 999px;
+      font-weight: 900;
+    }}
+    .idea-meta .pressure-pill {{
+      color: #174c86;
+      background: rgba(42, 117, 196, 0.14);
+      border: 1px solid rgba(42, 117, 196, 0.30);
+    }}
+    .idea-meta .action-buy,
+    .table-action.action-buy {{
+      color: #0f7a58;
+      background: rgba(22, 131, 95, 0.15);
+      border: 1px solid rgba(22, 131, 95, 0.32);
+    }}
+    .idea-meta .action-watch,
+    .table-action.action-watch {{
+      color: #9b6b00;
+      background: rgba(214, 170, 42, 0.20);
+      border: 1px solid rgba(214, 170, 42, 0.42);
+    }}
+    .idea-meta .action-hold,
+    .table-action.action-hold {{
+      color: #415064;
+      background: rgba(104, 112, 122, 0.15);
+      border: 1px solid rgba(104, 112, 122, 0.30);
+    }}
+    .idea-meta .action-avoid,
+    .table-action.action-avoid {{
+      color: #a8324f;
+      background: rgba(182, 61, 91, 0.15);
+      border: 1px solid rgba(182, 61, 91, 0.34);
+    }}
+    .idea-risk {{
+      display: block;
+      margin-top: 9px;
+      color: #68707a;
+      font-size: 12px;
+      line-height: 1.35;
+    }}
+    .table-card {{
+      margin-top: 18px;
+      padding: 17px 18px 16px;
+      border: 1px solid #ddd9cf;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.82);
+    }}
+    h2 {{
+      margin: 0 0 12px;
+      font-size: 20px;
+      letter-spacing: 0;
+    }}
+    table {{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }}
+    th {{
+      padding: 8px 9px;
+      color: #68707a;
+      text-align: left;
+      border-bottom: 2px solid #dedbd2;
+      font-weight: 900;
+    }}
+    td {{
+      padding: 9px;
+      border-bottom: 1px solid #e6e3da;
+      font-weight: 800;
+      vertical-align: middle;
+    }}
+    tr:last-child td {{ border-bottom: none; }}
+    .stock-name {{
+      font-size: 15px;
+      font-weight: 900;
+    }}
+    .stock-meta {{
+      margin-top: 2px;
+      color: #68707a;
+      font-size: 12px;
+    }}
+    .score {{
+      font-size: 20px;
+      font-weight: 900;
+    }}
+    .empty-row {{
+      padding: 18px 9px;
+      color: #68707a;
+      text-align: center;
+      font-weight: 900;
+    }}
+    .footer {{
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      color: #7c838b;
+      font-size: 12px;
+    }}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="topbar">
+      <div class="label">A-SHARE ACTIVE IDEAS</div>
+      <div class="date-pill">{escape(as_of)} / 生成 {datetime.now().strftime("%H:%M")}</div>
+    </div>
+    <h1>A股主动候选观察</h1>
+    <p class="subtitle">强方向自动召回候选并深筛，只做研究排序和仓位提示；美股仍保持被动指数基金框架。</p>
+
+    <div class="summary">
+      <div class="summary-box note"><span>今日主线</span><strong>{escape(ashare.market_note)}</strong></div>
+      <div class="summary-box"><span>候选池</span><strong>{ashare.watchlist_count} 只</strong></div>
+    </div>
+
+    <ul class="direction-list">{direction_html}</ul>
+
+    <h2 class="section-title">今日推荐</h2>
+    <ul class="idea-list">{idea_html}</ul>
+
+    <section class="table-card">
+      <h2>保留观察</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>股票</th>
+            <th>评级</th>
+            <th>分数</th>
+            <th>现价</th>
+            <th>动作</th>
+            <th>资金</th>
+            <th>20日</th>
+          </tr>
+        </thead>
+        <tbody>{retained_html}</tbody>
+      </table>
+    </section>
+
+    <section class="table-card">
+      <h2>长期追踪</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>股票</th>
+            <th>评级</th>
+            <th>分数</th>
+            <th>现价</th>
+            <th>动作</th>
+            <th>资金</th>
+            <th>20日</th>
+          </tr>
+        </thead>
+        <tbody>{long_term_html}</tbody>
+      </table>
+    </section>
+
+    <div class="footer">
+      <span>Data: 东方财富 / 新浪 quote & kline · AKShare 财务/估值/预测 · 东方财富资金流</span>
+      <span>仅供研究参考，不构成投资建议</span>
+    </div>
+  </div>
+</body>
+</html>
+"""
+
+
 def write_html(brief: Brief, config: AppConfig) -> Path:
     config.render.output_dir.mkdir(parents=True, exist_ok=True)
     output_path = config.render.output_dir / "brief.html"
@@ -596,8 +1215,17 @@ def write_html(brief: Brief, config: AppConfig) -> Path:
     return output_path
 
 
-def write_png(html_path: Path, config: AppConfig) -> Path:
-    png_path = config.render.output_dir / "brief.png"
+def write_ashare_html(brief: Brief, config: AppConfig) -> Path | None:
+    if brief.ashare is None or not brief.ashare.enabled:
+        return None
+    config.render.output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = config.render.output_dir / "ashare.html"
+    output_path.write_text(build_ashare_html(brief.ashare, config, date.today().isoformat()), encoding="utf-8")
+    return output_path
+
+
+def write_png(html_path: Path, config: AppConfig, filename: str = "brief.png") -> Path:
+    png_path = config.render.output_dir / filename
     script_path = Path(__file__).with_name("screenshot.js")
     env = os.environ.copy()
     env["NODE_PATH"] = str(config.render.node_modules)

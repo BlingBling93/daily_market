@@ -155,6 +155,38 @@ def push_to_feishu(
     return True
 
 
+def push_images_to_feishu(
+    webhook: Optional[str],
+    secret: Optional[str],
+    image_paths: list[Path],
+    app_id: Optional[str],
+    app_secret: Optional[str],
+) -> bool:
+    if not webhook:
+        return False
+    if not image_paths:
+        return False
+    if not app_id or not app_secret:
+        raise RuntimeError("Feishu app_id/app_secret are required for image push")
+    missing = [image_path for image_path in image_paths if not image_path.exists()]
+    if missing:
+        raise FileNotFoundError(f"Image not found: {missing[0]}")
+
+    sent_any = False
+    for image_path in image_paths:
+        image_key = _upload_image(image_path, app_id, app_secret)
+        _send_webhook(
+            webhook,
+            {
+                "msg_type": "image",
+                "content": {"image_key": image_key},
+            },
+            secret,
+        )
+        sent_any = True
+    return sent_any
+
+
 def push_image_to_feishu(
     webhook: Optional[str],
     secret: Optional[str],

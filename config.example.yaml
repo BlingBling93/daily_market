@@ -37,3 +37,17 @@ signals:
   cold_temperature: 32
   high_vxn: 24
   low_vxn: 16
+
+ashare:
+  enabled: true
+  watchlist_path: ashare_watchlist.csv
+  theme_etf_path: ashare_theme_etf.csv
+  observation_state_path: ashare_observation_state.json
+  theme_heat_history_path: ashare_theme_heat_history.csv
+  top_n: 4
+  direction_top_n: 3
+  current_allocation: 0.50
+  target_allocation: 0.70
+  max_single_position: 0.05
+  max_industry_allocation: 0.25
+  min_cash: 0.10

@@ -59,6 +59,69 @@ class AdviceSnapshot:
 
 
 @dataclass
+class AShareIdea:
+    list_type: str
+    theme: str
+    ticker: str
+    name: str
+    industry: str
+    style: str
+    rating: str
+    action: str
+    score: int
+    suggested_weight: float
+    current_weight: float
+    price: Optional[float]
+    day_change_pct: Optional[float]
+    return_20d: Optional[float]
+    thesis: str
+    catalysts: str
+    risks: str
+    invalidation: str
+    pressure_label: str = "资金分歧"
+    pressure_score: int = 50
+    data_note: str = ""
+
+
+@dataclass
+class AShareDirection:
+    name: str
+    proxy_ticker: str
+    proxy_name: str
+    style: str
+    score: int
+    action: str
+    etf_action: str
+    member_count: int
+    top_stock: str
+    rationale: str
+    price: Optional[float]
+    day_change_pct: Optional[float]
+    return_5d: Optional[float]
+    return_20d: Optional[float]
+    return_60d: Optional[float]
+    volume_ratio: Optional[float]
+    sma_20_gap_pct: Optional[float]
+    drawdown_60d_pct: Optional[float]
+    volatility_20d: Optional[float]
+    updated_at: Optional[str]
+
+
+@dataclass
+class AShareSnapshot:
+    enabled: bool
+    allocation_target: float
+    market_note: str
+    directions: List[AShareDirection]
+    top_ideas: List[AShareIdea]
+    long_term_ideas: List[AShareIdea]
+    retained_ideas: List[AShareIdea]
+    watchlist_count: int
+    data_source: str
+    observation_state_path: str
+
+
+@dataclass
 class Brief:
     as_of: date
     qqq: QuoteSnapshot
@@ -75,3 +138,4 @@ class Brief:
     hot_themes: List[ThemeHeat]
     cooling_themes: List[ThemeHeat]
     advice: AdviceSnapshot
+    ashare: Optional[AShareSnapshot]
