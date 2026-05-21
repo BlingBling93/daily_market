@@ -302,7 +302,7 @@ def build_html(brief: Brief, config: AppConfig) -> str:
 
     hot_html = "".join(_theme_line(item) for item in brief.hot_themes)
     cool_html = "".join(_theme_line(item) for item in brief.cooling_themes)
-    observations_html = "".join(f"<li>{item}</li>" for item in brief.observation_points)
+    observations_html = "".join(f"<li>{item}</li>" for item in brief.observation_points[1:])
 
     qqq_extra = f"""
       <div class="kv">
@@ -597,7 +597,7 @@ def build_html(brief: Brief, config: AppConfig) -> str:
     }}
     .strategy-grid {{
       display: grid;
-      grid-template-columns: 1.2fr repeat(3, 1fr);
+      grid-template-columns: 1.2fr 1.8fr;
       gap: 12px;
       margin-top: 12px;
     }}
@@ -620,14 +620,36 @@ def build_html(brief: Brief, config: AppConfig) -> str:
       font-size: 19px;
       line-height: 1.22;
     }}
-    .observations {{
-      margin: 16px 0 0;
+    .strategy-action strong {{
+      font-size: 27px;
+      line-height: 1;
+    }}
+    .strategy-position {{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 11px;
+    }}
+    .strategy-position em {{
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      background: #f1f3ef;
+      color: #4c5560;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 900;
+      text-align: center;
+    }}
+    .strategy-notes {{
+      margin: 10px 0 0;
       padding-left: 19px;
       color: #333b45;
-      font-size: 15px;
+      font-size: 13px;
       line-height: 1.42;
-      columns: 2;
-      column-gap: 28px;
+    }}
+    .strategy-notes li {{
+      margin-top: 4px;
     }}
     .footer {{
       margin-top: 20px;
@@ -655,12 +677,20 @@ def build_html(brief: Brief, config: AppConfig) -> str:
         <span class="badge {_temperature_class(brief.temperature.label)}">温度 {brief.temperature.score}</span>
       </div>
       <div class="strategy-grid">
-        <div class="strategy-box"><span>明日动作</span><strong>{brief.advice.action}</strong></div>
-        <div class="strategy-box"><span>参考仓位</span><strong>{brief.advice.allocation_band}</strong></div>
-        <div class="strategy-box"><span>当前仓位</span><strong>{config.portfolio.current_allocation:.0%}</strong></div>
-        <div class="strategy-box"><span>重点</span><strong>{brief.observation_points[0]}</strong></div>
+        <div class="strategy-box strategy-action">
+          <span>明日动作</span>
+          <strong>{brief.advice.action}</strong>
+          <div class="strategy-position">
+            <em>参考 {brief.advice.allocation_band}</em>
+            <em>当前 {config.portfolio.current_allocation:.0%}</em>
+          </div>
+        </div>
+        <div class="strategy-box">
+          <span>重点</span>
+          <strong>{brief.observation_points[0]}</strong>
+          <ul class="strategy-notes">{observations_html}</ul>
+        </div>
       </div>
-      <ul class="observations">{observations_html}</ul>
     </section>
 
     <div class="grid">
