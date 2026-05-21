@@ -825,6 +825,8 @@ def _etf_position_action(score: int, market: Optional[MarketSeries]) -> str:
         return "暂不配置"
     if market.return_5d > 12 and (market.day_change_pct < 0 or market.volume_ratio < 1.0):
         return "减仓降温"
+    if market.return_5d > 12 or market.sma_20_gap_pct > 14:
+        return "减仓提醒"
     if market.return_5d > 8 or market.sma_20_gap_pct > 10:
         return "等回调"
     if score >= 72 and market.return_5d <= 6 and market.sma_20_gap_pct <= 8 and market.volume_ratio >= 1.1:
@@ -1167,11 +1169,12 @@ def _build_ideas(
 def _select_today_ideas(ideas: List[AShareIdea], top_n: int) -> List[AShareIdea]:
     if top_n <= 0:
         return []
+    eligible = [idea for idea in ideas if not _is_avoid_signal(idea)]
     selected: List[AShareIdea] = []
     selected_tickers: set[str] = set()
 
     def take(predicate, count: int) -> None:
-        for idea in ideas:
+        for idea in eligible:
             if len(selected) >= top_n or count <= 0:
                 return
             if idea.ticker in selected_tickers or not predicate(idea):

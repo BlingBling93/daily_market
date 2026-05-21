@@ -90,6 +90,7 @@ ETF position action:
 | Condition | ETF action |
 |---|---|
 | 5d return > 12%, plus same-day weakness or insufficient turnover expansion | `减仓降温` |
+| 5d return > 12%, or MA20 gap > 14% | `减仓提醒` |
 | 5d return > 8% or MA20 gap > 10% | `等回调` |
 | score >= 72, 5d return <= 6%, MA20 gap <= 8%, volume ratio >= 1.1x | `可小幅加仓` |
 | score >= 68 | `持有观察` |
@@ -162,6 +163,8 @@ The final 4 daily recommendations try to follow this portfolio constraint:
 ```
 
 If a layer has too few candidates, the remaining slots are filled by total score.
+
+Stocks rated `D` / `X`, or with action `回避` / `减仓/回避`, are not allowed into `今日推荐`; they are only recorded as avoid signals in the observation state.
 
 Buy/sell pressure labels:
 

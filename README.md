@@ -85,7 +85,7 @@ an external cron service to trigger the workflow through the GitHub API.
 Recommended external cron setup:
 
 - Timezone: `Asia/Shanghai`
-- Schedule: every day at `08:50`
+- Schedule: every day at `14:15`
 - Method: `POST`
 - URL: `https://api.github.com/repos/BlingBling93/daily_market/actions/workflows/morning-brief.yml/dispatches`
 - Headers:

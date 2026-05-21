@@ -140,7 +140,7 @@ def _etf_action_class(action: str) -> str:
         return "etf-buy"
     if action in {"持有观察", "等回调"}:
         return "etf-watch"
-    if action in {"减仓降温", "暂不配置"}:
+    if action in {"减仓提醒", "减仓降温", "暂不配置"}:
         return "etf-avoid"
     return "etf-hold"
 
