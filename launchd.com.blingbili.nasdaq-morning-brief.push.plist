@@ -7,24 +7,37 @@
 
     <key>ProgramArguments</key>
     <array>
-      <string>/Users/blingbili/Documents/New project 2/run_push_feishu.sh</string>
+      <string>/usr/bin/python3</string>
+      <string>-B</string>
+      <string>-m</string>
+      <string>nasdaq_morning_brief</string>
+      <string>--config</string>
+      <string>config.yaml</string>
+      <string>--send-latest-image</string>
+      <string>output/brief.png,output/ashare.png</string>
     </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>PYTHONPATH</key>
+      <string>/Users/blingbili/Library/daily_market_runtime</string>
+    </dict>
 
     <key>StartCalendarInterval</key>
     <dict>
       <key>Hour</key>
-      <integer>9</integer>
+      <integer>14</integer>
       <key>Minute</key>
-      <integer>0</integer>
+      <integer>30</integer>
     </dict>
 
     <key>WorkingDirectory</key>
-    <string>/Users/blingbili/Documents/New project 2</string>
+    <string>/Users/blingbili/Library/daily_market_runtime</string>
 
     <key>StandardOutPath</key>
-    <string>/Users/blingbili/Documents/New project 2/output/push.stdout.log</string>
+    <string>/Users/blingbili/Library/daily_market_runtime/output/push.stdout.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/blingbili/Documents/New project 2/output/push.stderr.log</string>
+    <string>/Users/blingbili/Library/daily_market_runtime/output/push.stderr.log</string>
   </dict>
 </plist>

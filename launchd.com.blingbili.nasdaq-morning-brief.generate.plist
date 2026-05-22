@@ -7,8 +7,20 @@
 
     <key>ProgramArguments</key>
     <array>
-      <string>/Users/blingbili/Documents/New project 2/run_generate_brief.sh</string>
+      <string>/usr/bin/python3</string>
+      <string>-B</string>
+      <string>-m</string>
+      <string>nasdaq_morning_brief</string>
+      <string>--config</string>
+      <string>config.yaml</string>
+      <string>--no-push</string>
     </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>PYTHONPATH</key>
+      <string>/Users/blingbili/Library/daily_market_runtime</string>
+    </dict>
 
     <key>StartCalendarInterval</key>
     <dict>
@@ -19,12 +31,12 @@
     </dict>
 
     <key>WorkingDirectory</key>
-    <string>/Users/blingbili/Documents/New project 2</string>
+    <string>/Users/blingbili/Library/daily_market_runtime</string>
 
     <key>StandardOutPath</key>
-    <string>/Users/blingbili/Documents/New project 2/output/generate.stdout.log</string>
+    <string>/Users/blingbili/Library/daily_market_runtime/output/generate.stdout.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/blingbili/Documents/New project 2/output/generate.stderr.log</string>
+    <string>/Users/blingbili/Library/daily_market_runtime/output/generate.stderr.log</string>
   </dict>
 </plist>
