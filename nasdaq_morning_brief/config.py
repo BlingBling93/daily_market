@@ -59,6 +59,22 @@ class SignalConfig:
 
 
 @dataclass
+class PolicyConfig:
+    events_path: Path
+    cache_path: Path
+    news_cache_path: Path
+    auto_fetch: bool
+    lookahead_days: int
+    lookback_days: int
+    default_impact_days: int
+    refresh_hours: int
+    recalibrate_within_days: int
+    news_refresh_hours: int
+    earnings_lookahead_days: int
+    earnings_symbols: str
+
+
+@dataclass
 class AShareConfig:
     enabled: bool
     watchlist_path: Path
@@ -81,6 +97,7 @@ class AppConfig:
     render: RenderConfig
     push: PushConfig
     signals: SignalConfig
+    policy: PolicyConfig
     ashare: AShareConfig
 
 
@@ -163,6 +180,7 @@ def load_config(path: str) -> AppConfig:
     render = raw["render"]
     push = raw.get("push", {})
     signals = raw["signals"]
+    policy = raw.get("policy", {})
     ashare = raw.get("ashare", {})
 
     return AppConfig(
@@ -190,6 +208,20 @@ def load_config(path: str) -> AppConfig:
             feishu_app_secret=_env("FEISHU_APP_SECRET", push.get("feishu_app_secret")),
         ),
         signals=SignalConfig(**signals),
+        policy=PolicyConfig(
+            events_path=Path(policy.get("events_path", "policy_events.csv")),
+            cache_path=Path(policy.get("cache_path", "policy_calendar_cache.json")),
+            news_cache_path=Path(policy.get("news_cache_path", "policy_event_news_cache.json")),
+            auto_fetch=bool(policy.get("auto_fetch", True)),
+            lookahead_days=int(policy.get("lookahead_days", 7)),
+            lookback_days=int(policy.get("lookback_days", 21)),
+            default_impact_days=int(policy.get("default_impact_days", 10)),
+            refresh_hours=int(policy.get("refresh_hours", 24)),
+            recalibrate_within_days=int(policy.get("recalibrate_within_days", 3)),
+            news_refresh_hours=int(policy.get("news_refresh_hours", 6)),
+            earnings_lookahead_days=int(policy.get("earnings_lookahead_days", 45)),
+            earnings_symbols=str(policy.get("earnings_symbols", "AAPL,MSFT,NVDA,AMZN,GOOGL,META,TSLA")),
+        ),
         ashare=AShareConfig(
             enabled=bool(ashare.get("enabled", False)),
             watchlist_path=Path(ashare.get("watchlist_path", "ashare_watchlist.csv")),

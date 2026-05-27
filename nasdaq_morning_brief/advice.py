@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+from dataclasses import replace
+from datetime import date
+
 from .config import PortfolioConfig
-from .models import AdviceSnapshot, QuoteSnapshot, TemperatureSnapshot, ValuationSnapshot
+from .models import AdviceSnapshot, PolicyEvent, PolicySnapshot, QuoteSnapshot, TemperatureSnapshot, ValuationSnapshot
+
+
+MAJOR_POLICY_CATEGORIES = {"FOMC", "通胀", "就业", "财报", "监管", "地缘"}
 
 
 def _trend_state(qqq: QuoteSnapshot) -> str:
@@ -55,6 +61,9 @@ def _allocation_band(
         upper = target
     elif action == "暂停加仓":
         lower = max(min_allocation, current - step)
+        upper = current
+    elif action == "持有观察":
+        lower = current
         upper = current
     else:
         lower = max(min_allocation, current - step)
@@ -132,4 +141,101 @@ def generate_advice(
         risk_state=risk_state,
         valuation_state=valuation_state,
         allocation_band=allocation_band,
+        base_action=action,
+    )
+
+
+def _has_major_event(events: list[PolicyEvent]) -> bool:
+    return any(event.category in MAJOR_POLICY_CATEGORIES for event in events)
+
+
+def _policy_adjusted_action(base_action: str, policy: PolicySnapshot) -> str:
+    if base_action == "防守":
+        return base_action
+
+    has_upcoming_major = _has_major_event(policy.upcoming_events)
+    has_active_major = _has_major_event(policy.recent_events)
+
+    if has_upcoming_major:
+        if base_action in {"小幅加仓", "持有"}:
+            return "持有观察"
+        return base_action
+
+    if has_active_major:
+        if base_action in {"小幅加仓", "持有"}:
+            return "持有观察"
+        return base_action
+
+    if policy.stance == "偏谨慎":
+        if base_action in {"小幅加仓", "持有"}:
+            return "持有观察"
+        return base_action
+
+    if policy.stance == "偏友好" and base_action == "小幅降仓":
+        return "持有观察"
+
+    return base_action
+
+
+def _adjusted_target(
+    portfolio: PortfolioConfig,
+    base_target: float,
+    final_action: str,
+) -> float:
+    if final_action == "持有观察":
+        return portfolio.current_allocation
+    return base_target
+
+
+def apply_policy_adjustment(
+    portfolio: PortfolioConfig,
+    advice: AdviceSnapshot,
+    policy: PolicySnapshot,
+    as_of: date,
+) -> AdviceSnapshot:
+    base_action = advice.base_action or advice.action
+    final_action = _policy_adjusted_action(base_action, policy)
+    final_target = _adjusted_target(portfolio, advice.target_allocation, final_action)
+    allocation_band = _allocation_band(
+        portfolio.current_allocation,
+        final_target,
+        portfolio.step_allocation,
+        portfolio.min_allocation,
+        portfolio.max_allocation,
+        final_action,
+    )
+
+    if final_action == base_action:
+        focus = (
+            f"三因子基础动作“{base_action}”；基本面“{policy.stance}”，"
+            f"{policy.execution_note}"
+        )
+    else:
+        focus = (
+            f"三因子基础动作“{base_action}”，基本面修正为“{final_action}”；"
+            f"{policy.execution_note}"
+        )
+
+    triggers = [focus]
+    for item in advice.triggers:
+        if item not in triggers:
+            triggers.append(item)
+    if policy.short_term not in triggers:
+        triggers.append(policy.short_term)
+
+    summary = (
+        f"当前仓位 {portfolio.current_allocation:.0%}；三因子判断为趋势“{advice.trend_state}”、"
+        f"风险“{advice.risk_state}”、估值“{advice.valuation_state}”。"
+        f"基础动作“{base_action}”，结合基本面后明日动作是“{final_action}”，"
+        f"参考仓位区间 {allocation_band}。"
+    )
+
+    return replace(
+        advice,
+        action=final_action,
+        target_allocation=final_target,
+        summary=summary,
+        triggers=triggers,
+        allocation_band=allocation_band,
+        base_action=base_action,
     )

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from typing import List, Optional
 
@@ -56,6 +56,35 @@ class AdviceSnapshot:
     risk_state: str
     valuation_state: str
     allocation_band: str
+    base_action: str = ""
+
+
+@dataclass
+class PolicyEvent:
+    event_date: date
+    category: str
+    title: str
+    stance: str
+    summary: str
+    short_term: str
+    mid_term: str
+    long_term: str
+    impact_days: int
+    result_summary: str = ""
+    result_conclusion: str = ""
+    result_sources: List[str] = field(default_factory=list)
+
+
+@dataclass
+class PolicySnapshot:
+    stance: str
+    summary: str
+    execution_note: str
+    short_term: str
+    mid_term: str
+    long_term: str
+    upcoming_events: List[PolicyEvent]
+    recent_events: List[PolicyEvent]
 
 
 @dataclass
@@ -135,7 +164,6 @@ class Brief:
     temperature: TemperatureSnapshot
     cross_asset_notes: List[str]
     observation_points: List[str]
-    hot_themes: List[ThemeHeat]
-    cooling_themes: List[ThemeHeat]
+    policy: PolicySnapshot
     advice: AdviceSnapshot
     ashare: Optional[AShareSnapshot]

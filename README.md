@@ -6,7 +6,7 @@ Lightweight daily Nasdaq 100 brief generator for a single passive index position
 
 - Pulls market data for `QQQ`, `^NDX`, `^VIX`, and `^VXN`
 - Estimates short-term market temperature from price trend and volatility
-- Ranks Nasdaq 100 sectors / themes by short-term heat
+- Tracks event and policy fundamentals from a local event calendar
 - Scores a local A-share watchlist for active stock research candidates
 - Produces an HTML card ready for browser screenshot or automation capture
 - Sends the card summary to WeCom webhook when configured
@@ -46,15 +46,47 @@ Lightweight daily Nasdaq 100 brief generator for a single passive index position
 - manual valuation override for P/E metrics
 - webhook for WeCom bot push
 - webhook for Feishu bot push
+- policy event calendar path and lookback/lookahead windows
 - A-share active allocation target and watchlist path
 - output directory
 
 ## Notes
 
 - Index valuation sources are uneven on free endpoints, so the first version supports manual override in config.
-- Theme heat is computed from a maintained Nasdaq-oriented theme basket plus 1d / 5d / 20d returns.
+- Policy events are maintained in `policy_events.csv`; use it for FOMC, CPI/PCE, employment data, Mag 7 earnings, and major regulatory/geopolitical events.
 - A-share ideas are research candidates only. Edit `ashare_watchlist.csv` to update your universe, fundamentals, catalysts, and risk flags.
 - The US sleeve remains passive-index oriented; the A-share module does not recommend US single stocks.
+
+## Policy events
+
+Policy events are fetched automatically into `policy_calendar_cache.json`.
+Current automatic sources are:
+
+- Federal Reserve FOMC calendar
+- BEA release dates for PCE / Personal Income and Outlays and GDP
+- Nasdaq public earnings calendar for the configured Mag 7 symbols
+- Direct post-event result tracking where available, such as NVIDIA official
+  earnings releases and FRED/BEA PCE price-index series
+- Google News RSS only as a fallback when direct event data is unavailable
+
+`policy_events.csv` remains available for manual overrides or events that the
+free sources miss. It supports these columns:
+
+```csv
+date,category,title,stance,summary,short_term,mid_term,long_term,impact_days
+```
+
+Use `category` values such as `FOMC`, `通胀`, `就业`, `财报`, `监管`, or `地缘`.
+`impact_days` is optional in spirit but recommended: it keeps an event active
+after the event date while the market digests its rate, earnings, or risk
+premium impact. If it is blank, the app uses category defaults such as 21 days
+for `FOMC`, 10 days for `通胀` / `就业`, and 14 days for `财报`.
+The morning brief treats these as execution constraints on top of the base
+`明日动作`, not as a second conflicting action engine.
+
+Post-event result snippets are cached in `policy_event_news_cache.json`. The
+cache is refreshed on the event's ET date and during its impact window, then the
+result conclusion remains visible until the impact window expires.
 
 ## A-share active module
 

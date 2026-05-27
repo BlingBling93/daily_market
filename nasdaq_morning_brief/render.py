@@ -7,7 +7,7 @@ from html import escape
 from pathlib import Path
 
 from .config import AppConfig
-from .models import AShareDirection, AShareIdea, AShareSnapshot, Brief, QuoteSnapshot, ThemeHeat
+from .models import AShareDirection, AShareIdea, AShareSnapshot, Brief, PolicyEvent, QuoteSnapshot
 
 
 def _fmt_pct(value: float) -> str:
@@ -81,12 +81,23 @@ def _temperature_class(label: str) -> str:
     return "flat"
 
 
-def _theme_line(theme: ThemeHeat) -> str:
+def _policy_event_line(event: PolicyEvent) -> str:
+    result_html = ""
+    if event.result_conclusion:
+        result_html = f"<small>结论：{escape(event.result_conclusion)}</small>"
     return (
-        f"<li><span>{theme.theme}</span>"
-        f"<strong class=\"{_move_class(theme.avg_return_5d)}\">{_fmt_pct(theme.avg_return_5d)}</strong>"
-        f"<small>1日 {_fmt_pct(theme.avg_day_change_pct)} · 上涨占比 {theme.winners_ratio:.0%}</small></li>"
+        f"<li><span>{event.event_date.isoformat()} · {escape(event.category)}</span>"
+        f"<strong>{escape(event.title)}</strong>"
+        f"<small>{escape(event.stance)} · 影响期{event.impact_days}天 · {escape(event.summary)}</small>"
+        f"{result_html}</li>"
     )
+
+
+def _policy_event_list(upcoming: list[PolicyEvent], recent: list[PolicyEvent]) -> str:
+    active_events = upcoming + recent
+    if not active_events:
+        return "<li><span>未来/影响中事件</span><strong>暂无配置</strong><small>可在 policy_events.csv 中维护 FOMC、CPI、PCE、非农和重点财报。</small></li>"
+    return "".join(_policy_event_line(item) for item in active_events[:5])
 
 
 def _fmt_optional_pct(value: float | None) -> str:
@@ -300,8 +311,7 @@ def build_html(brief: Brief, config: AppConfig) -> str:
     if valuation.as_of:
         valuation_source = f"{valuation_source} · {valuation.as_of}"
 
-    hot_html = "".join(_theme_line(item) for item in brief.hot_themes)
-    cool_html = "".join(_theme_line(item) for item in brief.cooling_themes)
+    policy_events_html = _policy_event_list(brief.policy.upcoming_events, brief.policy.recent_events)
     observations_html = "".join(f"<li>{item}</li>" for item in brief.observation_points[1:])
 
     qqq_extra = f"""
@@ -544,34 +554,56 @@ def build_html(brief: Brief, config: AppConfig) -> str:
       background: #f1f3ef;
       text-align: center;
     }}
-    .theme-list {{
+    .event-list {{
       margin: 14px 0 0;
       padding: 0;
       list-style: none;
       display: grid;
       gap: 10px;
     }}
-    .theme-list li {{
+    .event-list li {{
       display: grid;
-      grid-template-columns: 1fr auto;
       gap: 4px 12px;
       padding: 10px 12px;
       border-radius: 8px;
       background: #f3f5f1;
     }}
-    .theme-list span {{
+    .event-list span {{
+      color: #68707a;
+      font-size: 12px;
+      font-weight: 800;
+    }}
+    .event-list strong {{
       font-size: 16px;
       font-weight: 900;
     }}
-    .theme-list strong {{
-      font-size: 17px;
-      font-weight: 900;
-    }}
-    .theme-list small {{
-      grid-column: 1 / 3;
+    .event-list small {{
       color: #68707a;
       font-size: 12px;
       font-weight: 700;
+      line-height: 1.35;
+    }}
+    .policy-impact {{
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }}
+    .policy-impact div {{
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #f3f5f1;
+    }}
+    .policy-impact span {{
+      display: block;
+      color: #68707a;
+      font-size: 12px;
+      font-weight: 800;
+    }}
+    .policy-impact strong {{
+      display: block;
+      margin-top: 3px;
+      font-size: 13px;
+      line-height: 1.35;
     }}
     .asset-row {{
       display: grid;
@@ -586,6 +618,21 @@ def build_html(brief: Brief, config: AppConfig) -> str:
     .asset-row strong {{
       font-size: 23px;
       font-weight: 900;
+    }}
+    .policy-row {{
+      display: grid;
+      gap: 5px;
+      padding: 11px 0;
+      border-top: 1px solid #e0e3dc;
+    }}
+    .policy-row span {{
+      color: #68707a;
+      font-size: 13px;
+      font-weight: 800;
+    }}
+    .policy-row strong {{
+      font-size: 14px;
+      line-height: 1.4;
     }}
     .strategy {{
       margin: 0 0 18px;
@@ -702,21 +749,26 @@ def build_html(brief: Brief, config: AppConfig) -> str:
       <section class="tile gold">
         <div class="tile-head">
           <div>
-            <h2>热度集中方向</h2>
-            <p>纳指风格主题 · 5日表现排序</p>
+            <h2>事件与政策基本面</h2>
+            <p>{escape(brief.policy.stance)} · 执行约束优先</p>
           </div>
         </div>
-        <ul class="theme-list">{hot_html}</ul>
+        <ul class="event-list">{policy_events_html}</ul>
       </section>
 
       <section class="tile blue">
         <div class="tile-head">
           <div>
-            <h2>降温方向</h2>
-            <p>短线相对转弱的主题</p>
+            <h2>调仓影响</h2>
+            <p>短期执行 · 中期仓位 · 长期逻辑</p>
           </div>
         </div>
-        <ul class="theme-list">{cool_html}</ul>
+        <div class="policy-impact">
+          <div><span>执行</span><strong>{escape(brief.policy.execution_note)}</strong></div>
+          <div><span>短期</span><strong>{escape(brief.policy.short_term)}</strong></div>
+          <div><span>中期</span><strong>{escape(brief.policy.mid_term)}</strong></div>
+          <div><span>长期</span><strong>{escape(brief.policy.long_term)}</strong></div>
+        </div>
       </section>
 
       <section class="tile gold">
@@ -745,7 +797,7 @@ def build_html(brief: Brief, config: AppConfig) -> str:
     </div>
 
     <div class="footer">
-      <span>Data: Yahoo Finance · VCP Scanner · Nasdaq style basket</span>
+      <span>Data: Yahoo Finance · VCP Scanner · Fed/BEA/Nasdaq calendar cache</span>
       <span>仅供参考，不构成投资建议</span>
     </div>
   </div>

@@ -38,6 +38,20 @@ signals:
   high_vxn: 24
   low_vxn: 16
 
+policy:
+  events_path: policy_events.csv
+  cache_path: policy_calendar_cache.json
+  news_cache_path: policy_event_news_cache.json
+  auto_fetch: true
+  lookahead_days: 7
+  lookback_days: 21
+  default_impact_days: 10
+  refresh_hours: 24
+  recalibrate_within_days: 3
+  news_refresh_hours: 6
+  earnings_lookahead_days: 45
+  earnings_symbols: AAPL,MSFT,NVDA,AMZN,GOOGL,META,TSLA
+
 ashare:
   enabled: true
   watchlist_path: ashare_watchlist.csv

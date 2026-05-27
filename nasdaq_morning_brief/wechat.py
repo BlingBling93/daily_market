@@ -11,7 +11,6 @@ from .models import Brief
 
 
 def build_text_summary(brief: Brief) -> str:
-    hot = ", ".join(item.theme for item in brief.hot_themes)
     us10y_value = brief.us10y.price / 10.0 if brief.us10y.price > 20 else brief.us10y.price
     cross_asset_summary = "；".join(brief.cross_asset_notes[:2])
     ashare_summary = ""
@@ -28,7 +27,7 @@ def build_text_summary(brief: Brief) -> str:
         f"美债10年：{us10y_value:.2f}%（{brief.us10y.day_change_pct:+.2f}%）\n"
         f"原油：{brief.oil.price:.2f}（{brief.oil.day_change_pct:+.2f}%）\n"
         f"VXN：{brief.vxn.price:.2f}\n"
-        f"热度方向：{hot}\n"
+        f"事件政策：{brief.policy.stance}；{brief.policy.execution_note}\n"
         f"跨资产结论：{cross_asset_summary}\n"
         f"建议：{brief.advice.summary}"
         f"{ashare_summary}"

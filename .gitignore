@@ -6,3 +6,5 @@ __pycache__/
 ashare_lowfreq_cache.json
 ashare_observation_state.json
 ashare_theme_heat_history.csv
+policy_calendar_cache.json
+policy_event_news_cache.json

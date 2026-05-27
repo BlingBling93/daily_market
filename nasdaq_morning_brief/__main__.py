@@ -6,25 +6,23 @@ from pathlib import Path
 from subprocess import CalledProcessError
 from urllib.error import HTTPError, URLError
 
-from .advice import generate_advice
+from .advice import apply_policy_adjustment, generate_advice
 from .ashare import build_ashare_snapshot
 from .config import load_config
 from .data import (
     fetch_auto_valuation,
     fetch_first_available_snapshot,
     fetch_quote_snapshot,
-    fetch_theme_heat,
-    load_universe,
 )
 from .indicators import (
     build_cross_asset_notes,
     build_observation_points,
     compute_temperature,
-    rank_theme_heat,
     summarize_valuation,
 )
 from .feishu import push_image_to_feishu, push_images_to_feishu
 from .models import Brief
+from .policy import build_policy_snapshot
 from .render import write_ashare_html, write_html, write_png
 from .wechat import push_to_wecom
 
@@ -54,7 +52,6 @@ def parse_args() -> argparse.Namespace:
 
 def build_brief(config_path: str, market_days_ago: int = 0) -> Brief:
     config = load_config(config_path)
-    universe = load_universe(Path("theme_basket.csv"))
 
     qqq = fetch_quote_snapshot("QQQ", market_days_ago=market_days_ago)
     ndx = fetch_quote_snapshot("^NDX", market_days_ago=market_days_ago)
@@ -68,11 +65,11 @@ def build_brief(config_path: str, market_days_ago: int = 0) -> Brief:
     except ValueError:
         auto_valuation = None
     valuation = summarize_valuation(config.valuation, auto_valuation)
-    theme_heat = fetch_theme_heat(universe, market_days_ago=market_days_ago)
-    hot_themes, cooling_themes = rank_theme_heat(theme_heat)
     temperature = compute_temperature(qqq, vxn, vix, valuation, config.signals)
     cross_asset_notes = build_cross_asset_notes(gold, us10y, oil)
     advice = generate_advice(config.portfolio, qqq, vxn, temperature, valuation)
+    policy = build_policy_snapshot(config.policy, qqq.as_of, advice, us10y, oil)
+    advice = apply_policy_adjustment(config.portfolio, advice, policy, qqq.as_of)
     ashare = build_ashare_snapshot(config.ashare, market_days_ago=market_days_ago)
     observation_points = build_observation_points(
         advice.triggers,
@@ -93,8 +90,7 @@ def build_brief(config_path: str, market_days_ago: int = 0) -> Brief:
         temperature=temperature,
         cross_asset_notes=cross_asset_notes,
         observation_points=observation_points,
-        hot_themes=hot_themes,
-        cooling_themes=cooling_themes,
+        policy=policy,
         advice=advice,
         ashare=ashare,
     )
