@@ -17,3 +17,5 @@ theme,proxy_ticker,proxy_name,style,risk_level,max_theme_weight,total_market_val
 光伏,515790,光伏ETF华泰柏瑞,growth,high,0.10,94.76,2026-05-19 16:00,同方向按总市值最大选择
 军工,512710,军工龙头ETF富国,advanced_manufacturing,high,0.10,88.60,2026-05-19 16:00,军工方向当前总市值略高于512660军工ETF国泰
 机器人,562500,机器人ETF华夏,advanced_manufacturing,high,0.10,206.09,2026-05-19 16:00,同方向按总市值最大选择
+游戏,516010,游戏ETF国泰,media,high,0.08,,2026-05-27,用户长期追踪持仓ETF；纳入方向代理池
+创业板50,159949,创业板50ETF华安,broad_growth,high,0.15,,2026-05-27,用户长期追踪持仓ETF；纳入成长宽基代理

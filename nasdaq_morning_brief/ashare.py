@@ -454,6 +454,16 @@ def _stock_market(symbol: str) -> str:
     return "sz"
 
 
+def _is_etf_row(row: Dict[str, str]) -> bool:
+    asset_type = _text(row, "asset_type").lower()
+    if asset_type == "etf":
+        return True
+    industry = _text(row, "industry").upper()
+    style = _text(row, "style").upper()
+    name = _text(row, "name").upper()
+    return industry == "ETF" or style.endswith("ETF") or name.endswith("ETF")
+
+
 def _is_st_stock(symbol: str) -> bool:
     global _ST_TICKERS
     if _ST_TICKERS is None:
@@ -541,6 +551,22 @@ def _fetch_fundamentals(row: Dict[str, str]) -> FundamentalSnapshot:
     symbol = _text(row, "ticker")
     if symbol in _FUNDAMENTAL_CACHE:
         return _FUNDAMENTAL_CACHE[symbol]
+
+    if _is_etf_row(row):
+        snapshot = FundamentalSnapshot(
+            roe=0.0,
+            profit_growth=0.0,
+            revenue_growth=0.0,
+            cashflow_profit_ratio=80.0,
+            asset_liability_ratio=_float(row, "risk_score", 60.0),
+            pe_percentile=_float(row, "pe_percentile", 50.0),
+            eps_growth=0.0,
+            analyst_buy_ratio=_float(row, "catalyst_score", 50.0),
+            report_date="ETF持仓型观察",
+            sources=["watchlist:etf"],
+        )
+        _FUNDAMENTAL_CACHE[symbol] = snapshot
+        return snapshot
 
     snapshot = FundamentalSnapshot(
         roe=_float(row, "roe"),
@@ -1034,6 +1060,24 @@ def _score(
     catalyst_score = _float(row, "catalyst_score", 50.0)
     risk_score = _float(row, "risk_score", 50.0)
     governance_score = _float(row, "governance_score", 70.0)
+    theme_score = theme.score if theme else 50
+    early_right = _early_right_score(row, quote, pressure_score)
+
+    if _is_etf_row(row):
+        momentum = 50.0
+        if quote:
+            momentum = _clip(50 + quote.return_20d * 2.0 + quote.return_60d * 0.8 + quote.volume_ratio * 5.0)
+        risk_control = _clip((100.0 - risk_score) * 0.55 + governance_score * 0.45)
+        total = (
+            theme_score * 0.30
+            + momentum * 0.25
+            + pressure_score * 0.15
+            + early_right * 0.10
+            + catalyst_score * 0.10
+            + risk_control * 0.10
+        )
+        total -= _crowding_penalty(row, quote) * 0.60
+        return round(_clip(total))
 
     quality = (
         _scale_positive(roe, 5, 25) * 0.40
@@ -1050,9 +1094,6 @@ def _score(
     risk_control = _clip((100.0 - risk_score) * 0.45 + governance_score * 0.30 + leverage_control * 0.25)
     analyst_expectation = _clip(fundamentals.analyst_buy_ratio * 0.65 + _scale_positive(fundamentals.eps_growth, -5, 15) * 0.35)
     catalyst_blend = catalyst_score * 0.45 + risk_control * 0.25 + analyst_expectation * 0.30
-    theme_score = theme.score if theme else 50
-    early_right = _early_right_score(row, quote, pressure_score)
-
     total = (
         theme_score * 0.20
         + quality * 0.22
