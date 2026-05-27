@@ -1412,7 +1412,11 @@ def _build_directions(
     return directions
 
 
-def build_ashare_snapshot(config: AShareConfig, market_days_ago: int = 0) -> AShareSnapshot:
+def build_ashare_snapshot(
+    config: AShareConfig,
+    market_days_ago: int = 0,
+    write_heat_history: bool = True,
+) -> AShareSnapshot:
     if not config.enabled:
         return AShareSnapshot(
             enabled=False,
@@ -1446,7 +1450,8 @@ def build_ashare_snapshot(config: AShareConfig, market_days_ago: int = 0) -> ASh
         rows = list(csv.DictReader(handle))
 
     themes = _load_theme_candidates(theme_path, market_days_ago)
-    _save_theme_heat_history(theme_heat_history_path, themes)
+    if write_heat_history:
+        _save_theme_heat_history(theme_heat_history_path, themes)
     all_theme_map = {item.theme: item for item in themes}
     selected = themes[: config.direction_top_n]
     selected_map = {item.theme: item for item in selected}

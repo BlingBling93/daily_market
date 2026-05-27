@@ -38,6 +38,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--no-push", action="store_true", help="Generate HTML/PNG without pushing.")
     parser.add_argument(
+        "--skip-ashare-heat-history",
+        action="store_true",
+        help="Do not append A-share ETF direction heat history during this run.",
+    )
+    parser.add_argument(
         "--require-push",
         action="store_true",
         help="Exit with an error if no image push succeeds.",
@@ -50,7 +55,11 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def build_brief(config_path: str, market_days_ago: int = 0) -> Brief:
+def build_brief(
+    config_path: str,
+    market_days_ago: int = 0,
+    write_ashare_heat_history: bool = True,
+) -> Brief:
     config = load_config(config_path)
 
     qqq = fetch_quote_snapshot("QQQ", market_days_ago=market_days_ago)
@@ -70,7 +79,11 @@ def build_brief(config_path: str, market_days_ago: int = 0) -> Brief:
     advice = generate_advice(config.portfolio, qqq, vxn, temperature, valuation)
     policy = build_policy_snapshot(config.policy, qqq.as_of, advice, us10y, oil)
     advice = apply_policy_adjustment(config.portfolio, advice, policy, qqq.as_of)
-    ashare = build_ashare_snapshot(config.ashare, market_days_ago=market_days_ago)
+    ashare = build_ashare_snapshot(
+        config.ashare,
+        market_days_ago=market_days_ago,
+        write_heat_history=write_ashare_heat_history,
+    )
     observation_points = build_observation_points(
         advice.triggers,
         temperature.rationale,
@@ -122,7 +135,11 @@ def main() -> int:
         return 0
 
     try:
-        brief = build_brief(args.config, market_days_ago=args.market_days_ago)
+        brief = build_brief(
+            args.config,
+            market_days_ago=args.market_days_ago,
+            write_ashare_heat_history=not args.skip_ashare_heat_history,
+        )
     except (HTTPError, URLError, ValueError) as exc:
         raise SystemExit(f"Failed to build brief from live market data: {exc}")
     output_path = write_html(brief, config)

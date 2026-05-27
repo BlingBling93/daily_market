@@ -32,10 +32,10 @@ Lightweight daily Nasdaq 100 brief generator for a single passive index position
    python3 -m nasdaq_morning_brief --config config.yaml
    ```
 
-4. Optional: schedule it on macOS `launchd` at 8:00 every day:
+4. Optional: run ad hoc local tests without pushing:
 
    ```bash
-   launchctl load ~/Documents/New\ project\ 2/launchd.com.blingbili.nasdaq-morning-brief.plist
+   python3 -B -m nasdaq_morning_brief --config config.yaml --no-push --skip-ashare-heat-history
    ```
 
 ## Config
@@ -117,7 +117,7 @@ an external cron service to trigger the workflow through the GitHub API.
 Recommended external cron setup:
 
 - Timezone: `Asia/Shanghai`
-- Schedule: every day at `14:15`
+- Schedule: every day at `13:45`
 - Method: `POST`
 - URL: `https://api.github.com/repos/BlingBling93/daily_market/actions/workflows/morning-brief.yml/dispatches`
 - Headers:
