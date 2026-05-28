@@ -107,13 +107,16 @@ RELATED_THEME_MAP = {
 
 def _float(row: Dict[str, str], key: str, default: float = 0.0) -> float:
     value = row.get(key, "")
-    if value in {"", "null", "None"}:
+    if value is None or value in {"", "null", "None"}:
         return default
     return float(value)
 
 
 def _text(row: Dict[str, str], key: str) -> str:
-    return row.get(key, "").strip()
+    value = row.get(key, "")
+    if value is None:
+        return ""
+    return str(value).strip()
 
 
 def _clip(value: float, low: float = 0.0, high: float = 100.0) -> float:
