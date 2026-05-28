@@ -817,6 +817,24 @@ def build_ashare_html(ashare: AShareSnapshot, config: AppConfig, as_of: str) -> 
     long_term_html = "".join(_tracking_row(item) for item in ashare.long_term_ideas)
     if not long_term_html:
         long_term_html = '<tr><td colspan="7" class="empty-row">暂无长期追踪标的</td></tr>'
+    validation_items = ashare.validation_summary or ["预测验证：暂无可回填样本，明日收盘后开始统计。"]
+    validation_html = "".join(f"<li>{escape(item)}</li>" for item in validation_items[:3])
+    diagnostics = ashare.validation_diagnostics or []
+    if diagnostics:
+        diagnostics_rows = "".join(
+            "<tr>"
+            f"<td>{escape(row.get('group', ''))}</td>"
+            f"<td>{escape(row.get('samples', ''))}</td>"
+            f"<td>{escape(row.get('hit_1d', ''))}</td>"
+            f"<td>{escape(row.get('hit_5d', ''))}</td>"
+            f"<td>{escape(row.get('hit_20d', ''))}</td>"
+            f"<td>{escape(row.get('excess_1d', ''))}</td>"
+            f"<td>{escape(row.get('loss_1d', ''))}</td>"
+            "</tr>"
+            for row in diagnostics
+        )
+    else:
+        diagnostics_rows = '<tr><td colspan="7" class="empty-row">暂无参数诊断样本</td></tr>'
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -902,6 +920,51 @@ def build_ashare_html(ashare: AShareSnapshot, config: AppConfig, as_of: str) -> 
     }}
     .summary-box.note strong {{
       font-size: 18px;
+    }}
+    .validation-list {{
+      margin: -4px 0 18px;
+      padding: 12px 14px;
+      list-style: none;
+      border: 1px solid #ddd9cf;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.62);
+      color: #333b45;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 800;
+    }}
+    .validation-list li + li {{
+      margin-top: 4px;
+      color: #68707a;
+    }}
+    .diagnostic-table {{
+      margin: -4px 0 18px;
+      padding: 14px;
+      border: 1px solid #ddd9cf;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.72);
+    }}
+    .diagnostic-table h2 {{
+      margin: 0 0 10px;
+      font-size: 20px;
+      line-height: 1.2;
+    }}
+    .diagnostic-table table {{
+      width: 100%;
+      border-collapse: collapse;
+    }}
+    .diagnostic-table th,
+    .diagnostic-table td {{
+      padding: 8px 7px;
+      border-bottom: 1px solid #e4e0d7;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 900;
+      color: #4d5661;
+      white-space: nowrap;
+    }}
+    .diagnostic-table th {{
+      color: #7a818a;
     }}
     .direction-list {{
       margin: 0 0 18px;
@@ -1238,6 +1301,26 @@ def build_ashare_html(ashare: AShareSnapshot, config: AppConfig, as_of: str) -> 
       <div class="summary-box note"><span>今日主线</span><strong>{escape(ashare.market_note)}</strong></div>
       <div class="summary-box"><span>候选池</span><strong>{ashare.watchlist_count} 只</strong></div>
     </div>
+
+    <ul class="validation-list">{validation_html}</ul>
+
+    <section class="diagnostic-table">
+      <h2>参数诊断</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>分组</th>
+            <th>样本</th>
+            <th>T+1</th>
+            <th>T+5</th>
+            <th>T+20</th>
+            <th>1日方向池</th>
+            <th>1日loss</th>
+          </tr>
+        </thead>
+        <tbody>{diagnostics_rows}</tbody>
+      </table>
+    </section>
 
     <ul class="direction-list">{direction_html}</ul>
 

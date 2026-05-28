@@ -58,5 +58,11 @@ jobs:
           path: |
             output/brief.html
             output/brief.png
+            output/ashare.html
+            output/ashare.png
             output/*.log
+            ashare_theme_heat_history.csv
+            ashare_theme_etf.csv
+            ashare_observation_state.json
+            ashare_lowfreq_cache.json
           if-no-files-found: ignore

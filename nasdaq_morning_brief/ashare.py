@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import statistics
 import time
 from dataclasses import dataclass
@@ -90,6 +91,70 @@ _FUNDAMENTAL_CACHE: Dict[str, FundamentalSnapshot] = {}
 _FLOW_CACHE: Dict[str, FundFlowSnapshot] = {}
 _LOW_FREQ_CACHE: Dict[str, object] = {}
 _LOW_FREQ_CACHE_PATH: Optional[Path] = None
+PREDICTION_LOG_FIELDS = [
+    "as_of",
+    "evaluated_at",
+    "theme",
+    "proxy_ticker",
+    "proxy_name",
+    "style",
+    "risk_level",
+    "score",
+    "direction_rank",
+    "direction_action",
+    "etf_action",
+    "predicted_signal",
+    "price_t0",
+    "price_t1",
+    "benchmark_price_t0",
+    "benchmark_price_t1",
+    "benchmark_1d_return",
+    "actual_1d_return",
+    "actual_excess_return",
+    "actual_excess_universe",
+    "actual_excess_benchmark",
+    "actual_rank",
+    "hit",
+    "loss",
+    "return_5d",
+    "return_20d",
+    "return_60d",
+    "volume_ratio",
+    "sma_20_gap_pct",
+    "drawdown_60d_pct",
+    "volatility_20d",
+]
+PREDICTION_HORIZONS = [1, 5, 10, 20]
+PREDICTION_HORIZON_FIELDS = [
+    "evaluated_at_{h}d",
+    "price_t{h}",
+    "benchmark_price_t{h}",
+    "benchmark_{h}d_return",
+    "actual_{h}d_return",
+    "actual_excess_{h}d",
+    "actual_excess_universe_{h}d",
+    "actual_excess_benchmark_{h}d",
+    "actual_rank_{h}d",
+    "hit_{h}d",
+    "loss_{h}d",
+]
+for _horizon in (5, 10, 20):
+    for _field_template in PREDICTION_HORIZON_FIELDS:
+        PREDICTION_LOG_FIELDS.append(_field_template.format(h=_horizon))
+ETF_ACTION_SIGNALS = {
+    "可小幅加仓": 1.0,
+    "持有观察": 0.3,
+    "等回调": 0.0,
+    "暂不配置": -0.3,
+    "减仓提醒": -1.0,
+    "减仓降温": -1.0,
+}
+STRONG_ETF_ACTIONS = {"可小幅加仓", "减仓提醒", "减仓降温", "暂不配置"}
+BENCHMARK_SYMBOL = "000001"
+BENCHMARK_NAME = "上证指数"
+BENCHMARK_SECID = "1.000001"
+UNIVERSE_EXCESS_WEIGHT = 0.65
+BENCHMARK_EXCESS_WEIGHT = 0.35
 AUTO_HOLDINGS_PER_THEME = 12
 LEADER_HOLDING_RANK = 5
 RELATED_THEME_MAP = {
@@ -194,7 +259,7 @@ def _save_lowfreq_cache() -> None:
 
 
 def _fundamental_to_cache(snapshot: FundamentalSnapshot) -> Dict[str, object]:
-    return {
+    row = {
         "roe": snapshot.roe,
         "profit_growth": snapshot.profit_growth,
         "revenue_growth": snapshot.revenue_growth,
@@ -314,19 +379,20 @@ def _calc_volatility(closes: List[float], window: int = 20) -> float:
     return statistics.pstdev(returns)
 
 
-def _fetch_market_series(symbol: str, market_days_ago: int = 0) -> Optional[MarketSeries]:
+def _fetch_market_series(symbol: str, market_days_ago: int = 0, secid: Optional[str] = None) -> Optional[MarketSeries]:
+    eastmoney_secid = secid or _secid(symbol)
     try:
         quote = _fetch_json(
             EM_QUOTE_URL,
             {
-                "secid": _secid(symbol),
+                "secid": eastmoney_secid,
                 "fields": "f43,f57,f58,f60,f86,f170",
             },
         ).get("data") or {}
         kline_payload = _fetch_json(
             EM_KLINE_URL,
             {
-                "secid": _secid(symbol),
+                "secid": eastmoney_secid,
                 "fields1": "f1,f2,f3,f4,f5,f6",
                 "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
                 "klt": "101",
@@ -377,8 +443,12 @@ def _fetch_market_series(symbol: str, market_days_ago: int = 0) -> Optional[Mark
     )
 
 
-def _fetch_sina_market_series(symbol: str, market_days_ago: int = 0) -> Optional[MarketSeries]:
-    sina_symbol = _sina_symbol(symbol)
+def _fetch_sina_market_series(
+    symbol: str,
+    market_days_ago: int = 0,
+    sina_symbol: Optional[str] = None,
+) -> Optional[MarketSeries]:
+    sina_symbol = sina_symbol or _sina_symbol(symbol)
     try:
         quote_text = _fetch_text(SINA_QUOTE_URL.format(symbols=sina_symbol))
         data = quote_text.split('"', 1)[1].rsplit('"', 1)[0]
@@ -431,6 +501,18 @@ def _fetch_best_market_series(symbol: str, market_days_ago: int = 0) -> Optional
     return _fetch_market_series(symbol, market_days_ago=market_days_ago) or _fetch_sina_market_series(
         symbol,
         market_days_ago=market_days_ago,
+    )
+
+
+def _fetch_benchmark_market_series(market_days_ago: int = 0) -> Optional[MarketSeries]:
+    return _fetch_market_series(
+        BENCHMARK_SYMBOL,
+        market_days_ago=market_days_ago,
+        secid=BENCHMARK_SECID,
+    ) or _fetch_sina_market_series(
+        BENCHMARK_SYMBOL,
+        market_days_ago=market_days_ago,
+        sina_symbol="sh000001",
     )
 
 
@@ -979,6 +1061,498 @@ def _save_theme_heat_history(path: Path, themes: List[ThemeCandidate], keep_batc
         writer.writerows(kept)
 
 
+def _theme_market_date(themes: List[ThemeCandidate]) -> str:
+    dates = [
+        theme.market.updated_at[:10]
+        for theme in themes
+        if theme.market and len(theme.market.updated_at) >= 10
+    ]
+    return max(dates) if dates else date.today().isoformat()
+
+
+def _prediction_signal(etf_action: str) -> float:
+    return ETF_ACTION_SIGNALS.get(etf_action, 0.0)
+
+
+def _prediction_row(
+    theme: ThemeCandidate,
+    rank: int,
+    as_of: str,
+    benchmark: Optional[MarketSeries],
+) -> Dict[str, str]:
+    market = theme.market
+    signal = _prediction_signal(theme.etf_action)
+    return {
+        "as_of": as_of,
+        "evaluated_at": "",
+        "theme": theme.theme,
+        "proxy_ticker": theme.proxy_ticker,
+        "proxy_name": theme.proxy_name,
+        "style": theme.style,
+        "risk_level": theme.risk_level,
+        "score": str(theme.score),
+        "direction_rank": str(rank),
+        "direction_action": theme.action,
+        "etf_action": theme.etf_action,
+        "predicted_signal": f"{signal:.1f}",
+        "price_t0": f"{market.price:.4f}" if market else "",
+        "price_t1": "",
+        "benchmark_price_t0": f"{benchmark.price:.4f}" if benchmark else "",
+        "benchmark_price_t1": "",
+        "benchmark_1d_return": "",
+        "actual_1d_return": "",
+        "actual_excess_return": "",
+        "actual_excess_universe": "",
+        "actual_excess_benchmark": "",
+        "actual_rank": "",
+        "hit": "",
+        "loss": "",
+        "return_5d": f"{market.return_5d:.4f}" if market else "",
+        "return_20d": f"{market.return_20d:.4f}" if market else "",
+        "return_60d": f"{market.return_60d:.4f}" if market else "",
+        "volume_ratio": f"{market.volume_ratio:.4f}" if market else "",
+        "sma_20_gap_pct": f"{market.sma_20_gap_pct:.4f}" if market else "",
+        "drawdown_60d_pct": f"{market.drawdown_60d_pct:.4f}" if market else "",
+        "volatility_20d": f"{market.volatility_20d:.4f}" if market else "",
+    }
+    for horizon in (5, 10, 20):
+        row.update(
+            {
+                f"evaluated_at_{horizon}d": "",
+                f"price_t{horizon}": "",
+                f"benchmark_price_t{horizon}": "",
+                f"benchmark_{horizon}d_return": "",
+                f"actual_{horizon}d_return": "",
+                f"actual_excess_{horizon}d": "",
+                f"actual_excess_universe_{horizon}d": "",
+                f"actual_excess_benchmark_{horizon}d": "",
+                f"actual_rank_{horizon}d": "",
+                f"hit_{horizon}d": "",
+                f"loss_{horizon}d": "",
+            }
+        )
+    return row
+
+
+def _row_float(row: Dict[str, str], key: str, default: float = 0.0) -> float:
+    try:
+        value = row.get(key, "")
+        if value is None or value == "":
+            return default
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _prediction_hit(signal: float, excess_return: float) -> bool:
+    if signal > 0:
+        return excess_return > 0
+    if signal < 0:
+        return excess_return < 0
+    return abs(excess_return) <= 0.5
+
+
+def _effective_excess(universe_excess: float, benchmark_excess: Optional[float]) -> float:
+    if benchmark_excess is None:
+        return universe_excess
+    return universe_excess * UNIVERSE_EXCESS_WEIGHT + benchmark_excess * BENCHMARK_EXCESS_WEIGHT
+
+
+def _prediction_loss(
+    row: Dict[str, str],
+    excess_return: float,
+    actual_rank: int,
+    peer_count: int,
+    actual_return: Optional[float] = None,
+    horizon: int = 1,
+) -> float:
+    signal = _row_float(row, "predicted_signal")
+    realized_return = _row_float(row, "actual_1d_return") if actual_return is None else actual_return
+    horizon_scale = math.sqrt(max(1, horizon))
+    normalized_return = max(-1.0, min(1.0, excess_return / (3.0 * horizon_scale)))
+    directional_miss = 0.0 if _prediction_hit(signal, excess_return) else abs(signal)
+    mse = (signal - normalized_return) ** 2
+    predicted_rank = max(1, int(_row_float(row, "direction_rank", peer_count)))
+    rank_gap = max(0.0, (actual_rank - predicted_rank) / max(1, peer_count - 1))
+    downside = max(0.0, -realized_return - 1.5 * horizon_scale) / (5.0 * horizon_scale) if signal > 0 else 0.0
+    return directional_miss * 0.35 + mse * 0.25 + rank_gap * 0.25 + downside * 0.15
+
+
+def _format_signed_pct(value: float) -> str:
+    return f"{value:+.2f}%"
+
+
+def _horizon_field(horizon: int, base: str) -> str:
+    legacy_1d_fields = {
+        "evaluated_at": "evaluated_at",
+        "price": "price_t1",
+        "benchmark_price": "benchmark_price_t1",
+        "benchmark_return": "benchmark_1d_return",
+        "actual_return": "actual_1d_return",
+        "effective_excess": "actual_excess_return",
+        "universe_excess": "actual_excess_universe",
+        "benchmark_excess": "actual_excess_benchmark",
+        "rank": "actual_rank",
+        "hit": "hit",
+        "loss": "loss",
+    }
+    if horizon == 1:
+        return legacy_1d_fields[base]
+    return {
+        "evaluated_at": f"evaluated_at_{horizon}d",
+        "price": f"price_t{horizon}",
+        "benchmark_price": f"benchmark_price_t{horizon}",
+        "benchmark_return": f"benchmark_{horizon}d_return",
+        "actual_return": f"actual_{horizon}d_return",
+        "effective_excess": f"actual_excess_{horizon}d",
+        "universe_excess": f"actual_excess_universe_{horizon}d",
+        "benchmark_excess": f"actual_excess_benchmark_{horizon}d",
+        "rank": f"actual_rank_{horizon}d",
+        "hit": f"hit_{horizon}d",
+        "loss": f"loss_{horizon}d",
+    }[base]
+
+
+def _prediction_market_age(as_of: str, current_as_of: str, rows: List[Dict[str, str]]) -> int:
+    dates = {row.get("as_of", "") for row in rows if row.get("as_of")}
+    dates.add(current_as_of)
+    return sum(1 for item in dates if as_of < item <= current_as_of)
+
+
+def _horizon_rows(rows: List[Dict[str, str]], horizon: int) -> List[Dict[str, str]]:
+    return [row for row in rows if row.get(_horizon_field(horizon, "actual_return")) != ""]
+
+
+def _set_horizon_result(
+    row: Dict[str, str],
+    horizon: int,
+    current_as_of: str,
+    price: float,
+    benchmark_price: Optional[float],
+    benchmark_return: Optional[float],
+    actual_return: float,
+    universe_excess: float,
+    benchmark_excess: Optional[float],
+    effective_excess: float,
+    actual_rank: int,
+    peer_count: int,
+) -> None:
+    row[_horizon_field(horizon, "evaluated_at")] = current_as_of
+    row[_horizon_field(horizon, "price")] = f"{price:.4f}"
+    row[_horizon_field(horizon, "benchmark_price")] = f"{benchmark_price:.4f}" if benchmark_price is not None else ""
+    row[_horizon_field(horizon, "benchmark_return")] = (
+        f"{benchmark_return:.4f}" if benchmark_return is not None else ""
+    )
+    row[_horizon_field(horizon, "actual_return")] = f"{actual_return:.4f}"
+    row[_horizon_field(horizon, "effective_excess")] = f"{effective_excess:.4f}"
+    row[_horizon_field(horizon, "universe_excess")] = f"{universe_excess:.4f}"
+    row[_horizon_field(horizon, "benchmark_excess")] = (
+        f"{benchmark_excess:.4f}" if benchmark_excess is not None else ""
+    )
+    row[_horizon_field(horizon, "rank")] = str(actual_rank)
+    row[_horizon_field(horizon, "hit")] = (
+        "1" if _prediction_hit(_row_float(row, "predicted_signal"), effective_excess) else "0"
+    )
+    row[_horizon_field(horizon, "loss")] = (
+        f"{_prediction_loss(row, effective_excess, actual_rank, peer_count, actual_return, horizon):.4f}"
+    )
+
+
+def _score_bucket(score: float) -> str:
+    if score >= 72:
+        return "72+"
+    if score >= 68:
+        return "68-71"
+    if score >= 58:
+        return "58-67"
+    return "<58"
+
+
+def _heat_bucket(row: Dict[str, str]) -> str:
+    if _row_float(row, "return_5d") > 8 or _row_float(row, "sma_20_gap_pct") > 10:
+        return "短线过热"
+    return "非过热"
+
+
+def _diagnostic_row(label: str, rows: List[Dict[str, str]]) -> Dict[str, str]:
+    def hit_rate(horizon: int) -> Optional[float]:
+        field = _horizon_field(horizon, "hit")
+        evaluated = [row for row in rows if row.get(field) != ""]
+        if not evaluated:
+            return None
+        return sum(1 for row in evaluated if row.get(field) == "1") / len(evaluated)
+
+    def average_field(horizon: int, base: str) -> Optional[float]:
+        field = _horizon_field(horizon, base)
+        values = [_row_float(row, field) for row in rows if row.get(field) != ""]
+        return statistics.mean(values) if values else None
+
+    def fmt_pct(value: Optional[float]) -> str:
+        return "等待样本" if value is None else f"{value:.0%}"
+
+    def fmt_signed(value: Optional[float]) -> str:
+        return "等待样本" if value is None else _format_signed_pct(value)
+
+    def fmt_loss(value: Optional[float]) -> str:
+        return "等待样本" if value is None else f"{value:.2f}"
+
+    return {
+        "group": label,
+        "samples": str(len(rows)),
+        "hit_1d": fmt_pct(hit_rate(1)),
+        "hit_5d": fmt_pct(hit_rate(5)),
+        "hit_20d": fmt_pct(hit_rate(20)),
+        "excess_1d": fmt_signed(average_field(1, "universe_excess")),
+        "loss_1d": fmt_loss(average_field(1, "loss")),
+    }
+
+
+def _parameter_diagnostics(rows: List[Dict[str, str]], window: int = 20) -> List[Dict[str, str]]:
+    evaluated = _horizon_rows(rows, 1)
+    if not evaluated:
+        return []
+    dates = sorted({row["as_of"] for row in evaluated}, reverse=True)
+    recent_dates = set(dates[:window])
+    recent_rows = [row for row in rows if row.get("as_of") in recent_dates]
+    groups: List[tuple[str, List[Dict[str, str]]]] = []
+
+    def add_groups(prefix: str, key_fn) -> None:
+        buckets: Dict[str, List[Dict[str, str]]] = {}
+        for row in recent_rows:
+            buckets.setdefault(key_fn(row), []).append(row)
+        for name, bucket_rows in sorted(buckets.items(), key=lambda item: (-len(item[1]), item[0])):
+            groups.append((f"{prefix}:{name}", bucket_rows))
+
+    add_groups("动作", lambda row: row.get("etf_action") or "未知")
+    add_groups("分数", lambda row: _score_bucket(_row_float(row, "score")))
+    add_groups("状态", _heat_bucket)
+    add_groups("风格", lambda row: row.get("style") or "未知")
+
+    return [_diagnostic_row(label, bucket_rows) for label, bucket_rows in groups[:12]]
+
+
+def _prediction_summary(
+    rows: List[Dict[str, str]],
+    top_n: int,
+    window: int = 20,
+) -> tuple[List[str], Dict[str, object], List[Dict[str, str]]]:
+    evaluated = _horizon_rows(rows, 1)
+    if not evaluated:
+        return ["预测验证：暂无可回填样本，明日收盘后开始统计。"], {
+            "evaluated_samples": 0,
+            "window_days": window,
+        }, []
+
+    dates = sorted({row["as_of"] for row in evaluated}, reverse=True)
+    latest_date = dates[0]
+    latest_rows = [row for row in evaluated if row["as_of"] == latest_date]
+    latest_top = [row for row in latest_rows if int(_row_float(row, "direction_rank", 999)) <= top_n]
+    latest_hits = sum(1 for row in latest_top if row.get("hit") == "1")
+    add_rows = [row for row in latest_rows if row.get("etf_action") == "可小幅加仓"]
+    add_universe_avg = (
+        statistics.mean(_row_float(row, "actual_excess_universe", _row_float(row, "actual_excess_return")) for row in add_rows)
+        if add_rows
+        else None
+    )
+    add_benchmark_values = [
+        _row_float(row, "actual_excess_benchmark")
+        for row in add_rows
+        if row.get("actual_excess_benchmark") != ""
+    ]
+    add_benchmark_avg = statistics.mean(add_benchmark_values) if add_benchmark_values else None
+
+    def horizon_metrics(horizon: int) -> Dict[str, object]:
+        horizon_evaluated = _horizon_rows(rows, horizon)
+        horizon_dates = sorted({row["as_of"] for row in horizon_evaluated}, reverse=True)
+        recent_dates = set(horizon_dates[:window])
+        recent_rows = [row for row in horizon_evaluated if row["as_of"] in recent_dates]
+        recent_top = [row for row in recent_rows if int(_row_float(row, "direction_rank", 999)) <= top_n]
+        strong_rows = [row for row in recent_rows if row.get("etf_action") in STRONG_ETF_ACTIONS]
+        effective_field = _horizon_field(horizon, "effective_excess")
+        universe_field = _horizon_field(horizon, "universe_excess")
+        benchmark_field = _horizon_field(horizon, "benchmark_excess")
+        hit_field = _horizon_field(horizon, "hit")
+        loss_field = _horizon_field(horizon, "loss")
+        weighted_effective_excess = [
+            _row_float(row, "predicted_signal") * _row_float(row, effective_field)
+            for row in recent_rows
+            if abs(_row_float(row, "predicted_signal")) > 0
+        ]
+        weighted_universe_excess = [
+            _row_float(row, "predicted_signal") * _row_float(row, universe_field, _row_float(row, effective_field))
+            for row in recent_rows
+            if abs(_row_float(row, "predicted_signal")) > 0
+        ]
+        weighted_benchmark_excess = [
+            _row_float(row, "predicted_signal") * _row_float(row, benchmark_field)
+            for row in recent_rows
+            if abs(_row_float(row, "predicted_signal")) > 0 and row.get(benchmark_field) != ""
+        ]
+        losses = [_row_float(row, loss_field) for row in recent_rows if row.get(loss_field) != ""]
+        return {
+            "sample_count": len(recent_rows),
+            "date_count": len(recent_dates),
+            "top_hit_rate": sum(1 for row in recent_top if row.get(hit_field) == "1") / len(recent_top)
+            if recent_top
+            else None,
+            "strong_hit_rate": sum(1 for row in strong_rows if row.get(hit_field) == "1") / len(strong_rows)
+            if strong_rows
+            else None,
+            "avg_effective_excess": statistics.mean(weighted_effective_excess) if weighted_effective_excess else None,
+            "avg_universe_excess": statistics.mean(weighted_universe_excess) if weighted_universe_excess else None,
+            "avg_benchmark_excess": statistics.mean(weighted_benchmark_excess) if weighted_benchmark_excess else None,
+            "avg_loss": statistics.mean(losses) if losses else None,
+        }
+
+    short_metrics = horizon_metrics(1)
+    swing5_metrics = horizon_metrics(5)
+    swing10_metrics = horizon_metrics(10)
+    trend20_metrics = horizon_metrics(20)
+
+    def pct_or_wait(value: object) -> str:
+        return "等待样本" if value is None else f"{float(value):.0%}"
+
+    def signed_or_wait(value: object) -> str:
+        return "等待样本" if value is None else _format_signed_pct(float(value))
+
+    def loss_or_wait(value: object) -> str:
+        return "等待样本" if value is None else f"{float(value):.2f}"
+
+    add_universe_text = _format_signed_pct(add_universe_avg) if add_universe_avg is not None else "暂无样本"
+    add_benchmark_text = _format_signed_pct(add_benchmark_avg) if add_benchmark_avg is not None else "暂无样本"
+    summary = [
+        f"昨日验证：前日 {len(latest_top)} 个强方向命中 {latest_hits} 个；可加仓超额 方向池{add_universe_text} / 上证{add_benchmark_text}",
+        f"T+1短线：方向命中率 {pct_or_wait(short_metrics['top_hit_rate'])}，强信号命中率 {pct_or_wait(short_metrics['strong_hit_rate'])}，方向池{signed_or_wait(short_metrics['avg_universe_excess'])}/日，上证{signed_or_wait(short_metrics['avg_benchmark_excess'])}/日，loss {loss_or_wait(short_metrics['avg_loss'])}",
+        f"T+5/T+10波段：5日命中 {pct_or_wait(swing5_metrics['top_hit_rate'])} / 10日命中 {pct_or_wait(swing10_metrics['top_hit_rate'])}；T+20主线命中 {pct_or_wait(trend20_metrics['top_hit_rate'])}，loss {loss_or_wait(trend20_metrics['avg_loss'])}",
+    ]
+    state = {
+        "updated_at": datetime.now().isoformat(timespec="seconds"),
+        "evaluated_samples": len(evaluated),
+        "latest_evaluated_date": latest_date,
+        "window_days": int(short_metrics["date_count"]),
+        "benchmark": BENCHMARK_NAME,
+        "universe_excess_weight": UNIVERSE_EXCESS_WEIGHT,
+        "benchmark_excess_weight": BENCHMARK_EXCESS_WEIGHT,
+        "horizons": {},
+    }
+    for horizon, metrics in {
+        1: short_metrics,
+        5: swing5_metrics,
+        10: swing10_metrics,
+        20: trend20_metrics,
+    }.items():
+        state["horizons"][f"{horizon}d"] = {
+            key: (round(value, 4) if isinstance(value, float) else value)
+            for key, value in metrics.items()
+        }
+    diagnostics = _parameter_diagnostics(rows, window)
+    state["parameter_diagnostics"] = diagnostics
+    return summary, state, diagnostics
+
+
+def _update_prediction_feedback(
+    prediction_log_path: Path,
+    model_state_path: Path,
+    themes: List[ThemeCandidate],
+    top_n: int,
+) -> tuple[List[str], List[Dict[str, str]]]:
+    current_as_of = _theme_market_date(themes)
+    benchmark = _fetch_benchmark_market_series()
+    benchmark_price = benchmark.price if benchmark and benchmark.price > 0 else None
+    current_prices = {
+        theme.proxy_ticker: theme.market.price
+        for theme in themes
+        if theme.market and theme.market.price > 0
+    }
+    rows: List[Dict[str, str]] = []
+    if prediction_log_path.exists():
+        with prediction_log_path.open("r", encoding="utf-8") as handle:
+            rows = [
+                {field: str(row.get(field, "")) for field in PREDICTION_LOG_FIELDS}
+                for row in csv.DictReader(handle)
+                if row.get("as_of")
+            ]
+
+    pending_by_key: Dict[tuple[str, int], List[Dict[str, str]]] = {}
+    for row in rows:
+        row_as_of = row.get("as_of", "")
+        if not row_as_of or row_as_of >= current_as_of:
+            continue
+        if row.get("proxy_ticker") not in current_prices or _row_float(row, "price_t0") <= 0:
+            continue
+        market_age = _prediction_market_age(row_as_of, current_as_of, rows)
+        for horizon in PREDICTION_HORIZONS:
+            if market_age >= horizon and not row.get(_horizon_field(horizon, "actual_return")):
+                pending_by_key.setdefault((row_as_of, horizon), []).append(row)
+
+    for (prediction_date, horizon), pending_rows in pending_by_key.items():
+        returns: Dict[str, float] = {}
+        for row in pending_rows:
+            ticker = row["proxy_ticker"]
+            price_t0 = _row_float(row, "price_t0")
+            price_t1 = current_prices[ticker]
+            returns[ticker] = (price_t1 / price_t0 - 1.0) * 100.0
+        if not returns:
+            continue
+        universe_baseline = statistics.mean(returns.values())
+        ranked = {
+            ticker: rank
+            for rank, (ticker, _) in enumerate(sorted(returns.items(), key=lambda item: item[1], reverse=True), start=1)
+        }
+        peer_count = len(returns)
+        for row in pending_rows:
+            ticker = row["proxy_ticker"]
+            actual_return = returns[ticker]
+            universe_excess = actual_return - universe_baseline
+            benchmark_return: Optional[float] = None
+            benchmark_excess: Optional[float] = None
+            benchmark_t0 = _row_float(row, "benchmark_price_t0")
+            if benchmark_price is not None and benchmark_t0 > 0:
+                benchmark_return = (benchmark_price / benchmark_t0 - 1.0) * 100.0
+                benchmark_excess = actual_return - benchmark_return
+            effective_excess = _effective_excess(universe_excess, benchmark_excess)
+            actual_rank = ranked[ticker]
+            _set_horizon_result(
+                row,
+                horizon,
+                current_as_of,
+                current_prices[ticker],
+                benchmark_price,
+                benchmark_return,
+                actual_return,
+                universe_excess,
+                benchmark_excess,
+                effective_excess,
+                actual_rank,
+                peer_count,
+            )
+
+    existing_by_key = {(row["as_of"], row["proxy_ticker"]): row for row in rows}
+    for rank, theme in enumerate(themes, start=1):
+        if theme.market is None:
+            continue
+        key = (current_as_of, theme.proxy_ticker)
+        existing = existing_by_key.get(key)
+        if existing is not None:
+            existing["direction_rank"] = existing.get("direction_rank") or str(rank)
+            if benchmark_price is not None and existing.get("benchmark_price_t0", "") == "":
+                existing["benchmark_price_t0"] = f"{benchmark_price:.4f}"
+            continue
+        else:
+            rows.append(_prediction_row(theme, rank, current_as_of, benchmark))
+
+    prediction_log_path.parent.mkdir(parents=True, exist_ok=True)
+    normalized_rows = [{field: str(row.get(field, "")) for field in PREDICTION_LOG_FIELDS} for row in rows]
+    with prediction_log_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=PREDICTION_LOG_FIELDS)
+        writer.writeheader()
+        writer.writerows(normalized_rows)
+
+    summary, state, diagnostics = _prediction_summary(normalized_rows, top_n)
+    model_state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
+    return summary, diagnostics
+
+
 def _buy_sell_pressure(
     quote: Optional[MarketSeries],
     flow: Optional[FundFlowSnapshot],
@@ -1466,6 +2040,8 @@ def build_ashare_snapshot(
             enabled=False,
             allocation_target=config.target_allocation,
             market_note="A股主动推荐模块未启用。",
+            validation_summary=[],
+            validation_diagnostics=[],
             directions=[],
             top_ideas=[],
             long_term_ideas=[],
@@ -1487,6 +2063,8 @@ def build_ashare_snapshot(
     theme_heat_history_path = config.theme_heat_history_path
     if not theme_heat_history_path.is_absolute():
         theme_heat_history_path = Path.cwd() / theme_heat_history_path
+    prediction_log_path = theme_heat_history_path.with_name("ashare_prediction_log.csv")
+    model_state_path = theme_heat_history_path.with_name("ashare_model_state.json")
     cache_path = state_path.with_name("ashare_lowfreq_cache.json")
     _init_lowfreq_cache(cache_path)
 
@@ -1496,6 +2074,12 @@ def build_ashare_snapshot(
     themes = _load_theme_candidates(theme_path, market_days_ago)
     if write_heat_history:
         _save_theme_heat_history(theme_heat_history_path, themes)
+    validation_summary, validation_diagnostics = _update_prediction_feedback(
+        prediction_log_path,
+        model_state_path,
+        themes,
+        config.direction_top_n,
+    )
     all_theme_map = {item.theme: item for item in themes}
     selected = themes[: config.direction_top_n]
     selected_map = {item.theme: item for item in selected}
@@ -1546,11 +2130,13 @@ def build_ashare_snapshot(
         enabled=True,
         allocation_target=config.target_allocation,
         market_note=_market_note(selected, auto_rows, today_ideas, config),
+        validation_summary=validation_summary,
+        validation_diagnostics=validation_diagnostics,
         directions=_build_directions(selected, auto_rows, limit=config.direction_top_n),
         top_ideas=today_ideas,
         long_term_ideas=long_term_ideas,
         retained_ideas=retained_ideas,
         watchlist_count=len(auto_rows),
-        data_source=f"{path} + {theme_path} + {cache_path}",
+        data_source=f"{path} + {theme_path} + {cache_path} + {prediction_log_path}",
         observation_state_path=str(state_path),
     )
