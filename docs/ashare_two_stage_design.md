@@ -267,6 +267,7 @@ Low-frequency cache policy:
 Action override:
 
 - If direction is `暂缓`, high-scoring stocks become `不追高` instead of `可建仓`.
+- A `暂缓` direction only blocks chasing strength; it does not protect weak names: `score >= 68` becomes `B / 不追高`, `52 <= score < 68` becomes `C / 持有观察`, and `score < 52` becomes `D / 减仓/回避`.
 - If direction is `观察`, high-scoring stocks become `强关注`.
 - If direction is `轻跟踪`, high-scoring stocks become `轻仓试探`.
 

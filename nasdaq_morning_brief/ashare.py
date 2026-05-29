@@ -1696,7 +1696,9 @@ def _rating(score: int, row: Dict[str, str], theme: Optional[ThemeCandidate], pr
     if theme and theme.action == "暂缓":
         if score >= 68:
             return "B", "不追高"
-        return "C", "持有观察"
+        if score >= 52:
+            return "C", "持有观察"
+        return "D", "减仓/回避"
     if pressure_label == "大量买入" and score >= 70:
         return "A", "可建仓"
     if theme and theme.action == "观察" and score >= 68:
