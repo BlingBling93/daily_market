@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 
 @dataclass
@@ -142,7 +142,6 @@ class AShareSnapshot:
     allocation_target: float
     market_note: str
     validation_summary: List[str]
-    validation_diagnostics: List[Dict[str, str]]
     directions: List[AShareDirection]
     top_ideas: List[AShareIdea]
     long_term_ideas: List[AShareIdea]

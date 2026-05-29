@@ -1455,7 +1455,7 @@ def _update_prediction_feedback(
     model_state_path: Path,
     themes: List[ThemeCandidate],
     top_n: int,
-) -> tuple[List[str], List[Dict[str, str]]]:
+) -> List[str]:
     current_as_of = _theme_market_date(themes)
     benchmark = _fetch_benchmark_market_series()
     benchmark_price = benchmark.price if benchmark and benchmark.price > 0 else None
@@ -1550,7 +1550,7 @@ def _update_prediction_feedback(
 
     summary, state, diagnostics = _prediction_summary(normalized_rows, top_n)
     model_state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
-    return summary, diagnostics
+    return summary
 
 
 def _buy_sell_pressure(
@@ -2041,7 +2041,6 @@ def build_ashare_snapshot(
             allocation_target=config.target_allocation,
             market_note="A股主动推荐模块未启用。",
             validation_summary=[],
-            validation_diagnostics=[],
             directions=[],
             top_ideas=[],
             long_term_ideas=[],
@@ -2074,7 +2073,7 @@ def build_ashare_snapshot(
     themes = _load_theme_candidates(theme_path, market_days_ago)
     if write_heat_history:
         _save_theme_heat_history(theme_heat_history_path, themes)
-    validation_summary, validation_diagnostics = _update_prediction_feedback(
+    validation_summary = _update_prediction_feedback(
         prediction_log_path,
         model_state_path,
         themes,
@@ -2131,7 +2130,6 @@ def build_ashare_snapshot(
         allocation_target=config.target_allocation,
         market_note=_market_note(selected, auto_rows, today_ideas, config),
         validation_summary=validation_summary,
-        validation_diagnostics=validation_diagnostics,
         directions=_build_directions(selected, auto_rows, limit=config.direction_top_n),
         top_ideas=today_ideas,
         long_term_ideas=long_term_ideas,

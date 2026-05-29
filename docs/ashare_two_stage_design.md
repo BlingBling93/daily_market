@@ -162,14 +162,14 @@ T+5/T+10 swing: 5d hit 62% / 10d hit 59%; T+20 trend hit 55%, loss 0.44
 
 T+1 mainly calibrates ETF execution actions, T+5/T+10 calibrate direction persistence, and T+20 calibrates medium-term theme capture. This MVP only evaluates and displays feedback. It does not directly rewrite `theme_score` yet. Once the sample size is large enough, a calibration layer can adjust predictive scores down for historically weak crowded signals and up for early right-side signals with strong realized hit rates.
 
-The morning card also shows a parameter diagnostics table. It is observational only and does not change parameters automatically. The table groups samples by:
+The system also writes a parameter diagnostics table into the `parameter_diagnostics` field in `ashare_model_state.json`. It is kept as a backend cache for observation only; it is not shown directly on the morning card and does not change parameters automatically. The table groups samples by:
 
 - ETF action: `可小幅加仓`, `持有观察`, `等回调`, `暂不配置`, `减仓提醒`, and related actions.
 - Score bucket: `<58`, `58-67`, `68-71`, `72+`.
 - Heat state: 5d return > 8% or MA20 gap > 10% is `短线过热`; otherwise `非过热`.
 - Style: the `style` field from the direction universe, such as tech, growth, or low risk.
 
-For each group, the table shows sample count, T+1/T+5/T+20 hit rates, T+1 average excess return versus the direction universe, and T+1 average loss. Once enough samples accumulate, this table is the basis for human-reviewed threshold and signal calibration.
+For each group, the cached table records sample count, T+1/T+5/T+20 hit rates, T+1 average excess return versus the direction universe, and T+1 average loss. Once enough samples accumulate, this cache is the basis for human-reviewed threshold and signal calibration.
 
 ## Stage 2: Stock Scoring
 
