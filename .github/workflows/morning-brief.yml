@@ -65,4 +65,6 @@ jobs:
             ashare_theme_etf.csv
             ashare_observation_state.json
             ashare_lowfreq_cache.json
+            ashare_prediction_log.csv
+            ashare_model_state.json
           if-no-files-found: ignore

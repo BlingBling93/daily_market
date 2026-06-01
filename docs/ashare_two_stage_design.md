@@ -111,6 +111,8 @@ Each run maintains two files:
 - `ashare_prediction_log.csv`: daily samples for each direction, including score, action, prediction signal, T0 direction ETF price, T0 Shanghai Composite price, and T+1/T+5/T+10/T+20 prices, returns, excess returns versus both the direction universe and the Shanghai Composite, hit flags, and losses.
 - `ashare_model_state.json`: rolling hit rates, strong-signal hit rates, average excess returns versus the direction universe and the Shanghai Composite, and average losses for each horizon.
 
+Validation horizons advance only by real trading sessions, not calendar days or workflow run days. The system derives the trading-date set from the daily K-lines of the direction ETFs and the Shanghai Composite. A T+1/T+5/T+10/T+20 result is filled only when both the prediction date and the current market date are present in that trading calendar and enough sessions have elapsed. Weekend runs, market holidays, and runs before the data source has advanced to a new trading session do not enter hit rates or losses early.
+
 ETF actions are mapped into prediction signals:
 
 | ETF action | Prediction signal |

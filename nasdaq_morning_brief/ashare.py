@@ -5,7 +5,7 @@ import json
 import math
 import statistics
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
@@ -40,6 +40,7 @@ class MarketSeries:
     drawdown_60d_pct: float
     volatility_20d: float
     updated_at: str
+    trade_dates: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -407,10 +408,12 @@ def _fetch_market_series(symbol: str, market_days_ago: int = 0, secid: Optional[
 
     closes: List[float] = []
     amounts: List[float] = []
+    trade_dates: List[str] = []
     for line in klines:
         parts = str(line).split(",")
         if len(parts) < 7:
             continue
+        trade_dates.append(parts[0])
         closes.append(float(parts[2]))
         amounts.append(float(parts[6]))
     if len(closes) < 22:
@@ -419,14 +422,18 @@ def _fetch_market_series(symbol: str, market_days_ago: int = 0, secid: Optional[
     if market_days_ago > 0 and len(closes) > market_days_ago:
         closes = closes[: -market_days_ago]
         amounts = amounts[: -market_days_ago]
+        trade_dates = trade_dates[: -market_days_ago]
 
     price = _scale_price(quote.get("f43", closes[-1]), symbol)
     previous = _scale_price(quote.get("f60", closes[-2]), symbol)
     day_change_pct = float(quote.get("f170") or 0.0) / 100.0
     raw_updated_at = quote.get("f86")
-    updated_at = date.today().isoformat()
+    kline_date = trade_dates[-1] if trade_dates else date.today().isoformat()
+    updated_at = kline_date
     if raw_updated_at:
         updated_at = datetime.fromtimestamp(int(raw_updated_at)).strftime("%Y-%m-%d %H:%M")
+        if updated_at[:10] != kline_date:
+            updated_at = kline_date
 
     return MarketSeries(
         price=price,
@@ -440,6 +447,7 @@ def _fetch_market_series(symbol: str, market_days_ago: int = 0, secid: Optional[
         drawdown_60d_pct=_calc_drawdown(closes, 60),
         volatility_20d=_calc_volatility(closes, 20),
         updated_at=updated_at,
+        trade_dates=trade_dates,
     )
 
 
@@ -471,16 +479,20 @@ def _fetch_sina_market_series(
 
     closes = [float(item["close"]) for item in rows]
     volumes = [float(item["volume"]) for item in rows]
+    trade_dates = [str(item.get("day", ""))[:10] for item in rows if item.get("day")]
     if len(closes) < 22:
         return None
     if market_days_ago > 0 and len(closes) > market_days_ago:
         closes = closes[: -market_days_ago]
         volumes = volumes[: -market_days_ago]
+        trade_dates = trade_dates[: -market_days_ago]
 
     previous = float(parts[2])
     price = float(parts[3])
     day_change_pct = (price / previous - 1.0) * 100.0 if previous else 0.0
-    updated_at = f"{parts[30]} {parts[31][:5]}" if len(parts) > 31 else date.today().isoformat()
+    kline_date = trade_dates[-1] if trade_dates else date.today().isoformat()
+    quote_updated_at = f"{parts[30]} {parts[31][:5]}" if len(parts) > 31 else kline_date
+    updated_at = quote_updated_at if quote_updated_at[:10] == kline_date else kline_date
 
     return MarketSeries(
         price=price,
@@ -494,6 +506,7 @@ def _fetch_sina_market_series(
         drawdown_60d_pct=_calc_drawdown(closes, 60),
         volatility_20d=_calc_volatility(closes, 20),
         updated_at=updated_at,
+        trade_dates=trade_dates,
     )
 
 
@@ -1082,7 +1095,7 @@ def _prediction_row(
 ) -> Dict[str, str]:
     market = theme.market
     signal = _prediction_signal(theme.etf_action)
-    return {
+    row = {
         "as_of": as_of,
         "evaluated_at": "",
         "theme": theme.theme,
@@ -1213,10 +1226,34 @@ def _horizon_field(horizon: int, base: str) -> str:
     }[base]
 
 
-def _prediction_market_age(as_of: str, current_as_of: str, rows: List[Dict[str, str]]) -> int:
-    dates = {row.get("as_of", "") for row in rows if row.get("as_of")}
+def _prediction_trade_dates(
+    current_as_of: str,
+    benchmark: Optional[MarketSeries],
+    themes: List[ThemeCandidate],
+    rows: List[Dict[str, str]],
+) -> List[str]:
+    dates = set(benchmark.trade_dates if benchmark else [])
+    for theme in themes:
+        if theme.market:
+            dates.update(theme.market.trade_dates)
+    if not dates:
+        # Last-resort compatibility for old logs: weekdays are not a full China
+        # exchange calendar, but they prevent weekend rows from advancing tests.
+        for row in rows:
+            row_as_of = row.get("as_of", "")
+            try:
+                if row_as_of and datetime.strptime(row_as_of, "%Y-%m-%d").weekday() < 5:
+                    dates.add(row_as_of)
+            except ValueError:
+                continue
     dates.add(current_as_of)
-    return sum(1 for item in dates if as_of < item <= current_as_of)
+    return sorted(date for date in dates if date)
+
+
+def _prediction_market_age(as_of: str, current_as_of: str, trade_dates: List[str]) -> int:
+    if as_of not in trade_dates or current_as_of not in trade_dates:
+        return 0
+    return sum(1 for item in trade_dates if as_of < item <= current_as_of)
 
 
 def _horizon_rows(rows: List[Dict[str, str]], horizon: int) -> List[Dict[str, str]]:
@@ -1472,6 +1509,7 @@ def _update_prediction_feedback(
                 for row in csv.DictReader(handle)
                 if row.get("as_of")
             ]
+    trade_dates = _prediction_trade_dates(current_as_of, benchmark, themes, rows)
 
     pending_by_key: Dict[tuple[str, int], List[Dict[str, str]]] = {}
     for row in rows:
@@ -1480,7 +1518,7 @@ def _update_prediction_feedback(
             continue
         if row.get("proxy_ticker") not in current_prices or _row_float(row, "price_t0") <= 0:
             continue
-        market_age = _prediction_market_age(row_as_of, current_as_of, rows)
+        market_age = _prediction_market_age(row_as_of, current_as_of, trade_dates)
         for horizon in PREDICTION_HORIZONS:
             if market_age >= horizon and not row.get(_horizon_field(horizon, "actual_return")):
                 pending_by_key.setdefault((row_as_of, horizon), []).append(row)
