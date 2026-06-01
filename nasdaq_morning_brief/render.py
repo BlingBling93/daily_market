@@ -1320,9 +1320,22 @@ def write_html(brief: Brief, config: AppConfig) -> Path:
 def write_ashare_html(brief: Brief, config: AppConfig) -> Path | None:
     if brief.ashare is None or not brief.ashare.enabled:
         return None
+    return write_ashare_snapshot_html(brief.ashare, config)
+
+
+def write_ashare_snapshot_html(
+    ashare: AShareSnapshot,
+    config: AppConfig,
+    as_of: str | None = None,
+) -> Path | None:
+    if not ashare.enabled:
+        return None
     config.render.output_dir.mkdir(parents=True, exist_ok=True)
     output_path = config.render.output_dir / "ashare.html"
-    output_path.write_text(build_ashare_html(brief.ashare, config, date.today().isoformat()), encoding="utf-8")
+    output_path.write_text(
+        build_ashare_html(ashare, config, as_of or date.today().isoformat()),
+        encoding="utf-8",
+    )
     return output_path
 
 

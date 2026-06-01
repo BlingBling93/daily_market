@@ -1,4 +1,4 @@
-name: Nasdaq Morning Brief
+name: Market Briefs
 
 on:
   # Triggered manually or by an external cron service through the GitHub workflow_dispatch API.
@@ -46,15 +46,19 @@ jobs:
           npm install playwright
           npx playwright install --with-deps chromium
 
-      - name: Generate and push Feishu image
+      - name: Generate and push Nasdaq image
         run: |
           python -B -m nasdaq_morning_brief --config config.example.yaml --require-push
+
+      - name: Generate and push A-share image
+        run: |
+          python -B -m nasdaq_morning_brief.ashare_report --config config.example.yaml --require-push
 
       - name: Upload generated card artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: nasdaq-morning-brief
+          name: market-briefs
           path: |
             output/brief.html
             output/brief.png

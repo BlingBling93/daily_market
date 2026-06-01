@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import argparse
-from datetime import date
 from pathlib import Path
 from subprocess import CalledProcessError
 from urllib.error import HTTPError, URLError
 
 from .advice import apply_policy_adjustment, generate_advice
-from .ashare import build_ashare_snapshot
 from .config import load_config
 from .data import (
     fetch_auto_valuation,
@@ -23,7 +21,7 @@ from .indicators import (
 from .feishu import push_image_to_feishu, push_images_to_feishu
 from .models import Brief
 from .policy import build_policy_snapshot
-from .render import write_ashare_html, write_html, write_png
+from .render import write_html, write_png
 from .wechat import push_to_wecom
 
 
@@ -37,11 +35,6 @@ def parse_args() -> argparse.Namespace:
         help="Use a prior market session. 1 means yesterday's market session.",
     )
     parser.add_argument("--no-push", action="store_true", help="Generate HTML/PNG without pushing.")
-    parser.add_argument(
-        "--skip-ashare-heat-history",
-        action="store_true",
-        help="Do not append A-share ETF direction heat history during this run.",
-    )
     parser.add_argument(
         "--require-push",
         action="store_true",
@@ -58,7 +51,6 @@ def parse_args() -> argparse.Namespace:
 def build_brief(
     config_path: str,
     market_days_ago: int = 0,
-    write_ashare_heat_history: bool = True,
 ) -> Brief:
     config = load_config(config_path)
 
@@ -79,11 +71,6 @@ def build_brief(
     advice = generate_advice(config.portfolio, qqq, vxn, temperature, valuation)
     policy = build_policy_snapshot(config.policy, qqq.as_of, advice, us10y, oil)
     advice = apply_policy_adjustment(config.portfolio, advice, policy, qqq.as_of)
-    ashare = build_ashare_snapshot(
-        config.ashare,
-        market_days_ago=market_days_ago,
-        write_heat_history=write_ashare_heat_history,
-    )
     observation_points = build_observation_points(
         advice.triggers,
         temperature.rationale,
@@ -105,7 +92,7 @@ def build_brief(
         observation_points=observation_points,
         policy=policy,
         advice=advice,
-        ashare=ashare,
+        ashare=None,
     )
 
 
@@ -138,36 +125,27 @@ def main() -> int:
         brief = build_brief(
             args.config,
             market_days_ago=args.market_days_ago,
-            write_ashare_heat_history=not args.skip_ashare_heat_history,
         )
     except (HTTPError, URLError, ValueError) as exc:
         raise SystemExit(f"Failed to build brief from live market data: {exc}")
     output_path = write_html(brief, config)
     try:
         png_path = write_png(output_path, config, "brief.png")
-        ashare_output_path = write_ashare_html(brief, config)
-        ashare_png_path = write_png(ashare_output_path, config, "ashare.png") if ashare_output_path else None
     except CalledProcessError as exc:
         raise SystemExit(f"Failed to render PNG screenshot: {exc}")
 
     if args.no_push:
         print(f"HTML brief written to {output_path}")
         print(f"PNG brief written to {png_path}")
-        if ashare_output_path and ashare_png_path:
-            print(f"A-share HTML written to {ashare_output_path}")
-            print(f"A-share PNG written to {ashare_png_path}")
         print("Push skipped: yes")
         return 0
 
     feishu_pushed = False
     if config.push.feishu_webhook:
-        image_paths = [png_path]
-        if ashare_png_path:
-            image_paths.append(ashare_png_path)
         feishu_pushed = push_images_to_feishu(
             config.push.feishu_webhook,
             config.push.feishu_secret,
-            image_paths,
+            [png_path],
             config.push.feishu_app_id,
             config.push.feishu_app_secret,
         )
@@ -176,9 +154,6 @@ def main() -> int:
         wecom_pushed = push_to_wecom(config.push.wecom_webhook, brief, image_path=png_path)
     print(f"HTML brief written to {output_path}")
     print(f"PNG brief written to {png_path}")
-    if ashare_output_path and ashare_png_path:
-        print(f"A-share HTML written to {ashare_output_path}")
-        print(f"A-share PNG written to {ashare_png_path}")
     print(f"Feishu pushed: {'yes' if feishu_pushed else 'no'}")
     print(f"WeCom pushed: {'yes' if wecom_pushed else 'no'}")
     if args.require_push and not (feishu_pushed or wecom_pushed):

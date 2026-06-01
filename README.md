@@ -1,16 +1,14 @@
-# Nasdaq Morning Brief
+# Market Brief Scripts
 
-Lightweight daily Nasdaq 100 brief generator for a single passive index position.
+Lightweight daily brief generators split by market so Nasdaq and A-share strategy work can be iterated independently.
 
 ## What it does
 
-- Pulls market data for `QQQ`, `^NDX`, `^VIX`, and `^VXN`
-- Estimates short-term market temperature from price trend and volatility
-- Tracks event and policy fundamentals from a local event calendar
-- Scores a local A-share watchlist for active stock research candidates
-- Produces an HTML card ready for browser screenshot or automation capture
-- Sends the card summary to WeCom webhook when configured
-- Sends the card summary to Feishu webhook when configured
+- Nasdaq script pulls `QQQ`, `^NDX`, `^VIX`, `^VXN`, cross-asset data, valuation, and policy events
+- A-share script scores the local active watchlist and ETF direction pool
+- Each script produces its own HTML card and PNG screenshot
+- Each script can push its own image to Feishu when configured
+- The Nasdaq script can still fall back to WeCom when configured
 
 ## Quick start
 
@@ -26,16 +24,29 @@ Lightweight daily Nasdaq 100 brief generator for a single passive index position
    cp config.example.yaml config.yaml
    ```
 
-3. Generate today's brief:
+3. Generate today's Nasdaq brief:
 
    ```bash
    python3 -m nasdaq_morning_brief --config config.yaml
    ```
 
-4. Optional: run ad hoc local tests without pushing:
+4. Generate today's A-share brief:
 
    ```bash
-   python3 -B -m nasdaq_morning_brief --config config.yaml --no-push --skip-ashare-heat-history
+   python3 -m nasdaq_morning_brief.ashare_report --config config.yaml
+   ```
+
+5. Optional: run ad hoc local tests without pushing:
+
+   ```bash
+   ./run_nasdaq_brief.sh
+   ./run_ashare_brief.sh
+   ```
+
+   To avoid appending A-share direction heat history during a local A-share debug run:
+
+   ```bash
+   python3 -B -m nasdaq_morning_brief.ashare_report --config config.yaml --no-push --skip-heat-history
    ```
 
 ## Config
@@ -102,7 +113,9 @@ Choice, iFinD, Tushare Pro, JQData, or Ricequant.
 
 ## GitHub Actions
 
-The cloud workflow lives in `.github/workflows/morning-brief.yml`.
+The cloud workflow lives in `.github/workflows/morning-brief.yml`. One external
+cron dispatch triggers the workflow once, and the workflow generates both the
+Nasdaq image and the A-share image in sequence.
 
 Set these repository secrets before enabling it:
 
@@ -112,7 +125,7 @@ Set these repository secrets before enabling it:
 - `FEISHU_SECRET` if your bot uses signature verification
 
 GitHub's native `schedule` trigger can be delayed or skipped, so this project uses
-an external cron service to trigger the workflow through the GitHub API.
+an external cron service to trigger the combined workflow through the GitHub API.
 
 Recommended external cron setup:
 
