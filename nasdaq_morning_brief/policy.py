@@ -22,10 +22,29 @@ DEFAULT_IMPACT_DAYS_BY_CATEGORY = {
     "通胀": 10,
     "就业": 10,
     "财报": 14,
+    "增长": 10,
     "监管": 30,
     "地缘": 30,
+    "IPO": 21,
+    "指数调整": 14,
+    "科技监管": 30,
+    "AI产业": 14,
+    "流动性": 21,
 }
-MAJOR_POLICY_CATEGORIES = {"FOMC", "通胀", "就业", "财报", "监管", "地缘"}
+MAJOR_POLICY_CATEGORIES = {
+    "FOMC",
+    "通胀",
+    "就业",
+    "财报",
+    "增长",
+    "监管",
+    "地缘",
+    "IPO",
+    "指数调整",
+    "科技监管",
+    "AI产业",
+    "流动性",
+}
 
 FED_FOMC_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
 BLS_RELEASE_URLS = {
@@ -145,6 +164,11 @@ def _category_priority(category: str) -> int:
         "增长": 4,
         "监管": 5,
         "地缘": 6,
+        "IPO": 7,
+        "指数调整": 8,
+        "科技监管": 9,
+        "AI产业": 10,
+        "流动性": 11,
     }
     return priorities.get(category, 9)
 
@@ -186,6 +210,73 @@ def load_policy_events(path: Path, default_impact_days: int) -> List[PolicyEvent
                 )
             )
     return sorted(events, key=lambda item: item.event_date)
+
+
+def _stance_from_discovered_category(category: str) -> str:
+    if category in {"科技监管", "流动性"}:
+        return "偏谨慎"
+    if category in {"IPO", "指数调整", "AI产业"}:
+        return "事件待确认"
+    return "待确认"
+
+
+def load_discovered_policy_events(config: PolicyConfig, as_of: date) -> List[PolicyEvent]:
+    path = config.discovered_events_path
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+
+    events: List[PolicyEvent] = []
+    cutoff = as_of - timedelta(days=config.discovery_retention_days)
+    max_future = as_of + timedelta(days=config.discovery_lookahead_days)
+    for row in payload.get("events", []):
+        if not isinstance(row, dict):
+            continue
+        status = str(row.get("status") or "").strip()
+        if status not in {"confirmed", "probable"}:
+            continue
+        try:
+            importance = int(row.get("importance") or 0)
+        except (TypeError, ValueError):
+            importance = 0
+        if importance < config.discovery_min_importance:
+            continue
+        event_date = _parse_date(str(row.get("date") or ""))
+        title = str(row.get("title") or "").strip()
+        if event_date is None or not title:
+            continue
+        if event_date < cutoff or event_date > max_future:
+            continue
+        category = str(row.get("category") or "事件").strip()
+        impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, config.default_impact_days)
+        try:
+            impact_days = max(1, int(row.get("impact_days") or impact_days))
+        except (TypeError, ValueError):
+            pass
+        channels = row.get("market_channels") if isinstance(row.get("market_channels"), list) else []
+        channel_text = "、".join(str(item) for item in channels if str(item).strip())
+        summary = str(row.get("summary") or "非常规事件雷达发现的候选重大事件。").strip()
+        if channel_text and "传导渠道" not in summary:
+            summary = f"{summary} 传导渠道：{channel_text}。"
+        sources = row.get("sources") if isinstance(row.get("sources"), list) else []
+        events.append(
+            PolicyEvent(
+                event_date=event_date,
+                category=category,
+                title=title,
+                stance=_stance_from_discovered_category(category),
+                summary=summary,
+                short_term=str(row.get("short_term") or "非常规催化发酵期内，短线观察QQQ、VXN和相关权重股确认。").strip(),
+                mid_term=str(row.get("mid_term") or "中期看事件是否改变资金流向、盈利预期或监管约束。").strip(),
+                long_term=str(row.get("long_term") or "长期只有当事件改变盈利、监管或流动性中枢时才调整核心配置。").strip(),
+                impact_days=impact_days,
+                result_sources=[str(item) for item in sources],
+            )
+        )
+    return sorted(events, key=lambda item: (item.event_date, _category_priority(item.category), item.title))
 
 
 def _event_to_dict(event: PolicyEvent) -> dict[str, object]:
@@ -321,6 +412,10 @@ def _news_cache_entry_fresh(entry: dict[str, object], refresh_hours: int) -> boo
     return _now_utc() - fetched_at < timedelta(hours=refresh_hours)
 
 
+def _news_cache_entry_has_result(entry: dict[str, object]) -> bool:
+    return bool(str(entry.get("summary") or "").strip() and str(entry.get("conclusion") or "").strip())
+
+
 def _event_active_on(event: PolicyEvent, event_date: date) -> bool:
     return event.event_date <= event_date <= event.event_date + timedelta(days=event.impact_days)
 
@@ -330,8 +425,10 @@ def _event_needs_result(event: PolicyEvent, event_date: date) -> bool:
 
 
 def _direct_result_supported(event: PolicyEvent) -> bool:
-    return (event.category == "通胀" and "PCE" in event.title) or (
-        event.category == "财报" and event.title.startswith("NVDA")
+    return (
+        (event.category == "通胀" and "PCE" in event.title)
+        or (event.category == "增长" and "GDP" in event.title)
+        or (event.category == "财报" and event.title.startswith("NVDA"))
     )
 
 
@@ -419,6 +516,48 @@ def _fetch_pce_direct_result(event: PolicyEvent) -> dict[str, object] | None:
     }
 
 
+def _quarter_label(value_date: date) -> str:
+    return f"{value_date.year}Q{((value_date.month - 1) // 3) + 1}"
+
+
+def _fetch_gdp_direct_result(event: PolicyEvent) -> dict[str, object] | None:
+    growth = _latest_fred_values("A191RL1Q225SBEA")
+    real_gdp = _latest_fred_values("GDPC1")
+    if not growth:
+        return None
+    latest_date, latest_growth = growth[-1]
+    previous_growth = growth[-2][1] if len(growth) >= 2 else None
+    real_level = real_gdp[-1][1] if real_gdp else None
+    real_level_text = f"；实际GDP折年水平{real_level:,.1f}十亿美元" if real_level is not None else ""
+
+    if latest_growth < 0:
+        stance = "偏谨慎"
+        conclusion = "GDP环比折年转负，增长韧性承压，事件影响期内降低追价和加仓冲动。"
+    elif latest_growth >= 2.5:
+        stance = "偏友好"
+        conclusion = "GDP增长韧性较强，盈利基本面支撑仍在，但需同步观察利率是否上行。"
+    else:
+        stance = "待确认"
+        conclusion = "GDP增长处于温和区间，继续观察利率、盈利预期和指数广度的二次确认。"
+
+    previous_text = f"，前值{previous_growth:+.1f}%" if previous_growth is not None else ""
+    summary = (
+        f"FRED/BEA序列 {_quarter_label(latest_date)}：实际GDP环比折年{latest_growth:+.1f}%"
+        f"{previous_text}{real_level_text}。"
+    )
+    return {
+        "fetched_at": _now_utc().isoformat(),
+        "summary": summary,
+        "conclusion": conclusion,
+        "stance": stance,
+        "sources": [
+            FRED_CSV_URL.format(series_id="A191RL1Q225SBEA"),
+            FRED_CSV_URL.format(series_id="GDPC1"),
+        ],
+        "method": "direct_fred_gdp",
+    }
+
+
 def _quarter_slug_from_event(event: PolicyEvent) -> str | None:
     match = re.search(r"(Jan|Apr|Jul|Oct)/20\d{2}", event.summary)
     if not match:
@@ -500,6 +639,8 @@ def _fetch_nvda_direct_result(event: PolicyEvent) -> dict[str, object] | None:
 def _fetch_direct_event_result(event: PolicyEvent) -> dict[str, object] | None:
     if event.category == "通胀" and "PCE" in event.title:
         return _fetch_pce_direct_result(event)
+    if event.category == "增长" and "GDP" in event.title:
+        return _fetch_gdp_direct_result(event)
     if event.category == "财报" and event.title.startswith("NVDA"):
         return _fetch_nvda_direct_result(event)
     return None
@@ -600,9 +741,12 @@ def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> Li
     for event in events:
         event_id = _event_id(event)
         entry = entries.get(event_id, {})
-        should_refresh = not _news_cache_entry_fresh(entry, config.news_refresh_hours)
-        if _direct_result_supported(event) and entry.get("method", "").startswith("direct_") is False:
-            should_refresh = True
+        if _news_cache_entry_has_result(entry):
+            should_refresh = False
+        else:
+            should_refresh = not _news_cache_entry_fresh(entry, config.result_retry_hours)
+            if _direct_result_supported(event) and entry.get("method", "").startswith("direct_") is False:
+                should_refresh = True
         if _event_needs_result(event, current_et_date) and should_refresh:
             try:
                 fetched = _fetch_event_result(event)
@@ -796,6 +940,7 @@ def _fetch_automatic_events(config: PolicyConfig, as_of: date) -> List[PolicyEve
 
 def load_policy_calendar(config: PolicyConfig, as_of: date) -> List[PolicyEvent]:
     manual_events = load_policy_events(config.events_path, config.default_impact_days)
+    discovered_events = load_discovered_policy_events(config, as_of)
     cached_events, fetched_at = _read_cached_events(config.cache_path, config.default_impact_days)
     automatic_events = cached_events
 
@@ -811,7 +956,7 @@ def load_policy_calendar(config: PolicyConfig, as_of: date) -> List[PolicyEvent]
             automatic_events = fresh_events
             _write_cached_events(config.cache_path, automatic_events)
 
-    return _attach_event_results(config, _merge_events(automatic_events, manual_events))
+    return _attach_event_results(config, _merge_events(automatic_events, discovered_events, manual_events))
 
 
 def _event_window(
@@ -832,6 +977,17 @@ def _event_window(
     upcoming = sorted(upcoming, key=lambda item: (item.event_date, _category_priority(item.category), item.title))
     recent = sorted(recent, key=lambda item: (item.event_date, _category_priority(item.category), item.title))
     return upcoming[:5], recent[-3:]
+
+
+def _next_major_event(events: Iterable[PolicyEvent], as_of: date) -> PolicyEvent | None:
+    future_events = [
+        item
+        for item in events
+        if item.event_date > as_of and item.category in MAJOR_POLICY_CATEGORIES
+    ]
+    if not future_events:
+        return None
+    return sorted(future_events, key=lambda item: (item.event_date, _category_priority(item.category), item.title))[0]
 
 
 def _rate_note(us10y: QuoteSnapshot, oil: QuoteSnapshot) -> str:
@@ -868,8 +1024,20 @@ def _execution_note(
     recent: List[PolicyEvent],
     stance: str,
 ) -> str:
-    near_events = [item for item in upcoming if item.category in {"FOMC", "通胀", "就业", "财报"}]
-    active_aftershocks = [item for item in recent if item.category in {"FOMC", "通胀", "就业", "财报"}]
+    execution_categories = {
+        "FOMC",
+        "通胀",
+        "就业",
+        "财报",
+        "增长",
+        "IPO",
+        "指数调整",
+        "科技监管",
+        "AI产业",
+        "流动性",
+    }
+    near_events = [item for item in upcoming if item.category in execution_categories]
+    active_aftershocks = [item for item in recent if item.category in execution_categories]
     if near_events and advice.action in {"小幅加仓", "持有"}:
         return "重大事件落地前不追价，新增资金分批或延后执行。"
     if near_events and advice.action in {"小幅降仓", "防守", "暂停加仓"}:
@@ -885,6 +1053,42 @@ def _execution_note(
     return "政策面不覆盖明日动作，按基础仓位框架小步执行。"
 
 
+def _event_has_result(event: PolicyEvent) -> bool:
+    return bool(event.result_conclusion or event.result_summary)
+
+
+def _impact_event(upcoming: List[PolicyEvent], recent: List[PolicyEvent]) -> PolicyEvent | None:
+    if upcoming:
+        return upcoming[0]
+    resulted_recent = [item for item in recent if _event_has_result(item)]
+    if resulted_recent:
+        return sorted(resulted_recent, key=lambda item: (item.event_date, _category_priority(item.category), item.title))[-1]
+    if recent:
+        return recent[-1]
+    return None
+
+
+def _short_term_impact(event: PolicyEvent, as_of: date) -> str:
+    if event.event_date > as_of:
+        days = (event.event_date - as_of).days
+        return f"{event.title}还有{days}天落地，短线新增资金先按事件前约束执行，避免一次性追价。"
+    if event.result_conclusion:
+        return f"{event.title}已落地：{event.result_conclusion}"
+    return event.short_term
+
+
+def _mid_term_impact(event: PolicyEvent, as_of: date) -> str:
+    if _event_has_result(event) and event.event_date <= as_of:
+        return f"中期以{event.title}结果为锚，观察该结论能否被利率、VXN和指数广度继续确认；{event.mid_term}"
+    return event.mid_term
+
+
+def _long_term_impact(event: PolicyEvent, as_of: date) -> str:
+    if _event_has_result(event) and event.event_date <= as_of:
+        return f"长期只有当{event.title}结果改变盈利或利率中枢时才调整核心配置；{event.long_term}"
+    return event.long_term
+
+
 def build_policy_snapshot(
     config: PolicyConfig,
     as_of: date,
@@ -894,28 +1098,32 @@ def build_policy_snapshot(
 ) -> PolicySnapshot:
     events = load_policy_calendar(config, as_of)
     upcoming, recent = _event_window(events, as_of, config.lookahead_days, config.lookback_days)
+    next_event = _next_major_event(events, as_of)
+    if next_event and any(_event_key(next_event) == _event_key(item) for item in upcoming):
+        next_event = None
     rate_note = _rate_note(us10y, oil)
     stance = _stance_from_events(upcoming, recent, rate_note)
     execution_note = _execution_note(advice, upcoming, recent, stance)
+    impact_event = _impact_event(upcoming, recent)
 
     if upcoming:
         first = upcoming[0]
         detail = first.result_conclusion or first.summary
         summary = f"未来{config.lookahead_days}天重点：{first.title}；{detail}"
-        short_term = first.result_conclusion or first.short_term
-        mid_term = first.mid_term
-        long_term = first.long_term
     elif recent:
-        first = recent[-1]
+        first = impact_event or recent[-1]
         elapsed_days = (as_of - first.event_date).days
         remaining_days = max(0, first.impact_days - elapsed_days)
         detail = first.result_conclusion or first.summary
         summary = f"仍在影响期：{first.title}；已过{elapsed_days}天，预计还需观察{remaining_days}天。{detail}"
-        short_term = first.result_conclusion or first.short_term
-        mid_term = first.mid_term
-        long_term = first.long_term
     else:
         summary = f"未配置未来{config.lookahead_days}天重大事件；{rate_note}"
+
+    if impact_event:
+        short_term = _short_term_impact(impact_event, as_of)
+        mid_term = _mid_term_impact(impact_event, as_of)
+        long_term = _long_term_impact(impact_event, as_of)
+    else:
         short_term = "没有明确事件催化时，短线仍以价格趋势、VXN和美债变化为主。"
         mid_term = "中期等待通胀、就业和财报数据形成连续方向后，再调整仓位中枢。"
         long_term = "长期核心逻辑仍取决于盈利增长、实际利率中枢和监管环境。"
@@ -929,4 +1137,5 @@ def build_policy_snapshot(
         long_term=long_term,
         upcoming_events=upcoming,
         recent_events=recent,
+        next_event=next_event,
     )

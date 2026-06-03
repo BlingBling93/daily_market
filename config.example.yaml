@@ -42,15 +42,20 @@ policy:
   events_path: policy_events.csv
   cache_path: policy_calendar_cache.json
   news_cache_path: policy_event_news_cache.json
+  discovered_events_path: policy_discovered_events_cache.json
   auto_fetch: true
   lookahead_days: 7
   lookback_days: 21
   default_impact_days: 10
-  refresh_hours: 24
+  refresh_hours: 360
   recalibrate_within_days: 3
-  news_refresh_hours: 6
+  result_retry_hours: 6
   earnings_lookahead_days: 45
   earnings_symbols: AAPL,MSFT,NVDA,AMZN,GOOGL,META,TSLA
+  discovery_lookahead_days: 120
+  discovery_retention_days: 45
+  discovery_min_importance: 70
+  discovery_queries: ""
 
 ashare:
   enabled: true

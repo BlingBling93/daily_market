@@ -63,15 +63,20 @@ class PolicyConfig:
     events_path: Path
     cache_path: Path
     news_cache_path: Path
+    discovered_events_path: Path
     auto_fetch: bool
     lookahead_days: int
     lookback_days: int
     default_impact_days: int
     refresh_hours: int
     recalibrate_within_days: int
-    news_refresh_hours: int
+    result_retry_hours: int
     earnings_lookahead_days: int
     earnings_symbols: str
+    discovery_lookahead_days: int
+    discovery_retention_days: int
+    discovery_min_importance: int
+    discovery_queries: str
 
 
 @dataclass
@@ -116,6 +121,8 @@ def _parse_scalar(value: str) -> Any:
         return None
     if value in {"true", "false"}:
         return value == "true"
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+        return value[1:-1]
     try:
         if "." in value:
             return float(value)
@@ -212,15 +219,20 @@ def load_config(path: str) -> AppConfig:
             events_path=Path(policy.get("events_path", "policy_events.csv")),
             cache_path=Path(policy.get("cache_path", "policy_calendar_cache.json")),
             news_cache_path=Path(policy.get("news_cache_path", "policy_event_news_cache.json")),
+            discovered_events_path=Path(policy.get("discovered_events_path", "policy_discovered_events_cache.json")),
             auto_fetch=bool(policy.get("auto_fetch", True)),
             lookahead_days=int(policy.get("lookahead_days", 7)),
             lookback_days=int(policy.get("lookback_days", 21)),
             default_impact_days=int(policy.get("default_impact_days", 10)),
-            refresh_hours=int(policy.get("refresh_hours", 24)),
+            refresh_hours=int(policy.get("refresh_hours", 360)),
             recalibrate_within_days=int(policy.get("recalibrate_within_days", 3)),
-            news_refresh_hours=int(policy.get("news_refresh_hours", 6)),
+            result_retry_hours=int(policy.get("result_retry_hours", policy.get("news_refresh_hours", 6))),
             earnings_lookahead_days=int(policy.get("earnings_lookahead_days", 45)),
             earnings_symbols=str(policy.get("earnings_symbols", "AAPL,MSFT,NVDA,AMZN,GOOGL,META,TSLA")),
+            discovery_lookahead_days=int(policy.get("discovery_lookahead_days", 120)),
+            discovery_retention_days=int(policy.get("discovery_retention_days", 45)),
+            discovery_min_importance=int(policy.get("discovery_min_importance", 70)),
+            discovery_queries=str(policy.get("discovery_queries", "")),
         ),
         ashare=AShareConfig(
             enabled=bool(ashare.get("enabled", False)),

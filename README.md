@@ -80,6 +80,9 @@ Current automatic sources are:
   earnings releases and FRED/BEA PCE price-index series
 - Google News RSS only as a fallback when direct event data is unavailable
 
+The periodic calendar cache is refreshed every 15 days by default, while events
+within `recalibrate_within_days` are still recalibrated before they land.
+
 `policy_events.csv` remains available for manual overrides or events that the
 free sources miss. It supports these columns:
 
@@ -96,8 +99,48 @@ The morning brief treats these as execution constraints on top of the base
 `明日动作`, not as a second conflicting action engine.
 
 Post-event result snippets are cached in `policy_event_news_cache.json`. The
-cache is refreshed on the event's ET date and during its impact window, then the
-result conclusion remains visible until the impact window expires.
+`result_retry_hours` setting controls retry frequency only while an event has
+entered its impact window but does not yet have a complete result. Once a cached
+entry has both a result summary and a conclusion, later morning brief runs reuse
+that cached result instead of refetching the historical event.
+
+## Asynchronous event discovery
+
+Non-periodic major events are refreshed separately into
+`policy_discovered_events_cache.json`:
+
+```bash
+./run_event_discovery.sh
+```
+
+This discovery job is intended for a low-frequency external cron, for example
+two or three times per week outside the morning brief run. The morning brief only
+reads the cache and merges `confirmed` / `probable` events whose importance is
+above `discovery_min_importance`.
+
+The discovery job uses broad event-pattern queries rather than single-entity
+keywords. It looks for high-impact patterns such as IPO filings / pricing,
+Nasdaq listings, index inclusion, export controls, antitrust actions, tariffs,
+Treasury liquidity events, and AI / semiconductor infrastructure shocks. Each
+candidate is scored by source quality, explicit event date, Nasdaq / QQQ
+transmission channel, AI / semiconductor relevance, and scale language such as
+large valuation or financing amounts.
+
+Recommended external cron setup:
+
+- Timezone: `Asia/Shanghai`
+- Schedule: Tuesday / Thursday / Saturday at `07:30`
+- Method: `POST`
+- URL: `https://api.github.com/repos/BlingBling93/daily_market/actions/workflows/event-discovery.yml/dispatches`
+- Headers:
+  - `Accept: application/vnd.github+json`
+  - `Authorization: Bearer <YOUR_GITHUB_PAT>`
+  - `Content-Type: application/json`
+- Body:
+
+  ```json
+  {"ref":"main"}
+  ```
 
 ## A-share active module
 
