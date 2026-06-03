@@ -85,6 +85,7 @@ class PolicySnapshot:
     long_term: str
     upcoming_events: List[PolicyEvent]
     recent_events: List[PolicyEvent]
+    next_event: Optional[PolicyEvent] = None
 
 
 @dataclass

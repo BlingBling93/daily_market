@@ -82,6 +82,9 @@ def _temperature_class(label: str) -> str:
 
 
 def _policy_event_line(event: PolicyEvent) -> str:
+    data_html = ""
+    if event.result_summary:
+        data_html = f"<small>数据：{escape(event.result_summary)}</small>"
     result_html = ""
     if event.result_conclusion:
         result_html = f"<small>结论：{escape(event.result_conclusion)}</small>"
@@ -89,15 +92,32 @@ def _policy_event_line(event: PolicyEvent) -> str:
         f"<li><span>{event.event_date.isoformat()} · {escape(event.category)}</span>"
         f"<strong>{escape(event.title)}</strong>"
         f"<small>{escape(event.stance)} · 影响期{event.impact_days}天 · {escape(event.summary)}</small>"
-        f"{result_html}</li>"
+        f"{data_html}{result_html}</li>"
     )
 
 
-def _policy_event_list(upcoming: list[PolicyEvent], recent: list[PolicyEvent]) -> str:
+def _next_policy_event_line(event: PolicyEvent) -> str:
+    return (
+        f"<li><span>下一重要事件 · {event.event_date.isoformat()} · {escape(event.category)}</span>"
+        f"<strong>{escape(event.title)}</strong>"
+        f"<small>{escape(event.summary)}</small></li>"
+    )
+
+
+def _policy_event_list(
+    upcoming: list[PolicyEvent],
+    recent: list[PolicyEvent],
+    next_event: PolicyEvent | None,
+) -> str:
     active_events = upcoming + recent
     if not active_events:
+        if next_event:
+            return _next_policy_event_line(next_event)
         return "<li><span>未来/影响中事件</span><strong>暂无配置</strong><small>可在 policy_events.csv 中维护 FOMC、CPI、PCE、非农和重点财报。</small></li>"
-    return "".join(_policy_event_line(item) for item in active_events[:5])
+    event_html = "".join(_policy_event_line(item) for item in active_events[:5])
+    if next_event:
+        event_html += _next_policy_event_line(next_event)
+    return event_html
 
 
 def _fmt_optional_pct(value: float | None) -> str:
@@ -311,7 +331,11 @@ def build_html(brief: Brief, config: AppConfig) -> str:
     if valuation.as_of:
         valuation_source = f"{valuation_source} · {valuation.as_of}"
 
-    policy_events_html = _policy_event_list(brief.policy.upcoming_events, brief.policy.recent_events)
+    policy_events_html = _policy_event_list(
+        brief.policy.upcoming_events,
+        brief.policy.recent_events,
+        brief.policy.next_event,
+    )
     observations_html = "".join(f"<li>{item}</li>" for item in brief.observation_points[1:])
 
     qqq_extra = f"""
