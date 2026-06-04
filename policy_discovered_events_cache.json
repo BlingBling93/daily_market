@@ -1,0 +1,898 @@
+{
+  "fetched_at": "2026-06-04T10:00:34.631662+00:00",
+  "timezone": "America/New_York",
+  "events": [
+    {
+      "date": "2026-04-21",
+      "category": "流动性",
+      "title": "Forge Nano, U.S. Advanced Manufacturing Leader for AI-Era",
+      "status": "expired",
+      "importance": 78,
+      "confidence": 47,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "AI"
+      ],
+      "summary": "GlobeNewswire：Forge Nano, U.S. Advanced Manufacturing Leader for AI-Era；传导渠道：流动性、美债利率、风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.651908+00:00",
+      "last_seen": "2026-06-04T10:00:32.651908+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMizgJBVV95cUxNMGdtaEgzYk80VzUxMXplMHpqYjF6Y3RHUU5fQ29KV3E2YzVLMGdPQU02ODI2N0ROWlVNclBFcFV2OVVNX0g5TVV0dHBVczc4U3pUN2RxeERJZTdLckVnR2N2RHpMMHQteWtjWERSbTR1aDVWS214STRPX0JYanVKM3U1SGJYWU93dUtOaW5BWTM5SFRfRzljOGNUMGdYWmU2bTE0RzlJb1lfMGxmSWtxMnIyU1VTRGFYbUI1ZWpRdng0bWdtdENIZzBvdWgyQjVVdnRVc1hSNGE4WnRvbDg2VGg1bEtRS1YwWVpXZXJuR3FKbWNOc0JDMGl2a3JHOW9tNGNBd3pQbVoxcTNoUUlGVXp4bklvcF8tNkthZUxCLTRNakJGTEk3NllQbE45T2xTdWVJeGNTZndQc0pKZnE0QmJJRndfVVBLWEg0ajhB?oc=5"
+      ]
+    },
+    {
+      "date": "2026-04-28",
+      "category": "流动性",
+      "title": "Cerebras IPO filing revives AI chipmaker’s market push",
+      "status": "expired",
+      "importance": 84,
+      "confidence": 57,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "AI",
+        "半导体"
+      ],
+      "summary": "eeNews Europe：Cerebras IPO filing revives AI chipmaker’s market push；传导渠道：流动性、美债利率、风险偏好、AI、半导体。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.651657+00:00",
+      "last_seen": "2026-06-04T10:00:32.651657+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMigwFBVV95cUxOM0k1X2t1cFZTem00bVBqV1NvSnBLRHRWYjdFQTYwbVpfenpQNTZXdWlvRy1qNXEyUFJvVmVpOXBHaF82aXg0SVVoX3dEWng4bFEzYmQzcWJ4Rk9zc0x0aGpnb1dVWnd1Q2VYVFdjRVBaMHhhQXNvdzVGLVpzRndwdDVZbw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "category": "流动性",
+      "title": "AI chipmaker Cerebras targets $3.5 billion raise in IPO",
+      "status": "expired",
+      "importance": 95,
+      "confidence": 69,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "AI",
+        "半导体",
+        "大额资金"
+      ],
+      "summary": "CNBC：AI chipmaker Cerebras targets $3.5 billion raise in IPO；传导渠道：流动性、美债利率、风险偏好、AI、半导体、大额资金。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:31.766469+00:00",
+      "last_seen": "2026-06-04T10:00:31.766469+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMib0FVX3lxTE5kOWU0Y1JwbGN6NjdQLU44bTB4cHYtZGtFNEZOUnQtcXJfOTlleWw3WlJhNmdLQjYtWDhHdTk1QWVUMVJmbzFCNkVOVTF2dGNac2twREpMeFZWdnEwM0JHQ29rQkJlSUNDR2JFdV8tb9IBdEFVX3lxTE5OM2p6TGRpN0lTUHF1X1ZTZzRndDJJakluNnRPQmdXOUdWRWRiREowOVl0YzJrOTB0M1Q2RU9ZSXpJb25EUUVMZmR2Q2FZVEs1Q1BVTTY3Zm82YnNCSlE4WlVlaVVObFRkYjMzWEhTNTVHSVdW?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-05",
+      "category": "IPO",
+      "title": "Nvidia Rival Cerebras Unveils IPO Details -- Here's What Investors Need to Know",
+      "status": "expired",
+      "importance": 76,
+      "confidence": 47,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "The Motley Fool：Nvidia Rival Cerebras Unveils IPO Details -- Here's What Investors Need to Know；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.652192+00:00",
+      "last_seen": "2026-06-04T10:00:32.652192+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMimAFBVV95cUxON1lyeTZReEdDR0w5eFNKZzY0T2J6Z3dTeEV6Y005UHI2WFRkVlpIOGFRWFFNZEJlcWdDLVlyalpRNG42dG00d0RadkNyNURxR29fbDFSVFVBR2wtUjJFaENJZlY1TnA2b0hGNTNVRkc5QVo5SWRrdldDWlhBVTJXVkJ3ZThEZUtueDVIM1NOV01yV0hMU2I4Vw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-12",
+      "category": "科技监管",
+      "title": "US-China Trade Truce May 12: Tariffs 145% to 30%, Chip Controls on the Table",
+      "status": "probable",
+      "importance": 78,
+      "confidence": 67,
+      "market_channels": [
+        "监管风险",
+        "半导体",
+        "科技估值"
+      ],
+      "summary": "abhs.in：US-China Trade Truce May 12: Tariffs 145% to 30%, Chip Controls on the Table；传导渠道：监管风险、半导体、科技估值。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 30,
+      "first_seen": "2026-06-04T10:00:34.345961+00:00",
+      "last_seen": "2026-06-04T10:00:34.345961+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMipwFBVV95cUxPbU9VQ3NuQVVHUm1oU2twUTcwNEdVbVI4dFd5cDhFWXFybWF2Z2JCWXlBWllJMjY1aHBaLVNOXzR3ZnRfVG9wYXc2NUtXSmdBQlZvOU5DeVY1dk53MkNMMkFkQ3dhMHNnbmpWTmJnTmoteThQR3Z3NUl1Vkk1MDJJMHFjUXZTNVhNeGNHemZhTk80em4wYkRIeU1uRHBfQ0xQSERvVTBHMA?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "category": "流动性",
+      "title": "Cerebras pops 68% in Nasdaq debut, pushing the AI chipmaker's market cap to $95 billion",
+      "status": "watch",
+      "importance": 100,
+      "confidence": 69,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "Nasdaq",
+        "AI",
+        "半导体",
+        "大额资金"
+      ],
+      "summary": "CNBC：Cerebras pops 68% in Nasdaq debut, pushing the AI chipmaker's market cap to $95 billion；传导渠道：流动性、美债利率、风险偏好、Nasdaq、AI、半导体、大额资金。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:31.766315+00:00",
+      "last_seen": "2026-06-04T10:00:32.651209+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMifkFVX3lxTE9tdTRxS3d0Z1pXY2VHeG13WHo4Z2dRUzluWDhqT0tyeUU5dVdiZUV6c01ZbTZVQXp2T0RWNEtEQ2NFSHlIVXJqSkJUalZwUERiNDEyaTE5TGJzTVUzT1RVSl9XUEFjX0o5MVVvNW9UNWtOQUtPbFBMc2h6U08td9IBgwFBVV95cUxPaTJEWlJwLTQxaWROcEhheThoV1ZGWGUwdDM1Q3p0MEF6ZFdabmpLS3dUQncyXzRMNjJCVmg4MlVSb2M2SXBxS29WNE5MTXl3TzNvOEFNdExkYUwtSVRIck9aa3BFRmM0dnN1ai1uWTlfR2ItalBwR3pCeUVtWWY2ZXNjdw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "category": "流动性",
+      "title": "SpaceX IPO Will Force Index Funds to Buy $7 Billion in One Day. What Happens to Nasdaq Next.",
+      "status": "watch",
+      "importance": 87,
+      "confidence": 57,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "Nasdaq",
+        "大额资金"
+      ],
+      "summary": "24/7 Wall St.：SpaceX IPO Will Force Index Funds to Buy $7 Billion in One Day. What Happens to Nasdaq Next.；传导渠道：流动性、美债利率、风险偏好、Nasdaq、大额资金。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.980704+00:00",
+      "last_seen": "2026-06-04T10:00:32.980704+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMizgFBVV95cUxOdUUzN3RiWWpjTFNpdURqeWNLMjIwWmhITWp1MkhjdlNXc2FXUnBqMlNlY0ozQ3lKRllzNExoaWp6OURYYjg0cXhIaVVLbk9RYkpqQTIxaThDU0p6UXJhclVLNUtlLTNwN0FzMmRZVFJYMlBWOEo3dC1MRDBsRVV6UndFS2ZKZWtPd3VTdGhBenlVdy1seHpSR1NKbnl3WHgxY29kc2UtRGJqZ2JZckRFZ25scWJfSmlFcjQtVlZkT1hzTXpzNWhLM2lBT2RMQQ?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "category": "科技监管",
+      "title": "Did the U.S. soften its stance on chip restrictions during Trump Xi talks?",
+      "status": "watch",
+      "importance": 86,
+      "confidence": 57,
+      "market_channels": [
+        "监管风险",
+        "半导体",
+        "科技估值",
+        "AI"
+      ],
+      "summary": "Latest news from Azerbaijan：Did the U.S. soften its stance on chip restrictions during Trump Xi talks?；传导渠道：监管风险、半导体、科技估值、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 30,
+      "first_seen": "2026-06-04T10:00:33.447974+00:00",
+      "last_seen": "2026-06-04T10:00:33.447974+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMilwFBVV95cUxOU2FmQnRlVzNyYXBKWDB4am1ONE9uVGNiMEJNSnVMSUs1dkgwTThDTkttRmNLejJIUTlERjZqczEwQWNobTZuVGhVNjI5bDNBNWVnNkt1TFpiOHFpUmRJNTZrLUVfX3FTNDVNT2hGTTVYWXJVVFVEVXVyVTJrcUx1QS12QTctVFdDYkd6dFBxNC0wUEdDTzdR?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "category": "流动性",
+      "title": "CBRS stock debuts on Nasdaq at $211, well above $185 IPO price",
+      "status": "watch",
+      "importance": 82,
+      "confidence": 57,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "Nasdaq"
+      ],
+      "summary": "eciks.org：CBRS stock debuts on Nasdaq at $211, well above $185 IPO price；传导渠道：流动性、美债利率、风险偏好、Nasdaq。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.651733+00:00",
+      "last_seen": "2026-06-04T10:00:32.651733+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMikgFBVV95cUxNMUNiamJodThxdmc1NmN1dW9LQkJ5LXh4RHRyaWpoNEw2WEh5UDZOV1dQck9VemluWDJLU3RFcVNaT1dhQllJRUg3Ykp0Q2d3LW5WakdoWHk2UzZmczRhdWl2cmpPWWM3ZkcyN1QteU1LMGo3alI3VGt2Nmw1ZUFJeXdnQUlNYUJKalZZbzFXWENjdw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "category": "IPO",
+      "title": "Cerebras, A.I. Chip Maker, Rises 89% in Market Debut as Tech IPOs Ramp Up",
+      "status": "watch",
+      "importance": 82,
+      "confidence": 73,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "半导体"
+      ],
+      "summary": "The New York Times：Cerebras, A.I. Chip Maker, Rises 89% in Market Debut as Tech IPOs Ramp Up；传导渠道：Nasdaq、流动性、成长股风险偏好、半导体。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:31.766068+00:00",
+      "last_seen": "2026-06-04T10:00:31.766068+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMidEFVX3lxTE5kOW1FOE5TMUp6Y2xYZWdwV3pMaVBnR0Rwb2R4d2lsb0JsOVlDSm5SSV8tSVBDUjlkY3dXT0lCUmFIRmRfa0NVSDdaUzRNaVg4ZU9vV0VUOVZNVldHVUdxT2hENS03cnJCcUFvMUx1a3NiOVNV?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "category": "IPO",
+      "title": "Cerebras IPO: Stock price soars on Nasdaq market debut after-already upsized pricing",
+      "status": "watch",
+      "importance": 80,
+      "confidence": 57,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好"
+      ],
+      "summary": "Fast Company：Cerebras IPO: Stock price soars on Nasdaq market debut after-already upsized pricing；传导渠道：Nasdaq、流动性、成长股风险偏好。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:31.765678+00:00",
+      "last_seen": "2026-06-04T10:00:32.651299+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPWmxtLXptMVhDbFJzNkZjT0RKazNSY3p6SGtIbFRVRXlRYnBPdG9KcGZGMUpnbElFY05EaUI2QjlnZE9JMjF0XzVzMTc1dlJNNElGcm9PbENmUUlqbDNwVWZrbmtkR001Q2lnRmdsYXJraldFVGwxdnBMNHhTV3pGMy1COEhrSlpUcVpES2wwV2FhV1RiQWNiZTI0bkxkaUhBeFRzSklJRWZaRDhlODl4MlNETXBlWFZtUUxBNnNMZk9oQVk0Mms4OVU4UEtYRXptSlNwWkFrZTk?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-15",
+      "category": "AI产业",
+      "title": "How is the U.S.-China tech war reshaping the future of AI and semiconductors?",
+      "status": "expired",
+      "importance": 80,
+      "confidence": 57,
+      "market_channels": [
+        "AI产业链",
+        "盈利预期",
+        "半导体",
+        "AI"
+      ],
+      "summary": "Latest news from Azerbaijan：How is the U.S.-China tech war reshaping the future of AI and semiconductors?；传导渠道：AI产业链、盈利预期、半导体、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 14,
+      "first_seen": "2026-06-04T10:00:33.447046+00:00",
+      "last_seen": "2026-06-04T10:00:33.447046+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMimwFBVV95cUxNMVJibkVYZlY5VGk2cnNuaXVMLWdyMzBYc1lGX2ZkcE9DbWFhNUJyQlJqSTA5LTBjanhqOEVoM2gtamhCdm5BcUVlV3o3aUJCQmpkb1o5UXdWVUdWb3ZrcmxTbVRyZEltWDB4TVdPUnljUU4wdXNyd0l1RGxCd1Z4Z3BSdjZOZzBRV3hmb2M3V3VaQ0FXbG41MTZaTQ?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-16",
+      "category": "IPO",
+      "title": "Cerebras’ blockbuster Nasdaq debut closes a huge first-day surge for AI chip IPOs",
+      "status": "watch",
+      "importance": 94,
+      "confidence": 57,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI",
+        "半导体"
+      ],
+      "summary": "MLQ.ai：Cerebras’ blockbuster Nasdaq debut closes a huge first-day surge for AI chip IPOs；传导渠道：Nasdaq、流动性、成长股风险偏好、AI、半导体。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.651531+00:00",
+      "last_seen": "2026-06-04T10:00:32.651531+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMipwFBVV95cUxPUkVKTndsN3RLbkRjMjdHbC01THBEUzI1eVp6cWt2NURGMzJMSlFnYVNYcHdIMFdyTXdPU3RjQWE5eGJILWtfMThZd1pLRFRxX3hIR0tQejNVMzE0YjNpQ3ctbVhjRkRYenV5M3A4VGZhVU5FOUdxTDhMUms4VUpEYzVpaW9wRHJxSUc4VHg4Zkc1aUdmNmlEbmQ1R2pERXdyMGVvclZvSQ?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-20",
+      "category": "IPO",
+      "title": "OpenAI Prepares to File to Go Public in Coming Weeks",
+      "status": "watch",
+      "importance": 84,
+      "confidence": 73,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "The New York Times：OpenAI Prepares to File to Go Public in Coming Weeks；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:31.765478+00:00",
+      "last_seen": "2026-06-04T10:00:32.201109+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMibkFVX3lxTE1qcklkTzJFdzZvREs4Ukc2SWM1X1J2dVE1MTUxcU90a1N1NUFWR3ZtOWt6SFZKekthZ2huSlpXRnJ1TDViY1NlcWQ2NUMxaU9tcHUzLUVhRnl6R0pkR1plZHhPVW5WWEhfSTVJZEhn?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-20",
+      "category": "流动性",
+      "title": "SpaceX is poised to be the biggest IPO ever. Here are the top U.S. deals to date",
+      "status": "watch",
+      "importance": 76,
+      "confidence": 59,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好"
+      ],
+      "summary": "CNBC：SpaceX is poised to be the biggest IPO ever. Here are the top U.S. deals to date；传导渠道：流动性、美债利率、风险偏好。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:31.765785+00:00",
+      "last_seen": "2026-06-04T10:00:31.765785+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMingFBVV95cUxOSlpxbjU3QzVIZkEwbUYzOWg3NXMySXluNHVYOXBvNENVOEhPWEhCTjZvcFBVUjRGckJkWDRZVEUwS1NmWG1GZFdWX1FBNDNBa0xNRXI2WC14TndrQzFRRW5VRFhkeGRMdlhBQ05FMGNTQjBPM0JkMVRSSm5LeXRZRU1fVTdETjlqV1NaeWc3encwVWpyckx2VUM3VGp5UdIBowFBVV95cUxPOEY5ejVpbHNWRHFaYkIyYnktT2ZTNU1qRHVicGQ3bVlhMkhZR1RzZWFKVzh4eHd1Q3VRZjVFMTl2MXR5NndEQkJuc3duSTYwUmhwQ0V5Zk5YaGhvcHljZnRtMVR0eDctWnotYTB4M3ZEaUlZcjEtSHIyWlQ4T3ZTMkdMaHNGWkZYMkxLLVpsQTRSbkpPUElXdFJyd1hQVkxMbEo0?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "category": "科技监管",
+      "title": "Antitrust Tech News Today: Big Tech, AI, Cloud & Competition Updates (2026)",
+      "status": "watch",
+      "importance": 80,
+      "confidence": 57,
+      "market_channels": [
+        "监管风险",
+        "半导体",
+        "科技估值",
+        "AI"
+      ],
+      "summary": "Tycoonstory Media：Antitrust Tech News Today: Big Tech, AI, Cloud & Competition Updates (2026)；传导渠道：监管风险、半导体、科技估值、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 30,
+      "first_seen": "2026-06-04T10:00:33.850728+00:00",
+      "last_seen": "2026-06-04T10:00:33.850728+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBVd0JUWVN5S0xNMzdKUDFsWXpzUGV0dnd6N2tpeGY0aUVwM283djQzdWJzSUQ5dDA1OFBxUXRaU3Nva1NKaVdONEQxaHVNWVRBNUxVS05OcVV3UHpFQ0E1YVVMdW7SAWpBVV95cUxNNFAwUUFFVVAxcG5yOFNBZzIyalp6Z1o5QVdTMGpfVFVRSE1GbzQxUnczYkZ4UWZuSGJNR0Fsa2xoVVpoZUdwNkJwWWdycHU1SGNKd2FCNm1WQkk3NHhuZjg2VGk1S1pBRkF3?oc=5"
+      ]
+    },
+    {
+      "date": "2026-05-29",
+      "category": "AI产业",
+      "title": "Sivers Semiconductors: AI Technology Heading To NASDAQ With Doubling Potential (SIVEF)",
+      "status": "watch",
+      "importance": 92,
+      "confidence": 57,
+      "market_channels": [
+        "AI产业链",
+        "盈利预期",
+        "半导体",
+        "Nasdaq",
+        "AI"
+      ],
+      "summary": "Seeking Alpha：Sivers Semiconductors: AI Technology Heading To NASDAQ With Doubling Potential (SIVEF)；传导渠道：AI产业链、盈利预期、半导体、Nasdaq、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 14,
+      "first_seen": "2026-06-04T10:00:32.651090+00:00",
+      "last_seen": "2026-06-04T10:00:32.651090+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiugFBVV95cUxPblo5R1JUMjhtMHFFQUZPOUtPUVZZREpPZDdacEhJYmpKZkZHSDB1am5fcTd1VWxILWhxOVNYb05VVUlWNEVOekxOd21fS0c4OTZLbTJGNXN6UG5fMlhVRm9uZjhhUTVVay11Z3h0cERLZDFzalEwbllOeFdhdF8zdU8teHB6VmJObnZqSGh4OXBTdloyTzhtNEZjNVJRQUE4czlFeFZ4SUNYdFdQcXlQWTFjdElqdnQyVUE?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "AI advertising platform Liftoff Mobile (LFTO.US) is returning to its IPO with $399 million in fu",
+      "status": "watch",
+      "importance": 93,
+      "confidence": 57,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI",
+        "大额资金"
+      ],
+      "summary": "富途牛牛：AI advertising platform Liftoff Mobile (LFTO.US) is returning to its IPO with $399 million in fu；传导渠道：Nasdaq、流动性、成长股风险偏好、AI、大额资金。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.651416+00:00",
+      "last_seen": "2026-06-04T10:00:32.651416+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNbmZ6QzVHc3VkcFpzSHd5VlEySFlJVXhYdERCV2V0NjdnM0I3SGxQdWVGQzhISkZBdFVBb2NWQUFKVndwMGpmM2laSUV5M0k3c2tVNjVIV3kwNXc2cXNZcnE0c3JrazhvajhWNWNndEdLaVBYSHJQcGoxSFprazVnMGpicFBSMEVaVFVjTnYzakpzNmFNV0M1dXVMNmh3Z2lpSkkzcjRFd0RmUQ?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "Anthropic Files Confidentially for IPO in Race With OpenAI",
+      "status": "watch",
+      "importance": 88,
+      "confidence": 81,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "Bloomberg.com：Anthropic Files Confidentially for IPO in Race With OpenAI；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200791+00:00",
+      "last_seen": "2026-06-04T10:00:32.200791+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiswFBVV95cUxQblpKamV6MlZMdXJ1ODFGb3lyb24tSml4ODEwdTlJSTM4Y3p1aEx5RUN3NkkzNkRLZ3FucjZRckNkTzZycS1EVnF4UXc5V2JfaE5YTU40U29CR2tiQ2J0VmRtQ05hbzk5dENZbGJOd01OZzdVMnJ3RDBqZVQ0WEtKZmVVemYzOF9pLTFib2ZQVHNvX3l2OU1Sa0kxWmd3S0RRTVRuODlmZlI0RWhJa1JXamlhYw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "Anthropic Files to Go Public in Blockbuster Year for IPOs",
+      "status": "watch",
+      "importance": 86,
+      "confidence": 77,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "WSJ：Anthropic Files to Go Public in Blockbuster Year for IPOs；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.199907+00:00",
+      "last_seen": "2026-06-04T10:00:32.199907+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiaEFVX3lxTE12a09ueHB6ZlRtS3kxdFpfYzRFM1ZoT1JObWllcHlDWnV3RW5CMFRlY09JUXVDRVBMbmZnQ21UT0lSdlRkRkxUQTV2Qm9Uai1wcHZqYU1DOU5UcUdCak9EaHgwNmFHSXEy?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "科技监管",
+      "title": "US expands AI chip restrictions on Chinese firms overseas",
+      "status": "watch",
+      "importance": 86,
+      "confidence": 57,
+      "market_channels": [
+        "监管风险",
+        "半导体",
+        "科技估值",
+        "AI"
+      ],
+      "summary": "The American Bazaar：US expands AI chip restrictions on Chinese firms overseas；传导渠道：监管风险、半导体、科技估值、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 30,
+      "first_seen": "2026-06-04T10:00:33.446593+00:00",
+      "last_seen": "2026-06-04T10:00:33.446593+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMirgFBVV95cUxPMEpUc213VEJSSVhjM2VyY3lRYlpMbURFYUJPRW9nNHRDMmxpTndRcm1Sa21NdDZrQkNQUlZUMm1EenUtVVRpQUdqbVRWWXNrR04yTjRIa1hJWExFWGRqeFhrdE9QX1lpaFdwSHdoQnEwUXN3OWRIR2F4d1M4cFpLR2pxdnh3TGNGU1l3cjdQRWF0OVYzbjc3bFdkWTBpNGdpaFMzZm9XZGxEclZ2M3c?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "AI giant Anthropic prepares to sell stock to the public; files preliminary IPO paperwork",
+      "status": "watch",
+      "importance": 80,
+      "confidence": 65,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "NPR：AI giant Anthropic prepares to sell stock to the public; files preliminary IPO paperwork；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.199770+00:00",
+      "last_seen": "2026-06-04T10:00:32.199770+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMif0FVX3lxTE4xSjA1OERrenh2U2ZHdDRlZUZxRkxDVXFQYkpaODU2WmxDaTB0bklTdW1CTk5uc3dIUXVJQVoyVm93cndTMGVFNElRaVdVbzlTLU12NU4xTWdtWFExR3FjTG9xU0JFOU1JRnFCNVE4Wm5uSllzUXV6d0JsQXFLbDA?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "流动性",
+      "title": "AI giant Anthropic files for US IPO as investors bet big on AI future",
+      "status": "watch",
+      "importance": 78,
+      "confidence": 47,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "AI"
+      ],
+      "summary": "Al Jazeera：AI giant Anthropic files for US IPO as investors bet big on AI future；传导渠道：流动性、美债利率、风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200092+00:00",
+      "last_seen": "2026-06-04T10:00:32.200092+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMisgFBVV95cUxORl9Sb2hudFE0eVNKWjVpSU5DR2dsbjlfa3g4WnBnc09ybWxEck0yR3lWTVowd0ctRzlsZ2lMU0FPWWNTNnlPdTVNWUxBandKaElRVW5LdUlVSTk0YVRiNnFydDNqSTZHdFZnWF9MOTcyTm5GcjhCY1ZXaG5iYk1fVFRQREJYOU1FZVBrRlpzWFhLSW9hdEIyM1JwSkx5Q1JlY1JDWldTNjFPSnV4cWlFUTZB0gG3AUFVX3lxTE5UenlFc3k2LWpFSk03WFB5bDEySFJqUVhla2E0eVVOQzZaaUxxd3F1Wk9wZVR1NEJpaGtfSGFyY2xvN1JQOHl4QTBRX251RmZIT1d3R3Z3R24zOU9jQXBtN0IwYXE5d0FhcllzYlhiQlVENGxueE5mQmV0OTVDZXA4dFFnZFphT1NyUElnMTlBaUFkYUNWeUxaU0ZwNVRORnlOQUFUaEFpS21hTnE2aVhUQ3JkZXFJYw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "Anthropic files to go public in a potentially trillion-dollar debut",
+      "status": "watch",
+      "importance": 78,
+      "confidence": 47,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "大额资金"
+      ],
+      "summary": "CNN：Anthropic files to go public in a potentially trillion-dollar debut；传导渠道：Nasdaq、流动性、成长股风险偏好、大额资金。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.199842+00:00",
+      "last_seen": "2026-06-04T10:00:32.199842+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBSeXpGc002YTVXcUkwaklMWjhyMUFadUpidDBJTjMtWEkyMHMxTkVJNFZGbVg1RzJPYXVfMUpRQTBvcjlpX0RDLXVVMHczWl9SajdWd29kVjJkTU9LMVhHdXpFWThpMEU?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "流动性",
+      "title": "Anthropic, maker of AI chatbot Claude, files for a public stock sale",
+      "status": "watch",
+      "importance": 78,
+      "confidence": 47,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "AI"
+      ],
+      "summary": "The Washington Post：Anthropic, maker of AI chatbot Claude, files for a public stock sale；传导渠道：流动性、美债利率、风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.201195+00:00",
+      "last_seen": "2026-06-04T10:00:32.201195+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMi_AFBVV95cUxNbGJmWWU3TGhBR2pjWm1QR3JVby1xT2k0VTViQU8zcGVTdUlkd3NlUlduTFl1dXNxSWZsS1dlTC1IVXZleWY1amVBb3lkSFJkbmFNbWtBaE55Y1plVjhIN1A0d1lrRF9XODRDdzJGYXltVTQtaXlybEc3TGdRdjFaMDliTllocUlQMjlWTUFPRTJrZ1VDZUxoQkY5d1ZtQ096YkNIcUhURFc3Z3R5U3VqdlduSDhvVTB6X1VGUGEzQzNYbjdxWlpzaUFvanJJb0RnaDB3SFJadk5rZzNkbFU3alVQLS13dG9kdHRVczF1eDVQc1VDTHlxS3JYU1o?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "流动性",
+      "title": "Claude maker Anthropic files for IPO, setting up public-market test of AI boom",
+      "status": "watch",
+      "importance": 78,
+      "confidence": 47,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好",
+        "AI"
+      ],
+      "summary": "CBS News：Claude maker Anthropic files for IPO, setting up public-market test of AI boom；传导渠道：流动性、美债利率、风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200222+00:00",
+      "last_seen": "2026-06-04T10:00:32.200222+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMifkFVX3lxTE9SRlJxcGlMbnh0bHBoOXNUN2RVR3RqVW1EYkNOZXdfWTBqYVJ1QjQzZHRobC0wQlZTT3dobm43VXZLMTEyNkp6eVJpeEhwOGJwNTBPOEVIR3M5Rk1feHVzUUQtSUdJdnYtUHFSYXZjZEVvSjdsbFRMTFNMcklWdw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "AI giant Anthropic files to go public after $965bn valuation",
+      "status": "watch",
+      "importance": 76,
+      "confidence": 47,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "The National：AI giant Anthropic files to go public after $965bn valuation；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.201042+00:00",
+      "last_seen": "2026-06-04T10:00:32.201042+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMivgFBVV95cUxQWUYyc1hhSU1SeXpYV2t2Q3U5Zk1IUXJUSDRibkJWelE0TlRUcTdIRU1OMzU0THJuaWhEM0IxZDdjYXlXbXNVbldDSkZCTkx0bXNHcHZWN1BnZlNPRk45czEyVEhoR0pVTnVCU29VMWQtMmJ1YUtsV1QwNVFqRTBSanlqb0dGZDI1SmlHQ19FU3JpbWthRXdpc0lxZ1dBWFlFSGNVUFo5cmhmeUlCdUlqQUJFOGluR1dLVDl3emJR?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "Anthropic Files to Go Public, Setting Stage for Huge I.P.O.",
+      "status": "watch",
+      "importance": 76,
+      "confidence": 63,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好"
+      ],
+      "summary": "The New York Times：Anthropic Files to Go Public, Setting Stage for Huge I.P.O.；传导渠道：Nasdaq、流动性、成长股风险偏好。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.199669+00:00",
+      "last_seen": "2026-06-04T10:00:32.199669+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMickFVX3lxTFBtS2E3dFVudU1ONHh4UFlOZG1reXp3WXhXZlNNZnpUOTd0YzRRaVVMUk9xMUNyekFrOGh5Yjh1Zi0xZlJNQTF2bGVfQ2lTQkJucmZWRG5tRDVYUldpZWRXeFNrR3hxLTRfLWQ3WjNZU3hKdw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "Anthropic files for IPO — Claude maker races OpenAI and SpaceX to Wall Street",
+      "status": "watch",
+      "importance": 76,
+      "confidence": 47,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "Tom's Hardware：Anthropic files for IPO — Claude maker races OpenAI and SpaceX to Wall Street；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200885+00:00",
+      "last_seen": "2026-06-04T10:00:32.200885+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMitgFBVV95cUxOa0hGbl9LNGZVbF9pTElkcnd6eGc0aGdXOHJYYklzM21yS0w3THlydFhVVGVkbFBVWDAxWUoxR0NqNkVIT0NaMDA5ODhGdEdWYzlMQXR3QUdUN0xla3NqUW95WFZULUZfSU82a3lNU3dwd2phX3dBcnQ2Y29VWXZPVUNuX2NMemNCSFNFNWxsRVN0QkF0anhGS1NZRFFnM1NxaXM4M0VLcGRLQ0VvcHo0ZHJyWkdxdw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "Anthropic files to go public as AI startups race to hit markets",
+      "status": "watch",
+      "importance": 76,
+      "confidence": 47,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "Semafor：Anthropic files to go public as AI startups race to hit markets；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200714+00:00",
+      "last_seen": "2026-06-04T10:00:32.200714+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOMFZ3Q2Y0TElOVVhpVmUzZkJ0MTNQX3hlMXlVLTR2Z2YwTXh0dFEzQjBnd1lMM2xGa2tWdTdjUElVU1hIOEdodjVkUWcyajE5OXFPWEpfUm9MS3dEN0RSZURvM1Awb3l0RDRZZmFBeG9nNzdMVzhBcW5uNEVoUkRZak5vNXdkNUNPSTJNWnVxUmpqMXdCdWU2RXRLUF9LOXY2dHBUb2RlaXczQQ?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "Sam Altman weighs in on the AI IPO race after Anthropic files to go public",
+      "status": "watch",
+      "importance": 76,
+      "confidence": 47,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "Business Insider：Sam Altman weighs in on the AI IPO race after Anthropic files to go public；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200389+00:00",
+      "last_seen": "2026-06-04T10:00:32.200389+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMijAFBVV95cUxNaUZoYjN3aHVRYnNUWFhsMUpxXzdjcWhTaGtNazZFSmVaT2RQdTVVRUpiUURzQ1oxYWVKai0yaG1vV2pnVi1DV3JNQ2h2ajdvTWV0aEJWNEJUV29wQ0RDeW9Sb0tiV2RFbzJ3T0lITFA0eWw4c0dKd2EyRVNVYm5KVEh2Y2M4cXFqQXpfVQ?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "IPO",
+      "title": "The AI boom could be heading to millions of 401(k)s as Anthropic files for IPO",
+      "status": "watch",
+      "importance": 76,
+      "confidence": 47,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "The Washington Post：The AI boom could be heading to millions of 401(k)s as Anthropic files for IPO；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.199992+00:00",
+      "last_seen": "2026-06-04T10:00:32.199992+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMirAFBVV95cUxONEhKM2VqMGUweGdtYjBzWHJVUVNBTUo0QWV0eEpPVmtDNkZHN0twdVNVenlWVElxVWtSUEc0eTNzWFlUV1hjWm9sc2k5U0t4cWM5QkpSMS1sVEJIR3pjY3VfRGtuRkN6QW1FVmFneXZNMndFUFYxMi00NjlUNFdudXBUVVVVTUFWSGlRRXRxMW5IZFpyTTFEb3dfV0xjRmo1Yl8xWG5uTTM1aTVW?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "category": "流动性",
+      "title": "Anthropic confidentially files for initial public offering on US stock market | Technology",
+      "status": "watch",
+      "importance": 70,
+      "confidence": 47,
+      "market_channels": [
+        "流动性",
+        "美债利率",
+        "风险偏好"
+      ],
+      "summary": "The Guardian：Anthropic confidentially files for initial public offering on US stock market | Technology；传导渠道：流动性、美债利率、风险偏好。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200467+00:00",
+      "last_seen": "2026-06-04T10:00:32.200467+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMidkFVX3lxTE9NVkNVVm55dkFIT1hvbEZSbW1aS3E3LXp4NjQ4LW1zQTRJa1cyY0VScGRrWDFQQnRDTU9nWlliS1g0ekhXSDctSlJ4ajVoalRkZ1IwWVpxem04Y09zdzVHY2ZxLVBfSC1VdmpMWnlOVWtaZC1RMEE?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "category": "IPO",
+      "title": "AI startup Anthropic files for IPO after reaching $965 billion valuation - Business",
+      "status": "watch",
+      "importance": 81,
+      "confidence": 57,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI",
+        "大额资金"
+      ],
+      "summary": "France 24：AI startup Anthropic files for IPO after reaching $965 billion valuation - Business；传导渠道：Nasdaq、流动性、成长股风险偏好、AI、大额资金。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200549+00:00",
+      "last_seen": "2026-06-04T10:00:32.200549+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMixAFBVV95cUxOS0ZQZDk3OFpEbW8zSWVabmxlSV9xcG1wVWRJSmR1MjdNZnFpSkdadlhvblV4WjhPVTNzRVlJT2daV2dqOHExRUV6b09DTGxQY28zTlZ5X3lGaDBmWlFJb2tXT2ZOMHhpbk1Wak9wSUZRS2hhdjIzNVhnWlRFOUpWNGdhZU9CaHVBRm5PbGlBc21scHlwTnlDa1htdkp2SkQyOFg2VXR1YkhZZDFIdDlVWExWS1E2d3BuVUlUa245dkNJc2g0?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "category": "IPO",
+      "title": "AI: Anthropic makes three filed for IPO take-offs. AI-RTZ #1105",
+      "status": "watch",
+      "importance": 76,
+      "confidence": 47,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "AI: Reset to Zero：AI: Anthropic makes three filed for IPO take-offs. AI-RTZ #1105；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:32.200968+00:00",
+      "last_seen": "2026-06-04T10:00:32.200968+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMie0FVX3lxTE9BOGsxdFRUQUxCcU5qeXhPdEdBRklHZUhDQWZmTUoyVFRwVHRibGg1RDlvX3I2ZmY3S2UzbmlrcXRxNGc1d2NHRTFoaE5tTngybzZfTmlDN2xmWDZiUlMzbEZ1d2VMMV9ya0paS04zZUJPMWVocWxfbkxISQ?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-11",
+      "category": "IPO",
+      "title": "SpaceX targets June 11 IPO pricing, picks Nasdaq for historic market debut",
+      "status": "probable",
+      "importance": 80,
+      "confidence": 77,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好"
+      ],
+      "summary": "CoinDesk：SpaceX targets June 11 IPO pricing, picks Nasdaq for historic market debut；传导渠道：Nasdaq、流动性、成长股风险偏好。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:31.765550+00:00",
+      "last_seen": "2026-06-04T10:00:31.765550+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOcHBjbUhGSk5RbnhtdnhIR1BlVGUyTlZGeEhiTDRLRjlPYjBsc2pkb0JwRGhBM2dSRy1JUlhwLVRvU3VQRmNmOVkwZEljSWk5WENFUUZGcTVJSUdBZFdaWFEyN2hsa0tYSVk3OVNjZHFFTk8wbnhfNzFPUHY0LW9qSG1fbEhNQXZlVG5nOHp0d0tSRnRPZVBRdlZsTlRKS0w1NlJCLVF3Z1lPLU12Wi0zMjhKT3ZFck8w?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-12",
+      "category": "IPO",
+      "title": "Exclusive: SpaceX accelerates IPO timeline, targets June 12 listing on Nasdaq, sources say",
+      "status": "confirmed",
+      "importance": 92,
+      "confidence": 95,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好"
+      ],
+      "summary": "Reuters：Exclusive: SpaceX accelerates IPO timeline, targets June 12 listing on Nasdaq, sources say；传导渠道：Nasdaq、流动性、成长股风险偏好。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 21,
+      "first_seen": "2026-06-04T10:00:31.765331+00:00",
+      "last_seen": "2026-06-04T10:00:31.765331+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMipwFBVV95cUxPUW9IMlpoSzV0SmFtY1JvSXVrZW41dDVxQWZObkloNXk3X2FyS2ZTLWhsUjczUHJ2a2daNEJ5VHFWcHJuX3lPS0k5ZXJsZ2liV1c3T0lvVDFpdTJBdDVWcGUtbzhVc3Vlak5CMUVkdlRoenlwUlh1ekVId3hibzVvS3ptdXhpdjc4bDktNmdjMXJFTlN3WWh4N3ExVEFlY2tUQldsUWtIRQ?oc=5"
+      ]
+    }
+  ]
+}
