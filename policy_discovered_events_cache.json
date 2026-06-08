@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-06-04T10:45:25.867974+00:00",
+  "fetched_at": "2026-06-08T05:51:00+00:00",
   "timezone": "America/New_York",
   "events": [
     {
@@ -1020,8 +1020,8 @@
       "category": "IPO",
       "title": "SpaceX targets June 11 IPO pricing, picks Nasdaq for historic market debut",
       "status": "probable",
-      "importance": 80,
-      "confidence": 77,
+      "importance": 78,
+      "confidence": 72,
       "market_channels": [
         "Nasdaq",
         "流动性",
@@ -1031,20 +1031,18 @@
       "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
       "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
-      "impact_days": 21,
-      "first_seen": "2026-06-04T10:00:31.765550+00:00",
-      "last_seen": "2026-06-04T10:45:23.024351+00:00",
-      "sources": [
-        "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOcHBjbUhGSk5RbnhtdnhIR1BlVGUyTlZGeEhiTDRLRjlPYjBsc2pkb0JwRGhBM2dSRy1JUlhwLVRvU3VQRmNmOVkwZEljSWk5WENFUUZGcTVJSUdBZFdaWFEyN2hsa0tYSVk3OVNjZHFFTk8wbnhfNzFPUHY0LW9qSG1fbEhNQXZlVG5nOHp0d0tSRnRPZVBRdlZsTlRKS0w1NlJCLVF3Z1lPLU12Wi0zMjhKT3ZFck8w?oc=5"
-      ]
+      "impact_days": 5,
+      "first_seen": "2026-06-08",
+      "last_seen": "2026-06-08",
+      "sources": []
     },
     {
       "date": "2026-06-12",
       "category": "IPO",
       "title": "Exclusive: SpaceX accelerates IPO timeline, targets June 12 listing on Nasdaq, sources say",
-      "status": "confirmed",
-      "importance": 92,
-      "confidence": 95,
+      "status": "probable",
+      "importance": 82,
+      "confidence": 76,
       "market_channels": [
         "Nasdaq",
         "流动性",
@@ -1054,12 +1052,10 @@
       "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
       "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
-      "impact_days": 21,
-      "first_seen": "2026-06-04T10:00:31.765331+00:00",
-      "last_seen": "2026-06-04T10:45:23.024212+00:00",
-      "sources": [
-        "https://news.google.com/rss/articles/CBMipwFBVV95cUxPUW9IMlpoSzV0SmFtY1JvSXVrZW41dDVxQWZObkloNXk3X2FyS2ZTLWhsUjczUHJ2a2daNEJ5VHFWcHJuX3lPS0k5ZXJsZ2liV1c3T0lvVDFpdTJBdDVWcGUtbzhVc3Vlak5CMUVkdlRoenlwUlh1ekVId3hibzVvS3ptdXhpdjc4bDktNmdjMXJFTlN3WWh4N3ExVEFlY2tUQldsUWtIRQ?oc=5"
-      ]
+      "impact_days": 5,
+      "first_seen": "2026-06-08",
+      "last_seen": "2026-06-08",
+      "sources": []
     }
   ]
 }

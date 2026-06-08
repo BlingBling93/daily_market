@@ -68,6 +68,11 @@ Lightweight daily brief generators split by market so Nasdaq and A-share strateg
 - A-share ideas are research candidates only. Edit `ashare_watchlist.csv` to update your universe, fundamentals, catalysts, and risk flags.
 - The US sleeve remains passive-index oriented; the A-share module does not recommend US single stocks.
 
+## Strategy docs
+
+- Nasdaq long-term sleeve: `docs/nasdaq_strategy.zh.md` / `docs/nasdaq_strategy.md`
+- A-share two-stage screening: `docs/ashare_two_stage_design.zh.md` / `docs/ashare_two_stage_design.md`
+
 ## Policy events
 
 Policy events are fetched automatically into `policy_calendar_cache.json`.
@@ -80,9 +85,6 @@ Current automatic sources are:
   earnings releases and FRED/BEA PCE price-index series
 - Google News RSS only as a fallback when direct event data is unavailable
 
-The periodic calendar cache is refreshed every 15 days by default, while events
-within `recalibrate_within_days` are still recalibrated before they land.
-
 `policy_events.csv` remains available for manual overrides or events that the
 free sources miss. It supports these columns:
 
@@ -90,19 +92,8 @@ free sources miss. It supports these columns:
 date,category,title,stance,summary,short_term,mid_term,long_term,impact_days
 ```
 
-Use `category` values such as `FOMC`, `通胀`, `就业`, `财报`, `监管`, or `地缘`.
-`impact_days` is optional in spirit but recommended: it keeps an event active
-after the event date while the market digests its rate, earnings, or risk
-premium impact. If it is blank, the app uses category defaults such as 21 days
-for `FOMC`, 10 days for `通胀` / `就业`, and 14 days for `财报`.
-The morning brief treats these as execution constraints on top of the base
-`明日动作`, not as a second conflicting action engine.
-
-Post-event result snippets are cached in `policy_event_news_cache.json`. The
-`result_retry_hours` setting controls retry frequency only while an event has
-entered its impact window but does not yet have a complete result. Once a cached
-entry has both a result summary and a conclusion, later morning brief runs reuse
-that cached result instead of refetching the historical event.
+Detailed event impact windows, execution constraints, and result-source tiers
+are documented in the Nasdaq strategy docs.
 
 ## Asynchronous event discovery
 

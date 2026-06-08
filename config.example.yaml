@@ -46,8 +46,8 @@ policy:
   auto_fetch: true
   lookahead_days: 7
   lookback_days: 21
-  default_impact_days: 10
-  refresh_hours: 360
+  default_impact_days: 3
+  refresh_hours: 72
   recalibrate_within_days: 3
   result_retry_hours: 6
   earnings_lookahead_days: 45

@@ -73,6 +73,7 @@ class PolicyEvent:
     result_summary: str = ""
     result_conclusion: str = ""
     result_sources: List[str] = field(default_factory=list)
+    result_source_tier: str = ""
 
 
 @dataclass
@@ -86,6 +87,8 @@ class PolicySnapshot:
     upcoming_events: List[PolicyEvent]
     recent_events: List[PolicyEvent]
     next_event: Optional[PolicyEvent] = None
+    execution_upcoming_events: List[PolicyEvent] = field(default_factory=list)
+    execution_recent_events: List[PolicyEvent] = field(default_factory=list)
 
 
 @dataclass

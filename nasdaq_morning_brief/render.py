@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 from datetime import date, datetime
 from html import escape
@@ -34,6 +35,17 @@ def _move_class(value: float) -> str:
 def _move_badge(value: float) -> str:
     arrow = "▲" if value > 0 else "▼" if value < 0 else "●"
     return f'<span class="badge {_move_class(value)}">{arrow} {_fmt_pct(value)}</span>'
+
+
+def _result_source_label(source_tier: str) -> str:
+    labels = {
+        "official": "官方",
+        "official_proxy": "FRED/官方代理",
+        "media_confirmed": "媒体转述·多源待校验",
+        "media_single": "媒体转述·待校验",
+        "unverified": "待校验",
+    }
+    return labels.get(source_tier, "待校验")
 
 
 def _value_badge(value: float, label: str) -> str:
@@ -84,7 +96,8 @@ def _temperature_class(label: str) -> str:
 def _policy_event_line(event: PolicyEvent) -> str:
     data_html = ""
     if event.result_summary:
-        data_html = f"<small>数据：{escape(event.result_summary)}</small>"
+        label = _result_source_label(event.result_source_tier)
+        data_html = f"<small>数据源：{escape(label)}；{escape(event.result_summary)}</small>"
     result_html = ""
     if event.result_conclusion:
         result_html = f"<small>结论：{escape(event.result_conclusion)}</small>"
@@ -104,18 +117,42 @@ def _next_policy_event_line(event: PolicyEvent) -> str:
     )
 
 
+def _policy_event_display_key(event: PolicyEvent) -> tuple[str, str]:
+    title = re.sub(r"[^a-z0-9]+", " ", event.title.lower()).strip()
+    summary = re.sub(r"[^a-z0-9]+", " ", event.summary.lower()).strip()
+    combined = f"{title} {summary}"
+    if event.category == "IPO" and "spacex" in combined and any(token in combined for token in ("ipo", "listing", "nasdaq")):
+        return event.category, "spacex-ipo"
+    return event.category, title
+
+
+def _dedupe_policy_events(events: list[PolicyEvent]) -> list[PolicyEvent]:
+    selected: dict[tuple[str, str], PolicyEvent] = {}
+    for event in events:
+        key = _policy_event_display_key(event)
+        current = selected.get(key)
+        if current is None:
+            selected[key] = event
+            continue
+        if event.event_date < current.event_date:
+            selected[key] = event
+        elif event.event_date == current.event_date and len(event.summary) > len(current.summary):
+            selected[key] = event
+    return list(selected.values())
+
+
 def _policy_event_list(
     upcoming: list[PolicyEvent],
     recent: list[PolicyEvent],
     next_event: PolicyEvent | None,
 ) -> str:
-    active_events = upcoming + recent
+    active_events = _dedupe_policy_events(upcoming + recent)
     if not active_events:
         if next_event:
             return _next_policy_event_line(next_event)
         return "<li><span>未来/影响中事件</span><strong>暂无配置</strong><small>可在 policy_events.csv 中维护 FOMC、CPI、PCE、非农和重点财报。</small></li>"
     event_html = "".join(_policy_event_line(item) for item in active_events[:5])
-    if next_event:
+    if next_event and _policy_event_display_key(next_event) not in {_policy_event_display_key(item) for item in active_events}:
         event_html += _next_policy_event_line(next_event)
     return event_html
 

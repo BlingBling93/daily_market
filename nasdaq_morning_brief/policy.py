@@ -18,6 +18,20 @@ from .models import AdviceSnapshot, PolicyEvent, PolicySnapshot, QuoteSnapshot
 
 
 DEFAULT_IMPACT_DAYS_BY_CATEGORY = {
+    "FOMC": 5,
+    "通胀": 3,
+    "就业": 3,
+    "财报": 5,
+    "增长": 2,
+    "监管": 14,
+    "地缘": 14,
+    "IPO": 5,
+    "指数调整": 5,
+    "科技监管": 14,
+    "AI产业": 7,
+    "流动性": 14,
+}
+LEGACY_IMPACT_DAYS_BY_CATEGORY = {
     "FOMC": 21,
     "通胀": 10,
     "就业": 10,
@@ -30,6 +44,20 @@ DEFAULT_IMPACT_DAYS_BY_CATEGORY = {
     "科技监管": 30,
     "AI产业": 14,
     "流动性": 21,
+}
+EXECUTION_LOOKAHEAD_DAYS_BY_CATEGORY = {
+    "FOMC": 3,
+    "通胀": 1,
+    "就业": 2,
+    "财报": 2,
+    "增长": 1,
+    "监管": 7,
+    "地缘": 7,
+    "IPO": 2,
+    "指数调整": 2,
+    "科技监管": 7,
+    "AI产业": 3,
+    "流动性": 5,
 }
 MAJOR_POLICY_CATEGORIES = {
     "FOMC",
@@ -57,6 +85,18 @@ NASDAQ_EARNINGS_URL = "https://api.nasdaq.com/api/calendar/earnings?date={event_
 GOOGLE_NEWS_RSS_URL = "https://news.google.com/rss/search?q={query}&hl=en-US&gl=US&ceid=US:en"
 FRED_CSV_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
 NVIDIA_NEWS_URL = "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-{quarter_slug}-quarter-fiscal-{fiscal_year}"
+PREFERRED_MEDIA_SOURCES = {
+    "Reuters",
+    "The Wall Street Journal",
+    "WSJ",
+    "Associated Press",
+    "AP News",
+    "CNBC",
+    "Bloomberg",
+    "MarketWatch",
+    "财联社",
+    "华尔街见闻",
+}
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
     "Accept": "application/json,text/html,text/plain,*/*",
@@ -293,6 +333,7 @@ def _event_to_dict(event: PolicyEvent) -> dict[str, object]:
         "result_summary": event.result_summary,
         "result_conclusion": event.result_conclusion,
         "result_sources": event.result_sources,
+        "result_source_tier": event.result_source_tier,
     }
 
 
@@ -307,6 +348,8 @@ def _event_from_dict(row: dict[str, object], default_impact_days: int) -> Policy
         impact_days = max(1, int(raw_impact)) if raw_impact not in (None, "") else DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, default_impact_days)
     except (TypeError, ValueError):
         impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, default_impact_days)
+    if impact_days == LEGACY_IMPACT_DAYS_BY_CATEGORY.get(category):
+        impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, impact_days)
     return PolicyEvent(
         event_date=event_date,
         category=category,
@@ -320,6 +363,7 @@ def _event_from_dict(row: dict[str, object], default_impact_days: int) -> Policy
         result_summary=str(row.get("result_summary") or "").strip(),
         result_conclusion=str(row.get("result_conclusion") or "").strip(),
         result_sources=row.get("result_sources") if isinstance(row.get("result_sources"), list) else [],
+        result_source_tier=str(row.get("result_source_tier") or "").strip(),
     )
 
 
@@ -414,6 +458,37 @@ def _news_cache_entry_fresh(entry: dict[str, object], refresh_hours: int) -> boo
 
 def _news_cache_entry_has_result(entry: dict[str, object]) -> bool:
     return bool(str(entry.get("summary") or "").strip() and str(entry.get("conclusion") or "").strip())
+
+
+def _result_source_tier(entry: dict[str, object]) -> str:
+    source_tier = str(entry.get("source_tier") or "").strip()
+    if source_tier:
+        return source_tier
+    method = str(entry.get("method") or "")
+    if method.startswith("direct_fred"):
+        return "official_proxy"
+    if method.startswith("direct_"):
+        return "official"
+    if method:
+        return "media_single"
+    return "unverified"
+
+
+def _result_is_policy_grade(entry: dict[str, object]) -> bool:
+    return _result_source_tier(entry) in {"official", "official_proxy"}
+
+
+def _media_cache_entry_fresh(entry: dict[str, object]) -> bool:
+    fetched_raw = entry.get("fetched_at")
+    if not fetched_raw:
+        return False
+    try:
+        fetched_at = datetime.fromisoformat(str(fetched_raw))
+    except ValueError:
+        return False
+    if fetched_at.tzinfo is None:
+        fetched_at = fetched_at.replace(tzinfo=timezone.utc)
+    return _now_utc() - fetched_at < timedelta(hours=12)
 
 
 def _event_active_on(event: PolicyEvent, event_date: date) -> bool:
@@ -513,6 +588,7 @@ def _fetch_pce_direct_result(event: PolicyEvent) -> dict[str, object] | None:
             FRED_CSV_URL.format(series_id="PCEPILFE"),
         ],
         "method": "direct_fred_pce",
+        "source_tier": "official_proxy",
     }
 
 
@@ -555,6 +631,7 @@ def _fetch_gdp_direct_result(event: PolicyEvent) -> dict[str, object] | None:
             FRED_CSV_URL.format(series_id="GDPC1"),
         ],
         "method": "direct_fred_gdp",
+        "source_tier": "official_proxy",
     }
 
 
@@ -633,6 +710,7 @@ def _fetch_nvda_direct_result(event: PolicyEvent) -> dict[str, object] | None:
         "stance": stance,
         "sources": [url],
         "method": "direct_nvidia_release",
+        "source_tier": "official",
     }
 
 
@@ -657,6 +735,19 @@ def _parse_google_news_items(rss_text: str) -> list[dict[str, str]]:
         if title:
             items.append({"title": html.unescape(title), "link": link, "source": source})
     return items
+
+
+def _is_preferred_media(source: str) -> bool:
+    normalized = source.strip().lower()
+    return any(item.lower() in normalized for item in PREFERRED_MEDIA_SOURCES)
+
+
+def _select_media_items(items: list[dict[str, str]]) -> tuple[list[dict[str, str]], str]:
+    preferred = [item for item in items if _is_preferred_media(item.get("source", ""))]
+    selected = preferred[:3] if preferred else items[:3]
+    distinct_sources = {item.get("source", "").strip().lower() for item in selected if item.get("source", "").strip()}
+    source_tier = "media_confirmed" if len(distinct_sources) >= 2 and preferred else "media_single"
+    return selected, source_tier
 
 
 def _infer_result_conclusion(event: PolicyEvent, titles: list[str]) -> tuple[str, str]:
@@ -716,17 +807,26 @@ def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
     items = _parse_google_news_items(rss_text)
     if not items:
         return None
-    titles = [item["title"] for item in items[:5]]
+    selected_items, source_tier = _select_media_items(items)
+    titles = [item["title"] for item in selected_items]
     stance, conclusion = _infer_result_conclusion(event, titles)
     source_text = "；".join(
-        f"{item['source'] or 'News'}: {item['title']}" for item in items[:3]
+        f"{item['source'] or 'News'}: {item['title']}" for item in selected_items
+    )
+    summary = (
+        f"媒体转述（待官方校验）：{source_text}"
+    )
+    media_conclusion = (
+        f"媒体标题初步指向“{stance}”，仅作为临时解读；仓位动作等待官方/FRED/公司IR数据确认。"
     )
     return {
         "fetched_at": _now_utc().isoformat(),
-        "summary": source_text,
-        "conclusion": conclusion,
-        "stance": stance,
-        "sources": [item["link"] for item in items[:3] if item.get("link")],
+        "summary": summary,
+        "conclusion": media_conclusion if conclusion else "媒体结果待官方校验，暂不改变基础动作。",
+        "stance": "待官方确认",
+        "sources": [item["link"] for item in selected_items if item.get("link")],
+        "method": "media_google_news",
+        "source_tier": source_tier,
     }
 
 
@@ -741,11 +841,14 @@ def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> Li
     for event in events:
         event_id = _event_id(event)
         entry = entries.get(event_id, {})
-        if _news_cache_entry_has_result(entry):
+        entry_tier = _result_source_tier(entry) if entry else ""
+        if _news_cache_entry_has_result(entry) and entry_tier.startswith("media"):
+            should_refresh = not _media_cache_entry_fresh(entry)
+        elif _news_cache_entry_has_result(entry):
             should_refresh = False
         else:
             should_refresh = not _news_cache_entry_fresh(entry, config.result_retry_hours)
-            if _direct_result_supported(event) and entry.get("method", "").startswith("direct_") is False:
+            if _direct_result_supported(event) and not _result_is_policy_grade(entry):
                 should_refresh = True
         if _event_needs_result(event, current_et_date) and should_refresh:
             try:
@@ -765,8 +868,9 @@ def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> Li
             event.result_summary = str(entry.get("summary") or "")
             event.result_conclusion = str(entry.get("conclusion") or "")
             event.result_sources = list(entry.get("sources") or [])
+            event.result_source_tier = _result_source_tier(entry)
             stance = str(entry.get("stance") or "")
-            if stance and stance != "待确认":
+            if _result_is_policy_grade(entry) and stance and stance != "待确认":
                 event.stance = stance
         enriched.append(event)
 
@@ -823,24 +927,37 @@ def _fetch_bls_release_events(as_of: date) -> List[PolicyEvent]:
     for category, (title_prefix, url) in BLS_RELEASE_URLS.items():
         category_name = "就业" if category.startswith("就业") else category
         text = " ".join(_clean_lines(_fetch_text(url)))
-        for match in re.finditer(r"([A-Za-z]+ \d{4})\s+([A-Z][a-z]{2}\.?\s+\d{1,2},\s+20\d{2})\s+(\d{1,2}:\d{2}\s+[AP]M)", text):
-            reference_month, release_date_text, release_time = match.groups()
+
+        def add_event(reference_month: str, release_date_text: str, release_time: str) -> None:
             event_date = _parse_us_date(release_date_text)
             if event_date is None or event_date.year < as_of.year - 1 or event_date.year > as_of.year + 1:
-                continue
-            events.append(
-                PolicyEvent(
-                    event_date=event_date,
-                    category=category_name,
-                    title=f"{title_prefix}发布",
-                    stance="待确认",
-                    summary=f"{reference_month}数据，{release_time} ET发布；美东日期口径。",
-                    short_term="数据落地前后利率和纳指期货波动可能放大。",
-                    mid_term="连续两到三次数据同向后，再调整仓位中枢。",
-                    long_term="只有通胀/就业趋势改变利率中枢时，才影响长期核心配置。",
-                    impact_days=DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category_name, 10),
-                )
+                return
+            event = PolicyEvent(
+                event_date=event_date,
+                category=category_name,
+                title=f"{title_prefix}发布",
+                stance="待确认",
+                summary=f"{reference_month}数据，{release_time} ET发布；美东日期口径。",
+                short_term="数据落地前后利率和纳指期货波动可能放大。",
+                mid_term="连续两到三次数据同向后，再调整仓位中枢。",
+                long_term="只有通胀/就业趋势改变利率中枢时，才影响长期核心配置。",
+                impact_days=DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category_name, 10),
             )
+            if _event_key(event) not in {_event_key(item) for item in events}:
+                events.append(event)
+
+        for match in re.finditer(r"([A-Za-z]+ \d{4})\s+([A-Z][a-z]{2}\.?\s+\d{1,2},\s+20\d{2})\s+(\d{1,2}:\d{2}\s+[AP]M)", text):
+            reference_month, release_date_text, release_time = match.groups()
+            add_event(reference_month, release_date_text, release_time)
+        for match in re.finditer(
+            r"for\s+([A-Za-z]+\s+20\d{2})\s+is\s+scheduled\s+to\s+be\s+released\s+on\s+"
+            r"([A-Za-z]+\.?\s+\d{1,2},\s+20\d{2}),\s+at\s+"
+            r"(\d{1,2}:\d{2})\s+([AP])\.?M\.?",
+            text,
+            flags=re.I,
+        ):
+            reference_month, release_date_text, release_time, meridiem = match.groups()
+            add_event(reference_month, release_date_text, f"{release_time} {meridiem.upper()}M")
     return events
 
 
@@ -979,6 +1096,24 @@ def _event_window(
     return upcoming[:5], recent[-3:]
 
 
+def _execution_event_window(
+    upcoming: List[PolicyEvent],
+    recent: List[PolicyEvent],
+    as_of: date,
+) -> tuple[List[PolicyEvent], List[PolicyEvent]]:
+    execution_upcoming = [
+        item
+        for item in upcoming
+        if 0 <= (item.event_date - as_of).days <= EXECUTION_LOOKAHEAD_DAYS_BY_CATEGORY.get(item.category, 1)
+    ]
+    execution_recent = [
+        item
+        for item in recent
+        if as_of <= item.event_date + timedelta(days=item.impact_days)
+    ]
+    return execution_upcoming, execution_recent
+
+
 def _next_major_event(events: Iterable[PolicyEvent], as_of: date) -> PolicyEvent | None:
     future_events = [
         item
@@ -1004,7 +1139,11 @@ def _rate_note(us10y: QuoteSnapshot, oil: QuoteSnapshot) -> str:
 
 def _stance_from_events(upcoming: List[PolicyEvent], recent: List[PolicyEvent], rate_note: str) -> str:
     joined = " ".join(item.stance for item in upcoming + recent)
-    result_joined = " ".join(item.result_conclusion for item in upcoming + recent)
+    result_joined = " ".join(
+        item.result_conclusion
+        for item in upcoming + recent
+        if item.result_source_tier in {"official", "official_proxy"}
+    )
     if "鹰" in joined or "风险" in joined or "10年美债收益率上行" in rate_note:
         return "偏谨慎"
     if "鸽" in joined or "利好" in joined or "收益率回落" in rate_note:
@@ -1098,12 +1237,13 @@ def build_policy_snapshot(
 ) -> PolicySnapshot:
     events = load_policy_calendar(config, as_of)
     upcoming, recent = _event_window(events, as_of, config.lookahead_days, config.lookback_days)
+    execution_upcoming, execution_recent = _execution_event_window(upcoming, recent, as_of)
     next_event = _next_major_event(events, as_of)
     if next_event and any(_event_key(next_event) == _event_key(item) for item in upcoming):
         next_event = None
     rate_note = _rate_note(us10y, oil)
     stance = _stance_from_events(upcoming, recent, rate_note)
-    execution_note = _execution_note(advice, upcoming, recent, stance)
+    execution_note = _execution_note(advice, execution_upcoming, execution_recent, stance)
     impact_event = _impact_event(upcoming, recent)
 
     if upcoming:
@@ -1138,4 +1278,6 @@ def build_policy_snapshot(
         upcoming_events=upcoming,
         recent_events=recent,
         next_event=next_event,
+        execution_upcoming_events=execution_upcoming,
+        execution_recent_events=execution_recent,
     )

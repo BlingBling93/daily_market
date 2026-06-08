@@ -7,7 +7,7 @@ from .config import PortfolioConfig
 from .models import AdviceSnapshot, PolicyEvent, PolicySnapshot, QuoteSnapshot, TemperatureSnapshot, ValuationSnapshot
 
 
-MAJOR_POLICY_CATEGORIES = {"FOMC", "通胀", "就业", "财报", "监管", "地缘"}
+MAJOR_POLICY_CATEGORIES = {"FOMC", "通胀", "就业", "财报", "增长", "监管", "地缘"}
 
 
 def _trend_state(qqq: QuoteSnapshot) -> str:
@@ -153,8 +153,8 @@ def _policy_adjusted_action(base_action: str, policy: PolicySnapshot) -> str:
     if base_action == "防守":
         return base_action
 
-    has_upcoming_major = _has_major_event(policy.upcoming_events)
-    has_active_major = _has_major_event(policy.recent_events)
+    has_upcoming_major = _has_major_event(policy.execution_upcoming_events)
+    has_active_major = _has_major_event(policy.execution_recent_events)
 
     if has_upcoming_major:
         if base_action in {"小幅加仓", "持有"}:
