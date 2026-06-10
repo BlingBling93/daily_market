@@ -122,31 +122,6 @@ Event results use `result_source_tier`:
 
 Only `official` / `official_proxy` results can influence policy stance. Media-tier results are displayed as summary and interpretation, but do not participate in formal stance upgrades.
 
-## A-Share Feedback and Loss Persistence
-
-The A-share direction feedback loop uses `ashare_prediction_log.csv` as cross-run state. After each `Market Briefs` workflow generates the A-share report, it must commit these state files back to the repository so the next run can inherit historical samples and continue filling realized results:
-
-- `ashare_prediction_log.csv`
-- `ashare_model_state.json`
-- `ashare_theme_heat_history.csv`
-- `ashare_observation_state.json`
-- `ashare_lowfreq_cache.json`
-
-Prediction rows are deduplicated by `as_of + proxy_ticker`. Each market-data run records that day's direction ETF samples; if the same day already exists, the run only fills missing fields instead of appending duplicates. Loss evaluation advances by real trading days, not calendar days or workflow runs. A horizon is filled only when the exact target trading day has a usable sample price:
-
-- T+1: `price_t1`, `actual_1d_return`, `actual_excess_*`, `hit`, `loss`
-- T+5: `price_t5`, `actual_5d_return`, `actual_excess_*_5d`, `hit_5d`, `loss_5d`
-- T+10: `*_10d`
-- T+20: `*_20d`
-
-If a trading day is missing an artifact or persisted sample, the system does not fabricate rows. Any result that depends on that date as the exact T+N target stays blank until a trusted price source is available. Loss combines directional miss, signal-strength error, realized rank gap, and downside risk for bullish calls. Effective excess return prefers a weighted blend of direction-universe excess and Shanghai Composite excess:
-
-```text
-effective_excess = universe_excess * 0.65 + benchmark_excess * 0.35
-```
-
-If Shanghai Composite pricing is unavailable, direction-universe excess is used alone. Bullish signals hit only when effective excess is positive; bearish / trim signals hit only when effective excess is negative; neutral signals hit when effective excess stays within +/-0.5%.
-
 ## Market Data Sources and Freshness
 
 The market-data layer no longer depends on Yahoo Finance as a single point of failure. The morning brief uses these priorities:

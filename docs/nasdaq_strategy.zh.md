@@ -122,31 +122,6 @@
 
 只有 `official` / `official_proxy` 结果可以影响政策姿态。媒体层结果只展示摘要和市场解读，不参与正式姿态升级。
 
-## A 股反馈与 loss 持久化
-
-A 股方向反馈使用 `ashare_prediction_log.csv` 作为跨运行状态文件。每次 `Market Briefs` workflow 生成 A 股报告后，必须把以下状态文件提交回仓库，确保下一次运行能继承历史样本并继续回填结果：
-
-- `ashare_prediction_log.csv`
-- `ashare_model_state.json`
-- `ashare_theme_heat_history.csv`
-- `ashare_observation_state.json`
-- `ashare_lowfreq_cache.json`
-
-预测日志按 `as_of + proxy_ticker` 去重。每个有行情的运行日会记录当日方向 ETF 样本；若当天样本已经存在，只补齐缺失字段，不重复追加。loss 评估按真实交易日推进，而不是自然日或 workflow 触发次数。只有目标交易日有可用样本价格时，才回填对应周期：
-
-- T+1：`price_t1`、`actual_1d_return`、`actual_excess_*`、`hit`、`loss`
-- T+5：`price_t5`、`actual_5d_return`、`actual_excess_*_5d`、`hit_5d`、`loss_5d`
-- T+10：`*_10d`
-- T+20：`*_20d`
-
-如果某个交易日缺少 artifact 或持久化样本，该日期不伪造行；依赖该日期作为精确 T+N 目标的结果保持空值，直到有可信价格来源补齐。loss 由方向错判、信号强度误差、实际排名落差和看多下跌风险组成。有效超额收益优先使用方向池超额和上证指数超额加权：
-
-```text
-effective_excess = universe_excess * 0.65 + benchmark_excess * 0.35
-```
-
-若缺少上证指数价格，则只使用方向池超额。看多信号要求有效超额收益为正才算 hit，看空 / 减仓信号要求有效超额收益为负才算 hit，中性信号要求有效超额收益落在 ±0.5% 内。
-
 ## 行情数据源与新鲜度
 
 行情层不再单点依赖 Yahoo Finance。晨报采用以下优先级：

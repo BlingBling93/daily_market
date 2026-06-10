@@ -111,7 +111,19 @@ Each run maintains two files:
 - `ashare_prediction_log.csv`: daily samples for each direction, including score, action, prediction signal, T0 direction ETF price, T0 Shanghai Composite price, and T+1/T+5/T+10/T+20 prices, returns, excess returns versus both the direction universe and the Shanghai Composite, hit flags, and losses.
 - `ashare_model_state.json`: rolling hit rates, strong-signal hit rates, average excess returns versus the direction universe and the Shanghai Composite, and average losses for each horizon.
 
+After the `Market Briefs` workflow generates the A-share report, it must commit feedback state back to the repository so the next run inherits historical samples instead of starting again from a fresh checkout. Persisted files include:
+
+- `ashare_prediction_log.csv`
+- `ashare_model_state.json`
+- `ashare_theme_heat_history.csv`
+- `ashare_observation_state.json`
+- `ashare_lowfreq_cache.json`
+
+Prediction rows are deduplicated by `as_of + proxy_ticker`. Each market-data run records that day's direction ETF samples; if the same day already exists, the run only fills missing fields instead of appending duplicates.
+
 Validation horizons advance only by real trading sessions, not calendar days or workflow run days. The system derives the trading-date set from the daily K-lines of the direction ETFs and the Shanghai Composite. A T+1/T+5/T+10/T+20 result is filled only when both the prediction date and the current market date are present in that trading calendar and enough sessions have elapsed. Weekend runs, market holidays, and runs before the data source has advanced to a new trading session do not enter hit rates or losses early.
+
+Backfills require the exact target trading day to have a usable price. If a trading day is missing an artifact or persisted sample, the system does not fabricate rows. Any result that depends on that date as the exact T+N target stays blank until a trusted price source is available.
 
 ETF actions are mapped into prediction signals:
 

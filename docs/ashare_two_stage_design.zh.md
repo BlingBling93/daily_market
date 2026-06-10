@@ -111,7 +111,19 @@ ETF 仓位动作：
 - `ashare_prediction_log.csv`：逐日记录每个方向的分数、动作、预测信号、T0 价格、上证指数 T0 价格，以及 T+1/T+5/T+10/T+20 的价格、收益、相对方向池和上证指数的超额收益、命中结果和 loss。
 - `ashare_model_state.json`：保存最近窗口里各周期的命中率、强信号命中率、相对方向池/上证指数的平均超额收益和平均 loss，供晨报展示和后续校准使用。
 
+`Market Briefs` workflow 生成 A 股报告后，必须把反馈状态提交回仓库，确保下一次运行继承历史样本，而不是从 fresh checkout 重新开始。需要持久化的文件包括：
+
+- `ashare_prediction_log.csv`
+- `ashare_model_state.json`
+- `ashare_theme_heat_history.csv`
+- `ashare_observation_state.json`
+- `ashare_lowfreq_cache.json`
+
+预测日志按 `as_of + proxy_ticker` 去重。每个有行情的运行日会记录当日方向 ETF 样本；若当天样本已经存在，只补齐缺失字段，不重复追加。
+
 验证周期只按真实交易日推进，不按自然日或任务运行日推进。系统从方向 ETF 和上证指数的日 K 线中提取交易日期，只有当预测日和当前行情日期都在交易日列表中，且中间已经经过足够的交易日，才会回填对应的 T+1/T+5/T+10/T+20 结果。周末、节假日、休市日运行，以及行情源尚未更新到新交易日的运行，都不会提前计入命中率或 loss。
+
+回填要求精确目标交易日有可用价格。若某个交易日缺少 artifact 或持久化样本，该日期不伪造行；依赖该日期作为精确 T+N 目标的结果保持空值，直到有可信价格来源补齐。
 
 ETF 动作会被映射成预测信号：
 
