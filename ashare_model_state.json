@@ -1,4 +1,161 @@
 {
-  "evaluated_samples": 0,
-  "window_days": 20
+  "updated_at": "2026-06-10T17:11:54",
+  "evaluated_samples": 140,
+  "latest_evaluated_date": "2026-06-09",
+  "window_days": 7,
+  "benchmark": "上证指数",
+  "universe_excess_weight": 0.65,
+  "benchmark_excess_weight": 0.35,
+  "horizons": {
+    "1d": {
+      "sample_count": 140,
+      "date_count": 7,
+      "top_hit_rate": 0.381,
+      "strong_hit_rate": 0.6139,
+      "avg_effective_excess": 0.1856,
+      "avg_universe_excess": 0.1757,
+      "avg_benchmark_excess": 0.2039,
+      "avg_loss": 0.2075
+    },
+    "5d": {
+      "sample_count": 80,
+      "date_count": 4,
+      "top_hit_rate": 0.5,
+      "strong_hit_rate": 0.6667,
+      "avg_effective_excess": 0.424,
+      "avg_universe_excess": 0.4236,
+      "avg_benchmark_excess": 0.4247,
+      "avg_loss": 0.1562
+    },
+    "10d": {
+      "sample_count": 0,
+      "date_count": 0,
+      "top_hit_rate": null,
+      "strong_hit_rate": null,
+      "avg_effective_excess": null,
+      "avg_universe_excess": null,
+      "avg_benchmark_excess": null,
+      "avg_loss": null
+    },
+    "20d": {
+      "sample_count": 0,
+      "date_count": 0,
+      "top_hit_rate": null,
+      "strong_hit_rate": null,
+      "avg_effective_excess": null,
+      "avg_universe_excess": null,
+      "avg_benchmark_excess": null,
+      "avg_loss": null
+    }
+  },
+  "parameter_diagnostics": [
+    {
+      "group": "动作:暂不配置",
+      "samples": "89",
+      "hit_1d": "62%",
+      "hit_5d": "76%",
+      "hit_20d": "等待样本",
+      "excess_1d": "-0.27%",
+      "loss_1d": "0.13"
+    },
+    {
+      "group": "动作:持有观察",
+      "samples": "35",
+      "hit_1d": "57%",
+      "hit_5d": "86%",
+      "hit_20d": "等待样本",
+      "excess_1d": "+0.24%",
+      "loss_1d": "0.29"
+    },
+    {
+      "group": "动作:可小幅加仓",
+      "samples": "9",
+      "hit_1d": "56%",
+      "hit_5d": "33%",
+      "hit_20d": "等待样本",
+      "excess_1d": "+1.39%",
+      "loss_1d": "0.60"
+    },
+    {
+      "group": "动作:等回调",
+      "samples": "4",
+      "hit_1d": "25%",
+      "hit_5d": "0%",
+      "hit_20d": "等待样本",
+      "excess_1d": "+1.14%",
+      "loss_1d": "0.17"
+    },
+    {
+      "group": "动作:减仓提醒",
+      "samples": "2",
+      "hit_1d": "100%",
+      "hit_5d": "0%",
+      "hit_20d": "等待样本",
+      "excess_1d": "-2.05%",
+      "loss_1d": "0.18"
+    },
+    {
+      "group": "动作:减仓降温",
+      "samples": "1",
+      "hit_1d": "0%",
+      "hit_5d": "等待样本",
+      "hit_20d": "等待样本",
+      "excess_1d": "+2.41%",
+      "loss_1d": "1.06"
+    },
+    {
+      "group": "分数:<58",
+      "samples": "90",
+      "hit_1d": "62%",
+      "hit_5d": "74%",
+      "hit_20d": "等待样本",
+      "excess_1d": "-0.30%",
+      "loss_1d": "0.13"
+    },
+    {
+      "group": "分数:58-67",
+      "samples": "22",
+      "hit_1d": "59%",
+      "hit_5d": "71%",
+      "hit_20d": "等待样本",
+      "excess_1d": "+0.63%",
+      "loss_1d": "0.20"
+    },
+    {
+      "group": "分数:72+",
+      "samples": "16",
+      "hit_1d": "50%",
+      "hit_5d": "40%",
+      "hit_20d": "等待样本",
+      "excess_1d": "+0.56%",
+      "loss_1d": "0.54"
+    },
+    {
+      "group": "分数:68-71",
+      "samples": "12",
+      "hit_1d": "50%",
+      "hit_5d": "100%",
+      "hit_20d": "等待样本",
+      "excess_1d": "+0.32%",
+      "loss_1d": "0.37"
+    },
+    {
+      "group": "状态:非过热",
+      "samples": "133",
+      "hit_1d": "60%",
+      "hit_5d": "74%",
+      "hit_20d": "等待样本",
+      "excess_1d": "-0.02%",
+      "loss_1d": "0.20"
+    },
+    {
+      "group": "状态:短线过热",
+      "samples": "7",
+      "hit_1d": "43%",
+      "hit_5d": "0%",
+      "hit_20d": "等待样本",
+      "excess_1d": "+0.41%",
+      "loss_1d": "0.30"
+    }
+  ]
 }

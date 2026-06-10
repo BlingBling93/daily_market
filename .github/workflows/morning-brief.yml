@@ -4,6 +4,9 @@ on:
   # Triggered manually or by an external cron service through the GitHub workflow_dispatch API.
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   generate-and-push:
     runs-on: ubuntu-latest
@@ -53,6 +56,21 @@ jobs:
       - name: Generate and push A-share image
         run: |
           python -B -m nasdaq_morning_brief.ashare_report --config config.example.yaml --require-push
+
+      - name: Commit A-share feedback state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            ashare_theme_heat_history.csv \
+            ashare_observation_state.json \
+            ashare_lowfreq_cache.json \
+            ashare_prediction_log.csv \
+            ashare_model_state.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Persist A-share feedback state"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push
 
       - name: Upload generated card artifact
         if: always()
