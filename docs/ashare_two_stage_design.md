@@ -92,7 +92,8 @@ ETF position action:
 | 5d return > 12%, plus same-day weakness or insufficient turnover expansion | `减仓降温` |
 | 5d return > 12%, or MA20 gap > 14% | `减仓提醒` |
 | 5d return > 8% or MA20 gap > 10% | `等回调` |
-| score >= 72, 5d return <= 6%, MA20 gap <= 8%, volume ratio >= 1.1x | `可小幅加仓` |
+| 20d return > 12%, or 20d volatility > 2.5 | `持有观察`, avoiding high-score chasing |
+| score >= 76, same-day change is non-negative, 5d return <= 6%, MA20 gap <= 7%, volume ratio between 1.1x and 1.8x | `可小幅加仓` |
 | score >= 68 | `持有观察` |
 | score < 58 | `暂不配置` |
 | otherwise | `持有观察` |

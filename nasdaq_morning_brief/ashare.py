@@ -953,7 +953,15 @@ def _etf_position_action(score: int, market: Optional[MarketSeries]) -> str:
         return "减仓提醒"
     if market.return_5d > 8 or market.sma_20_gap_pct > 10:
         return "等回调"
-    if score >= 72 and market.return_5d <= 6 and market.sma_20_gap_pct <= 8 and market.volume_ratio >= 1.1:
+    if market.return_20d > 12 or market.volatility_20d > 2.5:
+        return "持有观察" if score >= 68 else "暂不配置"
+    if (
+        score >= 76
+        and 0 <= market.day_change_pct
+        and market.return_5d <= 6
+        and market.sma_20_gap_pct <= 7
+        and 1.1 <= market.volume_ratio <= 1.8
+    ):
         return "可小幅加仓"
     if score >= 68:
         return "持有观察"
