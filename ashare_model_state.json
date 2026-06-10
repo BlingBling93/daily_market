@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-10T17:11:54",
+  "updated_at": "2026-06-10T18:30:29",
   "evaluated_samples": 140,
   "latest_evaluated_date": "2026-06-09",
   "window_days": 7,
@@ -15,7 +15,17 @@
       "avg_effective_excess": 0.1856,
       "avg_universe_excess": 0.1757,
       "avg_benchmark_excess": 0.2039,
-      "avg_loss": 0.2075
+      "avg_loss": 0.1862
+    },
+    "2d": {
+      "sample_count": 140,
+      "date_count": 7,
+      "top_hit_rate": 0.4762,
+      "strong_hit_rate": 0.6061,
+      "avg_effective_excess": 0.261,
+      "avg_universe_excess": 0.2453,
+      "avg_benchmark_excess": 0.2903,
+      "avg_loss": 0.1823
     },
     "5d": {
       "sample_count": 80,
@@ -65,7 +75,7 @@
       "hit_5d": "86%",
       "hit_20d": "等待样本",
       "excess_1d": "+0.24%",
-      "loss_1d": "0.29"
+      "loss_1d": "0.24"
     },
     {
       "group": "动作:可小幅加仓",
@@ -74,7 +84,7 @@
       "hit_5d": "33%",
       "hit_20d": "等待样本",
       "excess_1d": "+1.39%",
-      "loss_1d": "0.60"
+      "loss_1d": "0.45"
     },
     {
       "group": "动作:等回调",
@@ -119,7 +129,7 @@
       "hit_5d": "71%",
       "hit_20d": "等待样本",
       "excess_1d": "+0.63%",
-      "loss_1d": "0.20"
+      "loss_1d": "0.16"
     },
     {
       "group": "分数:72+",
@@ -128,7 +138,7 @@
       "hit_5d": "40%",
       "hit_20d": "等待样本",
       "excess_1d": "+0.56%",
-      "loss_1d": "0.54"
+      "loss_1d": "0.42"
     },
     {
       "group": "分数:68-71",
@@ -137,7 +147,7 @@
       "hit_5d": "100%",
       "hit_20d": "等待样本",
       "excess_1d": "+0.32%",
-      "loss_1d": "0.37"
+      "loss_1d": "0.34"
     },
     {
       "group": "状态:非过热",
@@ -146,7 +156,7 @@
       "hit_5d": "74%",
       "hit_20d": "等待样本",
       "excess_1d": "-0.02%",
-      "loss_1d": "0.20"
+      "loss_1d": "0.18"
     },
     {
       "group": "状态:短线过热",

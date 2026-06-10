@@ -105,11 +105,11 @@ The morning card displays the top 3 directions.
 Direction scoring now has two layers:
 
 1. `theme_score` remains an interpretable rule-based score for current trend, turnover, crowding, and style priors.
-2. A prediction log stores each day's score and ETF action as an auditable sample, then gradually validates the signal after 1/5/10/20 trading days.
+2. A prediction log stores each day's score and ETF action as an auditable sample, then gradually validates the signal after 1/2/5/10/20 trading days.
 
 Each run maintains two files:
 
-- `ashare_prediction_log.csv`: daily samples for each direction, including score, action, prediction signal, T0 direction ETF price, T0 Shanghai Composite price, and T+1/T+5/T+10/T+20 prices, returns, excess returns versus both the direction universe and the Shanghai Composite, hit flags, and losses.
+- `ashare_prediction_log.csv`: daily samples for each direction, including score, action, prediction signal, T0 direction ETF price, T0 Shanghai Composite price, and T+1/T+2/T+5/T+10/T+20 prices, returns, excess returns versus both the direction universe and the Shanghai Composite, hit flags, and losses.
 - `ashare_model_state.json`: rolling hit rates, strong-signal hit rates, average excess returns versus the direction universe and the Shanghai Composite, and average losses for each horizon.
 
 After the `Market Briefs` workflow generates the A-share report, it must commit feedback state back to the repository so the next run inherits historical samples instead of starting again from a fresh checkout. Persisted files include:
@@ -122,7 +122,7 @@ After the `Market Briefs` workflow generates the A-share report, it must commit 
 
 Prediction rows are deduplicated by `as_of + proxy_ticker`. Each market-data run records that day's direction ETF samples; if the same day already exists, the run only fills missing fields instead of appending duplicates.
 
-Validation horizons advance only by real trading sessions, not calendar days or workflow run days. The system derives the trading-date set from the daily K-lines of the direction ETFs and the Shanghai Composite. A T+1/T+5/T+10/T+20 result is filled only when both the prediction date and the current market date are present in that trading calendar and enough sessions have elapsed. Weekend runs, market holidays, and runs before the data source has advanced to a new trading session do not enter hit rates or losses early.
+Validation horizons advance only by real trading sessions, not calendar days or workflow run days. The system derives the trading-date set from the daily K-lines of the direction ETFs and the Shanghai Composite. A T+1/T+2/T+5/T+10/T+20 result is filled only when both the prediction date and the current market date are present in that trading calendar and enough sessions have elapsed. Weekend runs, market holidays, and runs before the data source has advanced to a new trading session do not enter hit rates or losses early.
 
 Backfills require the exact target trading day to have a usable price. If a trading day is missing an artifact or persisted sample, the system does not fabricate rows. Any result that depends on that date as the exact T+N target stays blank until a trusted price source is available.
 
@@ -165,13 +165,13 @@ loss =
 + 0.15 * downside_penalty
 ```
 
-Return normalization scales with the horizon: T+1 uses the short-term scale, while T+5/T+10/T+20 widen return and drawdown tolerance by the square root of the horizon so medium-term validation is not over-penalized by a one-day volatility scale.
+Return normalization scales with the horizon: T+1/T+2 use the short-term scale, while T+5/T+10/T+20 widen return and drawdown tolerance by the square root of the horizon so medium-term validation is not over-penalized by a one-day volatility scale. For positive signals, T+1/T+2 loss uses a small volatility-based tolerance band. Mild underperformance or pullback is not counted as a full directional error, but drawdowns beyond the band, clear underperformance, and realized rank gaps still raise loss.
 
 The morning card shows feedback lines by horizon:
 
 ```text
 Yesterday check: 2 of the prior 3 strong directions hit; addable excess universe +0.42% / Shanghai +0.86%
-T+1 short-term: direction hit rate 58%, strong-signal hit rate 64%, universe +0.18%/day, Shanghai +0.31%/day, loss 0.31
+T+1/T+2 short-term: 1d hit 58% / 2d hit 61%; strong-signal hit 64%, loss 0.31/0.28
 T+5/T+10 swing: 5d hit 62% / 10d hit 59%; T+20 trend hit 55%, loss 0.44
 ```
 

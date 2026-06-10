@@ -125,7 +125,7 @@ PREDICTION_LOG_FIELDS = [
     "drawdown_60d_pct",
     "volatility_20d",
 ]
-PREDICTION_HORIZONS = [1, 5, 10, 20]
+PREDICTION_HORIZONS = [1, 2, 5, 10, 20]
 PREDICTION_HORIZON_FIELDS = [
     "evaluated_at_{h}d",
     "price_t{h}",
@@ -139,7 +139,7 @@ PREDICTION_HORIZON_FIELDS = [
     "hit_{h}d",
     "loss_{h}d",
 ]
-for _horizon in (5, 10, 20):
+for _horizon in (2, 5, 10, 20):
     for _field_template in PREDICTION_HORIZON_FIELDS:
         PREDICTION_LOG_FIELDS.append(_field_template.format(h=_horizon))
 ETF_ACTION_SIGNALS = {
@@ -1136,7 +1136,7 @@ def _prediction_row(
         "drawdown_60d_pct": f"{market.drawdown_60d_pct:.4f}" if market else "",
         "volatility_20d": f"{market.volatility_20d:.4f}" if market else "",
     }
-    for horizon in (5, 10, 20):
+    for horizon in (2, 5, 10, 20):
         row.update(
             {
                 f"evaluated_at_{horizon}d": "",
@@ -1190,12 +1190,27 @@ def _prediction_loss(
     signal = _row_float(row, "predicted_signal")
     realized_return = _row_float(row, "actual_1d_return") if actual_return is None else actual_return
     horizon_scale = math.sqrt(max(1, horizon))
-    normalized_return = max(-1.0, min(1.0, excess_return / (3.0 * horizon_scale)))
-    directional_miss = 0.0 if _prediction_hit(signal, excess_return) else abs(signal)
+    short_term_tolerance = 0.0
+    if signal > 0 and horizon <= 2:
+        volatility = max(0.0, _row_float(row, "volatility_20d"))
+        short_term_tolerance = min(1.25 * horizon_scale, max(0.25, volatility * 0.35 * horizon_scale))
+    loss_excess = excess_return + short_term_tolerance if signal > 0 else excess_return
+    normalized_return = max(-1.0, min(1.0, loss_excess / (3.0 * horizon_scale)))
+    if signal > 0 and horizon <= 2:
+        directional_miss = (
+            0.0
+            if loss_excess >= 0
+            else abs(signal) * min(1.0, -loss_excess / max(0.5, short_term_tolerance))
+        )
+    else:
+        directional_miss = 0.0 if _prediction_hit(signal, excess_return) else abs(signal)
     mse = (signal - normalized_return) ** 2
     predicted_rank = max(1, int(_row_float(row, "direction_rank", peer_count)))
     rank_gap = max(0.0, (actual_rank - predicted_rank) / max(1, peer_count - 1))
-    downside = max(0.0, -realized_return - 1.5 * horizon_scale) / (5.0 * horizon_scale) if signal > 0 else 0.0
+    if signal > 0 and horizon <= 2 and realized_return >= -short_term_tolerance:
+        rank_gap *= 0.5
+    downside_floor = max(1.5 * horizon_scale, short_term_tolerance)
+    downside = max(0.0, -realized_return - downside_floor) / (5.0 * horizon_scale) if signal > 0 else 0.0
     return directional_miss * 0.35 + mse * 0.25 + rank_gap * 0.25 + downside * 0.15
 
 
@@ -1450,6 +1465,7 @@ def _prediction_summary(
         }
 
     short_metrics = horizon_metrics(1)
+    short2_metrics = horizon_metrics(2)
     swing5_metrics = horizon_metrics(5)
     swing10_metrics = horizon_metrics(10)
     trend20_metrics = horizon_metrics(20)
@@ -1467,7 +1483,7 @@ def _prediction_summary(
     add_benchmark_text = _format_signed_pct(add_benchmark_avg) if add_benchmark_avg is not None else "暂无样本"
     summary = [
         f"昨日验证：前日 {len(latest_top)} 个强方向命中 {latest_hits} 个；可加仓超额 方向池{add_universe_text} / 上证{add_benchmark_text}",
-        f"T+1短线：方向命中率 {pct_or_wait(short_metrics['top_hit_rate'])}，强信号命中率 {pct_or_wait(short_metrics['strong_hit_rate'])}，方向池{signed_or_wait(short_metrics['avg_universe_excess'])}/日，上证{signed_or_wait(short_metrics['avg_benchmark_excess'])}/日，loss {loss_or_wait(short_metrics['avg_loss'])}",
+        f"T+1/T+2短线：1日命中 {pct_or_wait(short_metrics['top_hit_rate'])} / 2日命中 {pct_or_wait(short2_metrics['top_hit_rate'])}；强信号 {pct_or_wait(short_metrics['strong_hit_rate'])}，loss {loss_or_wait(short_metrics['avg_loss'])}/{loss_or_wait(short2_metrics['avg_loss'])}",
         f"T+5/T+10波段：5日命中 {pct_or_wait(swing5_metrics['top_hit_rate'])} / 10日命中 {pct_or_wait(swing10_metrics['top_hit_rate'])}；T+20主线命中 {pct_or_wait(trend20_metrics['top_hit_rate'])}，loss {loss_or_wait(trend20_metrics['avg_loss'])}",
     ]
     state = {
@@ -1482,6 +1498,7 @@ def _prediction_summary(
     }
     for horizon, metrics in {
         1: short_metrics,
+        2: short2_metrics,
         5: swing5_metrics,
         10: swing10_metrics,
         20: trend20_metrics,
