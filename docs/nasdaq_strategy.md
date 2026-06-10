@@ -121,3 +121,23 @@ Event results use `result_source_tier`:
 | `unverified` | Pending verification |
 
 Only `official` / `official_proxy` results can influence policy stance. Media-tier results are displayed as summary and interpretation, but do not participate in formal stance upgrades.
+
+## Market Data Sources and Freshness
+
+The market-data layer no longer depends on Yahoo Finance as a single point of failure. The morning brief uses these priorities:
+
+| Data | Primary / fallback source | Date basis |
+|---|---|---|
+| QQQ | Nasdaq API, with Yahoo Finance as fallback | US trading-day close |
+| Nasdaq 100 / NDX | Nasdaq API, with Yahoo Finance as fallback | US trading-day close |
+| VIX / VXN | Cboe official daily history, with Yahoo Finance as fallback | US trading-day close |
+| Gold / oil proxies | Yahoo Finance; GLD / USO can fall back to Nasdaq API | Proxy-asset trading-day close |
+| 10Y Treasury | Yahoo Finance / FRED DGS10; downgrade with a warning if both fail | Daily yield |
+
+The top-right `行情 YYYY-MM-DD` date is the QQQ / Nasdaq trading-day date, not the report generation date. `生成 YYYY-MM-DD HH:MM` is the runtime local timestamp; the configured workflow is interpreted from the Beijing-time operating schedule.
+
+Freshness rules:
+
+- When a non-Yahoo source is used, the brief shows a top-level data notice listing the actual source for each affected asset.
+- If any market data date is earlier than the QQQ benchmark date, the brief lists the stale asset and date.
+- If a data point cannot be fetched correctly, the relevant card is downgraded to `暂无` and the top-level notice calls it out. The report must not silently reuse stale data.

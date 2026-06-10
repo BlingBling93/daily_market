@@ -17,6 +17,7 @@ class QuoteSnapshot:
     sma_20_gap_pct: float
     sma_50_gap_pct: float
     sma_200_gap_pct: float
+    source: str = "Yahoo Finance"
 
 
 @dataclass
@@ -172,3 +173,4 @@ class Brief:
     policy: PolicySnapshot
     advice: AdviceSnapshot
     ashare: Optional[AShareSnapshot]
+    data_warnings: List[str] = field(default_factory=list)

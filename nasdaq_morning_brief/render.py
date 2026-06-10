@@ -351,12 +351,32 @@ def _asset_row(name: str, value: str, change: float) -> str:
 
 
 def _yield_asset_row(name: str, snapshot: QuoteSnapshot) -> str:
+    if snapshot.source.startswith("Unavailable"):
+        return f"""
+          <div class="asset-row">
+            <span>{name}</span>
+            <strong>暂无</strong>
+            <span class="badge flat">● 暂无</span>
+          </div>
+        """
     return f"""
       <div class="asset-row">
         <span>{name}</span>
         <strong>{_fmt_us10y_yield(snapshot.price)}</strong>
         {_yield_badge(snapshot)}
       </div>
+    """
+
+
+def _data_warnings_html(warnings: list[str]) -> str:
+    if not warnings:
+        return ""
+    items = "".join(f"<li>{escape(warning)}</li>" for warning in warnings)
+    return f"""
+    <section class="data-alert">
+      <strong>数据提示</strong>
+      <ul>{items}</ul>
+    </section>
     """
 
 
@@ -374,6 +394,8 @@ def build_html(brief: Brief, config: AppConfig) -> str:
         brief.policy.next_event,
     )
     observations_html = "".join(f"<li>{item}</li>" for item in brief.observation_points[1:])
+    data_warnings_html = _data_warnings_html(brief.data_warnings)
+    generated_at = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     qqq_extra = f"""
       <div class="kv">
@@ -759,6 +781,29 @@ def build_html(brief: Brief, config: AppConfig) -> str:
     .strategy-notes li {{
       margin-top: 4px;
     }}
+    .data-alert {{
+      margin: 0 0 13px;
+      padding: 10px 12px;
+      border: 1px solid #e1b45b;
+      border-radius: 7px;
+      background: #fff8e8;
+      color: #6d4a07;
+      font-size: 12px;
+      line-height: 1.35;
+    }}
+    .data-alert strong {{
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #5d3f04;
+    }}
+    .data-alert ul {{
+      margin: 0;
+      padding-left: 17px;
+    }}
+    .data-alert li {{
+      margin-top: 3px;
+    }}
     .footer {{
       margin-top: 20px;
       display: flex;
@@ -772,9 +817,10 @@ def build_html(brief: Brief, config: AppConfig) -> str:
   <div class="card">
     <div class="topbar">
       <div class="label">◆ DAILY MARKET PULSE</div>
-      <div class="date-pill">{brief.as_of.isoformat()} / 生成 {datetime.now().strftime("%H:%M")}</div>
+      <div class="date-pill">行情 {brief.as_of.isoformat()} / 生成 {generated_at}</div>
     </div>
     <h1>纳指100长期持仓观察</h1>
+    {data_warnings_html}
 
     <section class="tile strategy">
       <div class="tile-head">

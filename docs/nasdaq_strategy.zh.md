@@ -121,3 +121,23 @@
 | `unverified` | 待校验 |
 
 只有 `official` / `official_proxy` 结果可以影响政策姿态。媒体层结果只展示摘要和市场解读，不参与正式姿态升级。
+
+## 行情数据源与新鲜度
+
+行情层不再单点依赖 Yahoo Finance。晨报采用以下优先级：
+
+| 数据 | 主源 / 备用源 | 口径 |
+|---|---|---|
+| QQQ | Nasdaq API，Yahoo Finance 兜底 | 美股交易日收盘 |
+| Nasdaq 100 / NDX | Nasdaq API，Yahoo Finance 兜底 | 美股交易日收盘 |
+| VIX / VXN | Cboe 官方日线，Yahoo Finance 兜底 | 美股交易日收盘 |
+| 黄金 / 原油代理 | Yahoo Finance；GLD / USO 可由 Nasdaq API 兜底 | 代理资产交易日收盘 |
+| 10Y 美债 | Yahoo Finance / FRED DGS10，失败时降级提示 | 收益率日线 |
+
+报告右上角的 `行情 YYYY-MM-DD` 是 QQQ / Nasdaq 交易日口径，不是生成日期。`生成 YYYY-MM-DD HH:MM` 是运行环境本地时间，当前云端和本地配置按北京时间触发或查看。
+
+数据提示规则：
+
+- 使用非 Yahoo 源时，晨报顶部显示“备用行情源已启用”，列出每个资产实际来源。
+- 其他行情日期早于 QQQ 基准日时，晨报顶部显示落后资产和日期。
+- 某项行情无法正确获取时，相关卡片降级显示 `暂无`，并在顶部提示，不允许静默沿用旧数据。
