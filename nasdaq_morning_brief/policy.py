@@ -291,6 +291,21 @@ def _stance_from_discovered_category(category: str) -> str:
     return "待确认"
 
 
+def _discovered_impact_days(
+    row: dict[str, object],
+    raw_category: str,
+    category: str,
+    default_impact_days: int,
+) -> int:
+    impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, default_impact_days)
+    if raw_category != category:
+        return impact_days
+    try:
+        return _normalize_impact_days(category, int(row.get("impact_days") or impact_days), default_impact_days)
+    except (TypeError, ValueError):
+        return impact_days
+
+
 def load_discovered_policy_events(config: PolicyConfig, as_of: date) -> List[PolicyEvent]:
     path = config.discovered_events_path
     if not path.exists():
@@ -324,11 +339,7 @@ def load_discovered_policy_events(config: PolicyConfig, as_of: date) -> List[Pol
         raw_category = str(row.get("category") or "事件").strip()
         summary = str(row.get("summary") or "非常规事件雷达发现的候选重大事件。").strip()
         category = _normalize_discovered_category(raw_category, title, summary)
-        impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, config.default_impact_days)
-        try:
-            impact_days = _normalize_impact_days(category, int(row.get("impact_days") or impact_days), config.default_impact_days)
-        except (TypeError, ValueError):
-            impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, config.default_impact_days)
+        impact_days = _discovered_impact_days(row, raw_category, category, config.default_impact_days)
         if event_date + timedelta(days=impact_days) < as_of and event_date < as_of:
             continue
         channels = row.get("market_channels") if isinstance(row.get("market_channels"), list) else []
