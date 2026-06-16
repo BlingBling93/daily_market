@@ -65,7 +65,7 @@ EVENT_PATTERNS = (
         ),
         "channels": ("Nasdaq", "流动性", "成长股风险偏好"),
         "base_importance": 62,
-        "impact_days": 21,
+        "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["IPO"],
     },
     {
         "category": "指数调整",
@@ -79,7 +79,7 @@ EVENT_PATTERNS = (
         ),
         "channels": ("指数权重", "被动资金", "QQQ"),
         "base_importance": 68,
-        "impact_days": 14,
+        "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["指数调整"],
     },
     {
         "category": "科技监管",
@@ -95,7 +95,7 @@ EVENT_PATTERNS = (
         ),
         "channels": ("监管风险", "半导体", "科技估值"),
         "base_importance": 66,
-        "impact_days": 30,
+        "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["科技监管"],
     },
     {
         "category": "AI产业",
@@ -109,7 +109,7 @@ EVENT_PATTERNS = (
         ),
         "channels": ("AI产业链", "盈利预期", "半导体"),
         "base_importance": 58,
-        "impact_days": 14,
+        "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["AI产业"],
     },
     {
         "category": "流动性",
@@ -123,7 +123,7 @@ EVENT_PATTERNS = (
         ),
         "channels": ("流动性", "美债利率", "风险偏好"),
         "base_importance": 64,
-        "impact_days": 21,
+        "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["流动性"],
     },
 )
 

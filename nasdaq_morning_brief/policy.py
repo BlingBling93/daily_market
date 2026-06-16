@@ -108,6 +108,11 @@ NASDAQ_HEADERS = {
     "Referer": "https://www.nasdaq.com/",
 }
 US_EASTERN = ZoneInfo("America/New_York")
+RESULT_FETCH_GRACE_DAYS = 7
+FOMC_SUMMARY = "美联储议息会议，美东日期口径；重点看政策声明、投票分歧、沃什发布会和沟通制度变化。"
+FOMC_SHORT_TERM = "会前和发布会后波动可能放大，新增资金避免一次性追价。"
+FOMC_MID_TERM = "中期看利率路径、2年/10年美债、资产负债表口径和沟通规则是否确认方向。"
+FOMC_LONG_TERM = "长期影响取决于实际利率中枢和美联储沟通框架是否改变科技股估值约束。"
 
 
 def _now_utc() -> datetime:
@@ -217,10 +222,36 @@ def _parse_impact_days(row: dict[str, str], category: str, fallback: int) -> int
     raw_value = (row.get("impact_days") or "").strip()
     if raw_value:
         try:
-            return max(1, int(raw_value))
+            return _normalize_impact_days(category, int(raw_value), fallback)
         except ValueError:
             pass
     return DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, fallback)
+
+
+def _normalize_impact_days(category: str, value: int | None, fallback: int) -> int:
+    default = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, fallback)
+    if value is None or value < 1:
+        return default
+    if value == LEGACY_IMPACT_DAYS_BY_CATEGORY.get(category):
+        return default
+    return value
+
+
+def _normalize_discovered_category(category: str, title: str, summary: str) -> str:
+    text = f"{title} {summary}".lower()
+    if category == "流动性":
+        liquidity_tokens = (
+            "treasury",
+            "debt ceiling",
+            "shutdown",
+            "liquidity",
+            "quantitative tightening",
+            " qt",
+        )
+        ai_tokens = ("ai", "nvidia", "semiconductor", "chip", "data center", "infrastructure")
+        if not any(token in text for token in liquidity_tokens) and any(token in text for token in ai_tokens):
+            return "AI产业"
+    return category
 
 
 def load_policy_events(path: Path, default_impact_days: int) -> List[PolicyEvent]:
@@ -290,15 +321,18 @@ def load_discovered_policy_events(config: PolicyConfig, as_of: date) -> List[Pol
             continue
         if event_date < cutoff or event_date > max_future:
             continue
-        category = str(row.get("category") or "事件").strip()
+        raw_category = str(row.get("category") or "事件").strip()
+        summary = str(row.get("summary") or "非常规事件雷达发现的候选重大事件。").strip()
+        category = _normalize_discovered_category(raw_category, title, summary)
         impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, config.default_impact_days)
         try:
-            impact_days = max(1, int(row.get("impact_days") or impact_days))
+            impact_days = _normalize_impact_days(category, int(row.get("impact_days") or impact_days), config.default_impact_days)
         except (TypeError, ValueError):
-            pass
+            impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, config.default_impact_days)
+        if event_date + timedelta(days=impact_days) < as_of and event_date < as_of:
+            continue
         channels = row.get("market_channels") if isinstance(row.get("market_channels"), list) else []
         channel_text = "、".join(str(item) for item in channels if str(item).strip())
-        summary = str(row.get("summary") or "非常规事件雷达发现的候选重大事件。").strip()
         if channel_text and "传导渠道" not in summary:
             summary = f"{summary} 传导渠道：{channel_text}。"
         sources = row.get("sources") if isinstance(row.get("sources"), list) else []
@@ -345,20 +379,33 @@ def _event_from_dict(row: dict[str, object], default_impact_days: int) -> Policy
     category = str(row.get("category") or "政策").strip()
     raw_impact = row.get("impact_days")
     try:
-        impact_days = max(1, int(raw_impact)) if raw_impact not in (None, "") else DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, default_impact_days)
+        impact_days = (
+            _normalize_impact_days(category, int(raw_impact), default_impact_days)
+            if raw_impact not in (None, "")
+            else DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, default_impact_days)
+        )
     except (TypeError, ValueError):
         impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, default_impact_days)
-    if impact_days == LEGACY_IMPACT_DAYS_BY_CATEGORY.get(category):
-        impact_days = DEFAULT_IMPACT_DAYS_BY_CATEGORY.get(category, impact_days)
+    summary = str(row.get("summary") or "等待事件落地。").strip()
+    short_term = str(row.get("short_term") or "事件前后波动可能放大。").strip()
+    mid_term = str(row.get("mid_term") or "连续数据确认后再调整仓位中枢。").strip()
+    long_term = str(row.get("long_term") or "暂不改变长期核心配置逻辑。").strip()
+    if category == "FOMC":
+        if "鲍威尔" in summary or "点阵图" in summary or "经济预测" in summary:
+            summary = FOMC_SUMMARY
+        if "点阵图" in mid_term or "降息路径" in mid_term:
+            mid_term = FOMC_MID_TERM
+        if "利率中枢" in long_term or "估值框架" in long_term:
+            long_term = FOMC_LONG_TERM
     return PolicyEvent(
         event_date=event_date,
         category=category,
         title=title,
         stance=str(row.get("stance") or "待确认").strip(),
-        summary=str(row.get("summary") or "等待事件落地。").strip(),
-        short_term=str(row.get("short_term") or "事件前后波动可能放大。").strip(),
-        mid_term=str(row.get("mid_term") or "连续数据确认后再调整仓位中枢。").strip(),
-        long_term=str(row.get("long_term") or "暂不改变长期核心配置逻辑。").strip(),
+        summary=summary,
+        short_term=short_term,
+        mid_term=mid_term,
+        long_term=long_term,
         impact_days=impact_days,
         result_summary=str(row.get("result_summary") or "").strip(),
         result_conclusion=str(row.get("result_conclusion") or "").strip(),
@@ -496,12 +543,15 @@ def _event_active_on(event: PolicyEvent, event_date: date) -> bool:
 
 
 def _event_needs_result(event: PolicyEvent, event_date: date) -> bool:
-    return event.category in MAJOR_POLICY_CATEGORIES and _event_active_on(event, event_date)
+    if event.category not in MAJOR_POLICY_CATEGORIES:
+        return False
+    result_end = event.event_date + timedelta(days=max(event.impact_days, RESULT_FETCH_GRACE_DAYS))
+    return event.event_date <= event_date <= result_end
 
 
 def _direct_result_supported(event: PolicyEvent) -> bool:
     return (
-        (event.category == "通胀" and "PCE" in event.title)
+        (event.category == "通胀" and ("CPI" in event.title or "PCE" in event.title))
         or (event.category == "增长" and "GDP" in event.title)
         or (event.category == "财报" and event.title.startswith("NVDA"))
     )
@@ -509,7 +559,7 @@ def _direct_result_supported(event: PolicyEvent) -> bool:
 
 def _news_query(event: PolicyEvent) -> str:
     if event.category == "FOMC":
-        return f'Federal Reserve FOMC decision {event.event_date.isoformat()} Powell rates'
+        return f'Federal Reserve FOMC decision {event.event_date.isoformat()} Kevin Warsh communication rates'
     if event.category == "通胀":
         if "PCE" in event.title:
             return f'US PCE inflation personal income outlays {event.event_date.isoformat()}'
@@ -519,6 +569,8 @@ def _news_query(event: PolicyEvent) -> str:
     if event.category == "财报":
         symbol = event.title.replace("财报", "").strip()
         return f'{symbol} earnings results guidance {event.event_date.isoformat()}'
+    if event.category == "IPO":
+        return f'{event.title} IPO debut shares close Nasdaq {event.event_date.isoformat()}'
     return f'{event.title} {event.event_date.isoformat()}'
 
 
@@ -588,6 +640,51 @@ def _fetch_pce_direct_result(event: PolicyEvent) -> dict[str, object] | None:
             FRED_CSV_URL.format(series_id="PCEPILFE"),
         ],
         "method": "direct_fred_pce",
+        "source_tier": "official_proxy",
+    }
+
+
+def _fetch_cpi_direct_result(event: PolicyEvent) -> dict[str, object] | None:
+    headline = _latest_fred_values("CPIAUCSL")
+    core = _latest_fred_values("CPILFESL")
+    if len(headline) < 13 or len(core) < 13:
+        return None
+    latest_date, latest_headline = headline[-1]
+    previous_headline = headline[-2][1]
+    year_ago_headline = headline[-13][1]
+    latest_core = core[-1][1]
+    previous_core = core[-2][1]
+    year_ago_core = core[-13][1]
+
+    headline_mom = _pct_change(latest_headline, previous_headline)
+    headline_yoy = _pct_change(latest_headline, year_ago_headline)
+    core_mom = _pct_change(latest_core, previous_core)
+    core_yoy = _pct_change(latest_core, year_ago_core)
+
+    if core_mom >= 0.30 or headline_mom >= 0.35:
+        stance = "偏谨慎"
+        conclusion = "CPI月度涨幅偏高，利率预期可能承压，事件影响期内降低追价和加仓冲动。"
+    elif core_mom <= 0.20 and headline_mom <= 0.25:
+        stance = "偏友好"
+        conclusion = "CPI月度涨幅温和，利率压力阶段性缓和，可维持基础动作但仍分批执行。"
+    else:
+        stance = "待确认"
+        conclusion = "CPI数据处于中性区间，继续观察美债收益率、美元和成长股反应。"
+
+    summary = (
+        f"FRED/BLS序列 {latest_date.isoformat()}：CPI环比{headline_mom:+.2f}%、同比{headline_yoy:+.2f}%；"
+        f"核心CPI环比{core_mom:+.2f}%、同比{core_yoy:+.2f}%。"
+    )
+    return {
+        "fetched_at": _now_utc().isoformat(),
+        "summary": summary,
+        "conclusion": conclusion,
+        "stance": stance,
+        "sources": [
+            FRED_CSV_URL.format(series_id="CPIAUCSL"),
+            FRED_CSV_URL.format(series_id="CPILFESL"),
+        ],
+        "method": "direct_fred_cpi",
         "source_tier": "official_proxy",
     }
 
@@ -715,6 +812,8 @@ def _fetch_nvda_direct_result(event: PolicyEvent) -> dict[str, object] | None:
 
 
 def _fetch_direct_event_result(event: PolicyEvent) -> dict[str, object] | None:
+    if event.category == "通胀" and "CPI" in event.title:
+        return _fetch_cpi_direct_result(event)
     if event.category == "通胀" and "PCE" in event.title:
         return _fetch_pce_direct_result(event)
     if event.category == "增长" and "GDP" in event.title:
@@ -788,6 +887,12 @@ def _infer_result_conclusion(event: PolicyEvent, titles: list[str]) -> tuple[str
             "sales and earnings beat",
             "share buyback",
             "rally",
+            "jumps",
+            "surges",
+            "shares rise",
+            "shares rose",
+            "closes up",
+            "closed up",
         )
     )
     if hawkish_hits > dovish_hits:
@@ -831,8 +936,6 @@ def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
 
 
 def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> List[PolicyEvent]:
-    if not config.auto_fetch:
-        return events
     current_et_date = datetime.now(US_EASTERN).date()
     entries = _read_news_cache(config.news_cache_path)
     changed = False
@@ -842,15 +945,18 @@ def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> Li
         event_id = _event_id(event)
         entry = entries.get(event_id, {})
         entry_tier = _result_source_tier(entry) if entry else ""
-        if _news_cache_entry_has_result(entry) and entry_tier.startswith("media"):
+        has_cached_result = _news_cache_entry_has_result(entry)
+        if has_cached_result and entry_tier.startswith("media"):
             should_refresh = not _media_cache_entry_fresh(entry)
-        elif _news_cache_entry_has_result(entry):
+        elif has_cached_result:
             should_refresh = False
+        elif event.event_date <= current_et_date:
+            should_refresh = True
         else:
             should_refresh = not _news_cache_entry_fresh(entry, config.result_retry_hours)
             if _direct_result_supported(event) and not _result_is_policy_grade(entry):
                 should_refresh = True
-        if _event_needs_result(event, current_et_date) and should_refresh:
+        if config.auto_fetch and _event_needs_result(event, current_et_date) and should_refresh:
             try:
                 fetched = _fetch_event_result(event)
             except (HTTPError, URLError, TimeoutError, ET.ParseError, OSError, ValueError):
@@ -912,10 +1018,10 @@ def _fetch_fomc_events(as_of: date) -> List[PolicyEvent]:
                 category="FOMC",
                 title="FOMC利率决议",
                 stance="待确认",
-                summary="美联储议息会议，美东日期口径；重点看声明、点阵图/经济预测和鲍威尔发布会。",
-                short_term="会前和发布会后波动可能放大，新增资金避免一次性追价。",
-                mid_term="中期看降息路径、实际利率和2年/10年美债是否确认方向。",
-                long_term="长期影响取决于利率中枢是否改变科技股估值框架。",
+                summary=FOMC_SUMMARY,
+                short_term=FOMC_SHORT_TERM,
+                mid_term=FOMC_MID_TERM,
+                long_term=FOMC_LONG_TERM,
                 impact_days=DEFAULT_IMPACT_DAYS_BY_CATEGORY["FOMC"],
             )
         )
@@ -1196,6 +1302,87 @@ def _event_has_result(event: PolicyEvent) -> bool:
     return bool(event.result_conclusion or event.result_summary)
 
 
+def _event_label(event: PolicyEvent) -> str:
+    text = f"{event.title} {event.summary}".lower()
+    if event.category == "FOMC":
+        return "FOMC利率决议"
+    if event.category == "通胀":
+        if "pce" in text:
+            return "PCE通胀数据"
+        if "cpi" in text:
+            return "CPI通胀数据"
+        return "通胀数据"
+    if event.category == "就业":
+        return "就业数据"
+    if event.category == "增长":
+        return "增长数据"
+    if event.category == "财报":
+        symbol = event.title.replace("财报", "").strip()
+        return f"{symbol or '权重股'}财报"
+    if event.category == "IPO":
+        if "spacex" in text:
+            return "SpaceX IPO/纳斯达克上市"
+        return "重点IPO事件"
+    if event.category == "指数调整":
+        return "指数调整事件"
+    if event.category == "AI产业":
+        return "AI产业催化"
+    if event.category == "科技监管":
+        return "科技监管事件"
+    if event.category == "流动性":
+        return "流动性事件"
+    return event.category or "重点事件"
+
+
+def _confirmation_focus(event: PolicyEvent) -> str:
+    if event.category == "通胀":
+        return "确认项是核心环比、10年美债收益率、美元和VXN是否同向缓和或再度上行。"
+    if event.category == "FOMC":
+        return "确认项是政策声明、投票分歧、沃什发布会、2年/10年美债和成长股估值反应是否一致。"
+    if event.category == "就业":
+        return "确认项是新增就业、失业率、薪资增速和美债利率是否给出同向信号。"
+    if event.category == "财报":
+        return "确认项是收入指引、毛利率、AI/云业务增速以及权重股盘后缺口是否被次日成交确认。"
+    if event.category == "IPO":
+        return "确认项是首日收盘表现、成交额、同赛道科技股联动、VXN和被动资金压力是否同时改善。"
+    if event.category == "指数调整":
+        return "确认项是被动资金买卖方向、权重股成交额和QQQ跟踪误差是否放大。"
+    if event.category == "AI产业":
+        return "确认项是半导体、云资本开支、盈利预期和纳指广度是否形成扩散。"
+    if event.category in {"科技监管", "监管"}:
+        return "确认项是监管约束是否转化为收入、供应链或估值折价，而不是只停留在新闻标题。"
+    if event.category == "流动性":
+        return "确认项是美债收益率、美元、融资条件和VXN是否同步收紧。"
+    return "确认项是利率、波动率、成交额和指数广度是否给出同向信号。"
+
+
+def _no_result_reasoning(event: PolicyEvent) -> tuple[str, str, str]:
+    focus = _confirmation_focus(event)
+    if event.category == "IPO":
+        return (
+            "暂无可靠落地数据时，短线不把传闻当成买入理由；先看首日定价、收盘涨跌、成交额和VXN是否确认风险偏好。",
+            f"中期按资金再平衡事件处理，{focus}若高开回落或带动波动率上行，新增仓位继续延后；若放量收涨且科技股广度扩散，事件约束可降级。",
+            "长期只有当IPO改变纳指权重结构、被动资金需求或科技股风险偏好中枢时，才调整核心仓位框架。",
+        )
+    if event.category == "通胀":
+        return (
+            "暂无官方通胀结果时，短线不预判方向；新增资金等待核心CPI/PCE和美债反应落地后再执行。",
+            f"中期按利率定价链条推演，{focus}若核心通胀偏热且收益率上行，仓位约束延续；若通胀降温且收益率回落，恢复基础动作。",
+            "长期只有当连续通胀数据改变实际利率中枢时，才改变纳指核心配置比例。",
+        )
+    if event.category == "FOMC":
+        return (
+            "暂无议息结果时，短线按事件前约束处理，避免在政策声明和沃什发布会前一次性加仓。",
+            f"中期看政策路径是否被重新定价，{focus}偏鹰则降低追价，偏鸽且收益率回落才解除约束。",
+            "长期只有当实际利率中枢或美联储沟通框架发生持续变化时，才影响长期仓位中枢。",
+        )
+    return (
+        f"暂无可用落地数据时，短线先按观察处理；{focus}",
+        f"中期看事件是否真正传导到盈利预期、资金流和指数广度，{focus}",
+        "长期不因单条新闻调整核心仓位，只有基本面、监管或流动性中枢发生持续变化才改变配置框架。",
+    )
+
+
 def _impact_event(upcoming: List[PolicyEvent], recent: List[PolicyEvent]) -> PolicyEvent | None:
     if upcoming:
         return upcoming[0]
@@ -1208,24 +1395,27 @@ def _impact_event(upcoming: List[PolicyEvent], recent: List[PolicyEvent]) -> Pol
 
 
 def _short_term_impact(event: PolicyEvent, as_of: date) -> str:
+    label = _event_label(event)
     if event.event_date > as_of:
         days = (event.event_date - as_of).days
-        return f"{event.title}还有{days}天落地，短线新增资金先按事件前约束执行，避免一次性追价。"
+        return f"{label}还有{days}天落地，短线新增资金先按事件前约束执行，避免一次性追价。"
     if event.result_conclusion:
-        return f"{event.title}已落地：{event.result_conclusion}"
-    return event.short_term
+        return f"{label}已有落地信息：{event.result_conclusion}"
+    return _no_result_reasoning(event)[0]
 
 
 def _mid_term_impact(event: PolicyEvent, as_of: date) -> str:
+    label = _event_label(event)
     if _event_has_result(event) and event.event_date <= as_of:
-        return f"中期以{event.title}结果为锚，观察该结论能否被利率、VXN和指数广度继续确认；{event.mid_term}"
-    return event.mid_term
+        return f"中期以{label}的落地信息为锚，{_confirmation_focus(event)}如果确认项与左侧结论一致，再恢复或收紧基础仓位动作。"
+    return _no_result_reasoning(event)[1]
 
 
 def _long_term_impact(event: PolicyEvent, as_of: date) -> str:
+    label = _event_label(event)
     if _event_has_result(event) and event.event_date <= as_of:
-        return f"长期只有当{event.title}结果改变盈利或利率中枢时才调整核心配置；{event.long_term}"
-    return event.long_term
+        return f"长期不因{label}的单次结果改变核心配置；只有该结果继续改变盈利预期、实际利率或监管/流动性中枢，才调整长期仓位框架。"
+    return _no_result_reasoning(event)[2]
 
 
 def build_policy_snapshot(

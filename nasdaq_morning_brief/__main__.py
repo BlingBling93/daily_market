@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 from pathlib import Path
 from subprocess import CalledProcessError
 from urllib.error import HTTPError, URLError
@@ -20,7 +21,7 @@ from .indicators import (
 )
 from .feishu import push_image_to_feishu, push_images_to_feishu
 from .models import Brief
-from .policy import build_policy_snapshot
+from .policy import US_EASTERN, build_policy_snapshot
 from .render import write_html, write_png
 from .wechat import push_to_wecom
 
@@ -110,8 +111,9 @@ def build_brief(
     temperature = compute_temperature(qqq, vxn, vix, valuation, config.signals)
     cross_asset_notes = build_cross_asset_notes(gold, us10y, oil)
     advice = generate_advice(config.portfolio, qqq, vxn, temperature, valuation)
-    policy = build_policy_snapshot(config.policy, qqq.as_of, advice, us10y, oil)
-    advice = apply_policy_adjustment(config.portfolio, advice, policy, qqq.as_of)
+    policy_as_of = max(qqq.as_of, datetime.now(US_EASTERN).date())
+    policy = build_policy_snapshot(config.policy, policy_as_of, advice, us10y, oil)
+    advice = apply_policy_adjustment(config.portfolio, advice, policy, policy_as_of)
     observation_points = build_observation_points(
         advice.triggers,
         temperature.rationale,

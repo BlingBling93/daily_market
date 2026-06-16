@@ -43,6 +43,7 @@ def _result_source_label(source_tier: str) -> str:
         "official_proxy": "FRED/官方代理",
         "media_confirmed": "媒体转述·多源待校验",
         "media_single": "媒体转述·待校验",
+        "manual_confirmed": "手工确认·待行情源校验",
         "unverified": "待校验",
     }
     return labels.get(source_tier, "待校验")
@@ -134,7 +135,7 @@ def _dedupe_policy_events(events: list[PolicyEvent]) -> list[PolicyEvent]:
         if current is None:
             selected[key] = event
             continue
-        if event.event_date < current.event_date:
+        if event.event_date > current.event_date:
             selected[key] = event
         elif event.event_date == current.event_date and len(event.summary) > len(current.summary):
             selected[key] = event
@@ -146,7 +147,10 @@ def _policy_event_list(
     recent: list[PolicyEvent],
     next_event: PolicyEvent | None,
 ) -> str:
-    active_events = _dedupe_policy_events(upcoming + recent)
+    active_events = sorted(
+        _dedupe_policy_events(upcoming + recent),
+        key=lambda item: (item.event_date, item.category, item.title),
+    )
     if not active_events:
         if next_event:
             return _next_policy_event_line(next_event)
