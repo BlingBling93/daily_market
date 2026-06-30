@@ -57,7 +57,10 @@ EVENT_PATTERNS = (
             "prepares to file",
             "preliminary ipo paperwork",
             "go public",
+            "list on nasdaq",
+            "to list on nasdaq",
             "nasdaq listing",
+            "nasdaq debut",
             "price range",
             "pricing date",
             "roadshow",
@@ -125,6 +128,78 @@ EVENT_PATTERNS = (
         "base_importance": 64,
         "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["流动性"],
     },
+)
+
+LOW_QUALITY_TITLE_PATTERNS = (
+    r"\bstock\s+(?:closed|closes|close|ends|ended|settles|finished)\s+(?:up|down)\s+by\s+\d",
+    r"\bshares?\s+(?:closed|closes|close|ends|ended|settles|finished)\s+(?:up|down)\s+by\s+\d",
+    r"\b(?:stock|shares?)\s+(?:is\s+)?(?:up|down|higher|lower)\s+\d",
+    r"\bwhat\s+(?:signal|investors?)\s+(?:does\s+it\s+send|need\s+to\s+know)\b",
+    r"\bwhy\s+.+\s+(?:stock|shares?)\s+(?:is\s+)?(?:moving|rising|falling|up|down)\b",
+)
+STRUCTURAL_EVENT_TOKENS_BY_CATEGORY = {
+    "IPO": (
+        "ipo",
+        "initial public offering",
+        "s-1",
+        "files to go public",
+        "list on nasdaq",
+        "to list on nasdaq",
+        "nasdaq listing",
+        "nasdaq debut",
+        "price range",
+        "pricing date",
+        "market debut",
+    ),
+    "指数调整": (
+        "nasdaq-100 inclusion",
+        "nasdaq 100 inclusion",
+        "index inclusion",
+        "index rebalance",
+        "special rebalance",
+        "added to the nasdaq",
+    ),
+    "科技监管": (
+        "export controls",
+        "chip restrictions",
+        "antitrust",
+        "doj",
+        "ftc",
+        "eu commission",
+        "tariff",
+        "sanctions",
+    ),
+    "AI产业": (
+        "ai chip",
+        "data center",
+        "gpu",
+        "export license",
+        "ai infrastructure",
+    ),
+    "流动性": (
+        "treasury refunding",
+        "debt ceiling",
+        "government shutdown",
+        "liquidity drain",
+        "quantitative tightening",
+        "qt",
+    ),
+}
+AI_SEMICONDUCTOR_EVENT_ACTIONS = (
+    "announces",
+    "plans",
+    "launches",
+    "build",
+    "invest",
+    "investment",
+    "capex",
+    "spending",
+    "order",
+    "supply deal",
+    "partnership",
+    "acquisition",
+    "raises",
+    "funding",
 )
 
 
@@ -255,16 +330,46 @@ def _extract_event_date(text: str, as_of: date) -> date | None:
     return parsed
 
 
+def _contains_token(text: str, token: str) -> bool:
+    if len(token) <= 3 and token.isalnum():
+        return re.search(rf"\b{re.escape(token)}\b", text) is not None
+    return token in text
+
+
+def _is_low_quality_market_commentary(text: str) -> bool:
+    lowered = text.lower()
+    return any(re.search(pattern, lowered) for pattern in LOW_QUALITY_TITLE_PATTERNS)
+
+
+def _has_structural_event_evidence(category: str, text: str) -> bool:
+    tokens = STRUCTURAL_EVENT_TOKENS_BY_CATEGORY.get(category, ())
+    if any(_contains_token(text, token) for token in tokens):
+        return True
+    if category == "AI产业":
+        has_semiconductor_context = any(
+            _contains_token(text, token)
+            for token in ("semiconductor", "chip", "ai", "artificial intelligence")
+        )
+        has_event_action = any(_contains_token(text, token) for token in AI_SEMICONDUCTOR_EVENT_ACTIONS)
+        return has_semiconductor_context and has_event_action
+    return False
+
+
 def _category_match(text: str) -> dict[str, object] | None:
     lowered = re.sub(r"\bi\.p\.o\.?\b", "ipo", text.lower())
+    if _is_low_quality_market_commentary(lowered):
+        return None
     matches = []
     for pattern in EVENT_PATTERNS:
-        hits = sum(token in lowered for token in pattern["tokens"])
+        hits = sum(_contains_token(lowered, token) for token in pattern["tokens"])
         if hits:
             matches.append((hits, int(pattern["base_importance"]), pattern))
     if not matches:
         return None
-    return sorted(matches, key=lambda item: (item[0], item[1]), reverse=True)[0][2]
+    selected = sorted(matches, key=lambda item: (item[0], item[1]), reverse=True)[0][2]
+    if not _has_structural_event_evidence(str(selected["category"]), lowered):
+        return None
+    return selected
 
 
 def _source_weight(source: str) -> int:

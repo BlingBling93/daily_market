@@ -73,6 +73,13 @@ MAJOR_POLICY_CATEGORIES = {
     "AI产业",
     "流动性",
 }
+DISCOVERED_EVENT_NOISE_PATTERNS = (
+    r"\bstock\s+(?:closed|closes|close|ends|ended|settles|finished)\s+(?:up|down)\s+by\s+\d",
+    r"\bshares?\s+(?:closed|closes|close|ends|ended|settles|finished)\s+(?:up|down)\s+by\s+\d",
+    r"\b(?:stock|shares?)\s+(?:is\s+)?(?:up|down|higher|lower)\s+\d",
+    r"\bwhat\s+(?:signal|investors?)\s+(?:does\s+it\s+send|need\s+to\s+know)\b",
+    r"\bwhy\s+.+\s+(?:stock|shares?)\s+(?:is\s+)?(?:moving|rising|falling|up|down)\b",
+)
 
 FED_FOMC_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
 BLS_RELEASE_URLS = {
@@ -254,6 +261,11 @@ def _normalize_discovered_category(category: str, title: str, summary: str) -> s
     return category
 
 
+def _is_discovered_event_noise(title: str, summary: str) -> bool:
+    text = f"{title} {summary}".lower()
+    return any(re.search(pattern, text) for pattern in DISCOVERED_EVENT_NOISE_PATTERNS)
+
+
 def load_policy_events(path: Path, default_impact_days: int) -> List[PolicyEvent]:
     if not path.exists():
         return []
@@ -338,6 +350,8 @@ def load_discovered_policy_events(config: PolicyConfig, as_of: date) -> List[Pol
             continue
         raw_category = str(row.get("category") or "事件").strip()
         summary = str(row.get("summary") or "非常规事件雷达发现的候选重大事件。").strip()
+        if _is_discovered_event_noise(title, summary):
+            continue
         category = _normalize_discovered_category(raw_category, title, summary)
         impact_days = _discovered_impact_days(row, raw_category, category, config.default_impact_days)
         if event_date + timedelta(days=impact_days) < as_of and event_date < as_of:
