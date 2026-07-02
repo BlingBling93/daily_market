@@ -41,6 +41,7 @@ Routine macro events use short default impact windows:
 | `增长` / GDP | 2 days | 1 day |
 | `通胀` / CPI, PCE | 3 days | 1 day |
 | `就业` / payrolls | 3 days | 2 days |
+| `美联储讲话` / Fed speeches, testimony | 2 days | 1 day |
 | `FOMC` | 5 days | 3 days |
 | `财报` / major index-weight earnings | 5 days | 2 days |
 
@@ -51,10 +52,13 @@ Structural shocks such as regulation, geopolitics, tech regulation, and liquidit
 The official calendar layer only determines event date, category, and release time:
 
 - Federal Reserve FOMC calendar
+- Federal Reserve speeches RSS for Fed official speeches / testimony
 - BEA release schedule for GDP / PCE
 - BLS CPI / employment schedule when available
 - Nasdaq public earnings calendar
 - Manual fallback in `policy_events.csv`
+
+When BLS schedule pages are blocked or temporarily unavailable, the payroll release date falls back to the monthly employment-report rule: normally the first Friday of the month, moved to the previous business day when it conflicts with a U.S. federal holiday.
 
 The official data layer takes first-party or official-proxy results whenever possible:
 
@@ -82,6 +86,7 @@ The non-periodic event discovery job is not a daily news searcher. It is a low-f
 - Nasdaq 100 additions / removals, special rebalances, and index-weight events.
 - AI / semiconductor export controls, antitrust actions, tariffs, and tech regulation.
 - Treasury refunding, debt ceiling, government shutdown, liquidity drain, and other funding shocks.
+- Fed Chair / FOMC-related speeches, testimony, and forward-guidance shifts.
 - AI infrastructure, semiconductor, cloud capex, or data-center events that may alter earnings expectations.
 
 The discovery job aggregates headlines and summaries from higher-signal sources, then extracts event patterns. It should not depend on a single entity keyword. Names such as SpaceX, OpenAI, Anthropic, and Cerebras are possible extracted subjects, not hard-coded strategy assumptions.

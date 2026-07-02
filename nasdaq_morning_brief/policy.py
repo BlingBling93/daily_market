@@ -6,6 +6,7 @@ import json
 import re
 import xml.etree.ElementTree as ET
 from datetime import date, datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Iterable, List
 from urllib.error import HTTPError, URLError
@@ -25,6 +26,7 @@ DEFAULT_IMPACT_DAYS_BY_CATEGORY = {
     "增长": 2,
     "监管": 14,
     "地缘": 14,
+    "美联储讲话": 2,
     "IPO": 5,
     "指数调整": 5,
     "科技监管": 14,
@@ -39,6 +41,7 @@ LEGACY_IMPACT_DAYS_BY_CATEGORY = {
     "增长": 10,
     "监管": 30,
     "地缘": 30,
+    "美联储讲话": 10,
     "IPO": 21,
     "指数调整": 14,
     "科技监管": 30,
@@ -53,6 +56,7 @@ EXECUTION_LOOKAHEAD_DAYS_BY_CATEGORY = {
     "增长": 1,
     "监管": 7,
     "地缘": 7,
+    "美联储讲话": 1,
     "IPO": 2,
     "指数调整": 2,
     "科技监管": 7,
@@ -67,6 +71,7 @@ MAJOR_POLICY_CATEGORIES = {
     "增长",
     "监管",
     "地缘",
+    "美联储讲话",
     "IPO",
     "指数调整",
     "科技监管",
@@ -82,6 +87,7 @@ DISCOVERED_EVENT_NOISE_PATTERNS = (
 )
 
 FED_FOMC_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+FED_SPEECHES_RSS_URL = "https://www.federalreserve.gov/feeds/speeches.xml"
 BLS_RELEASE_URLS = {
     "通胀": ("CPI", "https://www.bls.gov/schedule/news_release/cpi.htm"),
     "就业": ("非农就业", "https://www.bls.gov/schedule/news_release/empsit.htm"),
@@ -199,6 +205,56 @@ def _parse_us_date(value: str, default_year: int | None = None) -> date | None:
         return None
 
 
+def _first_weekday(year: int, month: int, weekday: int) -> date:
+    current = date(year, month, 1)
+    while current.weekday() != weekday:
+        current += timedelta(days=1)
+    return current
+
+
+def _nth_weekday(year: int, month: int, weekday: int, nth: int) -> date:
+    return _first_weekday(year, month, weekday) + timedelta(days=7 * (nth - 1))
+
+
+def _last_weekday(year: int, month: int, weekday: int) -> date:
+    current = date(year, month + 1, 1) - timedelta(days=1) if month < 12 else date(year, 12, 31)
+    while current.weekday() != weekday:
+        current -= timedelta(days=1)
+    return current
+
+
+def _observed_fixed_holiday(year: int, month: int, day: int) -> date:
+    holiday = date(year, month, day)
+    if holiday.weekday() == 5:
+        return holiday - timedelta(days=1)
+    if holiday.weekday() == 6:
+        return holiday + timedelta(days=1)
+    return holiday
+
+
+def _us_federal_holidays(year: int) -> set[date]:
+    return {
+        _observed_fixed_holiday(year, 1, 1),
+        _nth_weekday(year, 1, 0, 3),
+        _nth_weekday(year, 2, 0, 3),
+        _last_weekday(year, 5, 0),
+        _observed_fixed_holiday(year, 6, 19),
+        _observed_fixed_holiday(year, 7, 4),
+        _nth_weekday(year, 9, 0, 1),
+        _nth_weekday(year, 10, 0, 2),
+        _observed_fixed_holiday(year, 11, 11),
+        _nth_weekday(year, 11, 3, 4),
+        _observed_fixed_holiday(year, 12, 25),
+    }
+
+
+def _previous_business_day(value: date) -> date:
+    current = value - timedelta(days=1)
+    while current.weekday() >= 5 or current in _us_federal_holidays(current.year):
+        current -= timedelta(days=1)
+    return current
+
+
 def _event_key(event: PolicyEvent) -> tuple[date, str, str]:
     return event.event_date, event.category, event.title
 
@@ -216,8 +272,9 @@ def _category_priority(category: str) -> int:
         "增长": 4,
         "监管": 5,
         "地缘": 6,
-        "IPO": 7,
-        "指数调整": 8,
+        "美联储讲话": 7,
+        "IPO": 8,
+        "指数调整": 9,
         "科技监管": 9,
         "AI产业": 10,
         "流动性": 11,
@@ -298,7 +355,7 @@ def load_policy_events(path: Path, default_impact_days: int) -> List[PolicyEvent
 def _stance_from_discovered_category(category: str) -> str:
     if category in {"科技监管", "流动性"}:
         return "偏谨慎"
-    if category in {"IPO", "指数调整", "AI产业"}:
+    if category in {"IPO", "指数调整", "AI产业", "美联储讲话"}:
         return "事件待确认"
     return "待确认"
 
@@ -1053,11 +1110,48 @@ def _fetch_fomc_events(as_of: date) -> List[PolicyEvent]:
     return events
 
 
+def _employment_release_date(year: int, month: int) -> date:
+    release_date = _first_weekday(year, month, 4)
+    if release_date in _us_federal_holidays(release_date.year):
+        return _previous_business_day(release_date)
+    return release_date
+
+
+def _reference_month_for_release(year: int, month: int) -> str:
+    release_month = date(year, month, 1)
+    reference_month = release_month.replace(day=1) - timedelta(days=1)
+    return reference_month.strftime("%B %Y")
+
+
+def _fallback_employment_events(as_of: date) -> list[PolicyEvent]:
+    events: list[PolicyEvent] = []
+    for year in range(as_of.year - 1, as_of.year + 2):
+        for month in range(1, 13):
+            event_date = _employment_release_date(year, month)
+            events.append(
+                PolicyEvent(
+                    event_date=event_date,
+                    category="就业",
+                    title="非农就业发布",
+                    stance="待确认",
+                    summary=f"{_reference_month_for_release(year, month)}数据，08:30 AM ET发布；BLS日历不可用时按月度就业报告规则兜底。",
+                    short_term="数据落地前后利率、美元和纳指期货波动可能放大。",
+                    mid_term="中期看新增就业、失业率和薪资增速是否与通胀数据同向确认。",
+                    long_term="只有就业趋势持续改变利率路径时，才影响长期核心配置。",
+                    impact_days=DEFAULT_IMPACT_DAYS_BY_CATEGORY["就业"],
+                )
+            )
+    return events
+
+
 def _fetch_bls_release_events(as_of: date) -> List[PolicyEvent]:
     events: List[PolicyEvent] = []
     for category, (title_prefix, url) in BLS_RELEASE_URLS.items():
         category_name = "就业" if category.startswith("就业") else category
-        text = " ".join(_clean_lines(_fetch_text(url)))
+        try:
+            text = " ".join(_clean_lines(_fetch_text(url)))
+        except (HTTPError, URLError, TimeoutError, OSError):
+            continue
 
         def add_event(reference_month: str, release_date_text: str, release_time: str) -> None:
             event_date = _parse_us_date(release_date_text)
@@ -1089,6 +1183,45 @@ def _fetch_bls_release_events(as_of: date) -> List[PolicyEvent]:
         ):
             reference_month, release_date_text, release_time, meridiem = match.groups()
             add_event(reference_month, release_date_text, f"{release_time} {meridiem.upper()}M")
+    if not any(event.category == "就业" and event.title == "非农就业发布" for event in events):
+        existing_keys = {_event_key(event) for event in events}
+        for event in _fallback_employment_events(as_of):
+            if _event_key(event) not in existing_keys:
+                events.append(event)
+    return events
+
+
+def _fetch_fed_speech_events(as_of: date) -> list[PolicyEvent]:
+    root = ET.fromstring(_fetch_text(FED_SPEECHES_RSS_URL))
+    events: list[PolicyEvent] = []
+    for item in root.findall(".//item"):
+        title = html.unescape((item.findtext("title") or "").strip())
+        description = html.unescape((item.findtext("description") or "").strip())
+        raw_pub_date = (item.findtext("pubDate") or "").strip()
+        if not title or not raw_pub_date:
+            continue
+        try:
+            published_at = parsedate_to_datetime(raw_pub_date)
+        except (TypeError, ValueError):
+            continue
+        if published_at.tzinfo is None:
+            published_at = published_at.replace(tzinfo=timezone.utc)
+        event_date = published_at.astimezone(US_EASTERN).date()
+        if event_date.year < as_of.year - 1 or event_date.year > as_of.year + 1:
+            continue
+        events.append(
+            PolicyEvent(
+                event_date=event_date,
+                category="美联储讲话",
+                title=f"Fed讲话：{title}",
+                stance="待确认",
+                summary=f"{description or 'Federal Reserve official speech/testimony.'}；Fed官方RSS口径。",
+                short_term="讲话前后关注利率预期、美元、美债收益率和纳指估值反应。",
+                mid_term="中期看讲话是否改变市场对下一次FOMC路径、通胀反应函数或资产负债表政策的定价。",
+                long_term="长期只有当沟通框架或政策反应函数持续变化时，才改变核心配置逻辑。",
+                impact_days=DEFAULT_IMPACT_DAYS_BY_CATEGORY["美联储讲话"],
+            )
+        )
     return events
 
 
@@ -1173,6 +1306,7 @@ def _fetch_automatic_events(config: PolicyConfig, as_of: date) -> List[PolicyEve
     for fetcher in (
         _fetch_fomc_events,
         _fetch_bls_release_events,
+        _fetch_fed_speech_events,
         _fetch_bea_release_events,
     ):
         try:
@@ -1296,6 +1430,7 @@ def _execution_note(
 ) -> str:
     execution_categories = {
         "FOMC",
+        "美联储讲话",
         "通胀",
         "就业",
         "财报",
@@ -1331,6 +1466,8 @@ def _event_label(event: PolicyEvent) -> str:
     text = f"{event.title} {event.summary}".lower()
     if event.category == "FOMC":
         return "FOMC利率决议"
+    if event.category == "美联储讲话":
+        return "美联储讲话"
     if event.category == "通胀":
         if "pce" in text:
             return "PCE通胀数据"
@@ -1364,6 +1501,8 @@ def _confirmation_focus(event: PolicyEvent) -> str:
         return "确认项是核心环比、10年美债收益率、美元和VXN是否同向缓和或再度上行。"
     if event.category == "FOMC":
         return "确认项是政策声明、投票分歧、沃什发布会、2年/10年美债和成长股估值反应是否一致。"
+    if event.category == "美联储讲话":
+        return "确认项是讲话是否改变利率路径预期、2年/10年美债、美元和成长股估值反应。"
     if event.category == "就业":
         return "确认项是新增就业、失业率、薪资增速和美债利率是否给出同向信号。"
     if event.category == "财报":
@@ -1400,6 +1539,12 @@ def _no_result_reasoning(event: PolicyEvent) -> tuple[str, str, str]:
             "暂无议息结果时，短线按事件前约束处理，避免在政策声明和沃什发布会前一次性加仓。",
             f"中期看政策路径是否被重新定价，{focus}偏鹰则降低追价，偏鸽且收益率回落才解除约束。",
             "长期只有当实际利率中枢或美联储沟通框架发生持续变化时，才影响长期仓位中枢。",
+        )
+    if event.category == "美联储讲话":
+        return (
+            "讲话落地前后先按沟通风险处理，不把单次措辞直接当成加仓信号。",
+            f"中期看市场是否重新定价下一次FOMC路径，{focus}若收益率和VXN同向上行，新增仓位继续延后。",
+            "长期只有当美联储沟通框架或政策反应函数持续变化时，才调整核心仓位框架。",
         )
     return (
         f"暂无可用落地数据时，短线先按观察处理；{focus}",

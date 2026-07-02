@@ -26,6 +26,8 @@ DEFAULT_DISCOVERY_QUERIES = (
     "FTC DOJ antitrust cloud AI technology",
     "tariff export license semiconductor AI technology",
     "Treasury refunding debt ceiling shutdown liquidity Nasdaq rates",
+    "Federal Reserve Chair speech rate guidance FOMC Nasdaq",
+    "Fed Chair Warsh speech rates inflation forward guidance",
 )
 
 SOURCE_WEIGHTS = {
@@ -128,6 +130,26 @@ EVENT_PATTERNS = (
         "base_importance": 64,
         "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["流动性"],
     },
+    {
+        "category": "美联储讲话",
+        "tokens": (
+            "fed chair",
+            "federal reserve chair",
+            "federal reserve chairman",
+            "fomc",
+            "rate guidance",
+            "forward guidance",
+            "interest rates",
+            "rate hike",
+            "rate cut",
+            "monetary policy",
+            "warsh",
+            "powell",
+        ),
+        "channels": ("美债利率", "FOMC预期", "成长股估值"),
+        "base_importance": 68,
+        "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["美联储讲话"],
+    },
 )
 
 LOW_QUALITY_TITLE_PATTERNS = (
@@ -183,6 +205,20 @@ STRUCTURAL_EVENT_TOKENS_BY_CATEGORY = {
         "liquidity drain",
         "quantitative tightening",
         "qt",
+    ),
+    "美联储讲话": (
+        "fed chair",
+        "federal reserve chair",
+        "federal reserve chairman",
+        "fomc",
+        "rate guidance",
+        "forward guidance",
+        "interest rates",
+        "rate hike",
+        "rate cut",
+        "monetary policy",
+        "warsh",
+        "powell",
     ),
 }
 AI_SEMICONDUCTOR_EVENT_ACTIONS = (
@@ -394,9 +430,18 @@ def _market_bonus(text: str) -> tuple[int, list[str]]:
         ("mega", 6, "超大规模"),
         ("billion", 5, "大额资金"),
         ("trillion", 10, "大额资金"),
+        ("fed chair", 8, "FOMC预期"),
+        ("federal reserve chair", 8, "FOMC预期"),
+        ("fomc", 8, "FOMC预期"),
+        ("interest rates", 8, "美债利率"),
+        ("rate hike", 8, "美债利率"),
+        ("rate cut", 8, "美债利率"),
+        ("forward guidance", 6, "FOMC预期"),
+        ("warsh", 6, "FOMC预期"),
+        ("powell", 6, "FOMC预期"),
     )
     for token, value, channel in signals:
-        if token in lowered:
+        if _contains_token(lowered, token):
             bonus += value
             if channel not in channels:
                 channels.append(channel)

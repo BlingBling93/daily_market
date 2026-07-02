@@ -41,6 +41,7 @@
 | `增长` / GDP | 2 天 | 1 天 |
 | `通胀` / CPI、PCE | 3 天 | 1 天 |
 | `就业` / 非农 | 3 天 | 2 天 |
+| `美联储讲话` / Fed 讲话、证词 | 2 天 | 1 天 |
 | `FOMC` | 5 天 | 3 天 |
 | `财报` / 重点权重股 | 5 天 | 2 天 |
 
@@ -51,10 +52,13 @@
 官方日历层只确定事件日期、类别和发布时间：
 
 - Federal Reserve FOMC calendar
+- Federal Reserve speeches RSS for Fed 官员讲话 / 证词
 - BEA release schedule for GDP / PCE
 - BLS CPI / employment schedule when available
 - Nasdaq public earnings calendar
 - `policy_events.csv` 手工兜底
+
+BLS 页面被防爬或临时不可用时，非农发布日期按月度就业报告规则兜底：通常为每月第一个周五，若遇美国联邦假日则提前到前一个工作日。
 
 官方数据层优先取一手或官方代理结果：
 
@@ -82,6 +86,7 @@
 - Nasdaq 100 纳入、剔除、特殊再平衡等指数权重事件。
 - AI / 半导体出口管制、反垄断、关税、科技监管。
 - Treasury refunding、债务上限、政府停摆、流动性抽离等资金面冲击。
+- Fed Chair / FOMC 相关讲话、证词和前瞻指引变化。
 - AI 基础设施、半导体、云资本开支等可能改变盈利预期的产业事件。
 
 发现器优先从高信噪比来源聚合标题和摘要，再按事件模式抽取，而不是只依赖单一实体关键词。SpaceX、OpenAI、Anthropic、Cerebras 等名称只是可能被抽取的对象，不应写死为策略前提。
