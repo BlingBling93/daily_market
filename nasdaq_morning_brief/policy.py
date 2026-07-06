@@ -607,6 +607,19 @@ def _result_is_policy_grade(entry: dict[str, object]) -> bool:
     return _result_source_tier(entry) in {"official", "official_proxy"}
 
 
+def _result_is_media_tier(source_tier: str) -> bool:
+    return source_tier.startswith("media") or source_tier == "trusted_media_fallback"
+
+
+def _result_can_drive_policy(entry: dict[str, object]) -> bool:
+    return _result_source_tier(entry) in {
+        "official",
+        "official_proxy",
+        "trusted_media_fallback",
+        "media_confirmed",
+    }
+
+
 def _media_cache_entry_fresh(entry: dict[str, object]) -> bool:
     fetched_raw = entry.get("fetched_at")
     if not fetched_raw:
@@ -1000,20 +1013,26 @@ def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
     source_text = "；".join(
         f"{item['source'] or 'News'}: {item['title']}" for item in selected_items
     )
-    summary = (
-        f"媒体转述（待官方校验）：{source_text}"
-    )
-    media_conclusion = (
-        f"媒体标题初步指向“{stance}”，仅作为临时解读；仓位动作等待官方/FRED/公司IR数据确认。"
-    )
+    trusted_media = source_tier == "media_confirmed"
+    summary_prefix = "可信媒体兜底（待官方校验）" if trusted_media else "媒体转述（待官方校验）"
+    summary = f"{summary_prefix}：{source_text}"
+    if trusted_media:
+        media_conclusion = (
+            f"多家高信源媒体标题初步指向“{stance}”，官方/FRED暂缺时作为临时仓位分析依据；"
+            "后续若官方数据冲突，以官方数据覆盖。"
+        )
+    else:
+        media_conclusion = (
+            f"媒体标题初步指向“{stance}”，仅作为临时解读；仓位动作等待官方/FRED/公司IR数据确认。"
+        )
     return {
         "fetched_at": _now_utc().isoformat(),
         "summary": summary,
         "conclusion": media_conclusion if conclusion else "媒体结果待官方校验，暂不改变基础动作。",
-        "stance": "待官方确认",
+        "stance": stance if trusted_media else "待官方确认",
         "sources": [item["link"] for item in selected_items if item.get("link")],
         "method": "media_google_news",
-        "source_tier": source_tier,
+        "source_tier": "trusted_media_fallback" if trusted_media else source_tier,
     }
 
 
@@ -1028,7 +1047,7 @@ def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> Li
         entry = entries.get(event_id, {})
         entry_tier = _result_source_tier(entry) if entry else ""
         has_cached_result = _news_cache_entry_has_result(entry)
-        if has_cached_result and entry_tier.startswith("media"):
+        if has_cached_result and _result_is_media_tier(entry_tier):
             should_refresh = not _media_cache_entry_fresh(entry)
         elif has_cached_result:
             should_refresh = False
@@ -1058,7 +1077,7 @@ def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> Li
             event.result_sources = list(entry.get("sources") or [])
             event.result_source_tier = _result_source_tier(entry)
             stance = str(entry.get("stance") or "")
-            if _result_is_policy_grade(entry) and stance and stance != "待确认":
+            if _result_can_drive_policy(entry) and stance and stance != "待确认":
                 event.stance = stance
         enriched.append(event)
 
@@ -1407,7 +1426,7 @@ def _stance_from_events(upcoming: List[PolicyEvent], recent: List[PolicyEvent], 
     result_joined = " ".join(
         item.result_conclusion
         for item in upcoming + recent
-        if item.result_source_tier in {"official", "official_proxy"}
+        if item.result_source_tier in {"official", "official_proxy", "trusted_media_fallback", "media_confirmed"}
     )
     if "鹰" in joined or "风险" in joined or "10年美债收益率上行" in rate_note:
         return "偏谨慎"

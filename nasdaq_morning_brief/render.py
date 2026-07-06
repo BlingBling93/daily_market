@@ -41,6 +41,7 @@ def _result_source_label(source_tier: str) -> str:
     labels = {
         "official": "官方",
         "official_proxy": "FRED/官方代理",
+        "trusted_media_fallback": "可信媒体兜底·待官方校验",
         "media_confirmed": "媒体转述·多源待校验",
         "media_single": "媒体转述·待校验",
         "manual_confirmed": "手工确认·待行情源校验",

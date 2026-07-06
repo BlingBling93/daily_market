@@ -70,7 +70,8 @@ The media interpretation layer is only a temporary fallback when official result
 - Prefer Reuters, WSJ, AP, CNBC, Bloomberg, MarketWatch, 财联社, and 华尔街见闻.
 - Media results must be labelled as pending official verification.
 - Media results are cached for only 12 hours.
-- Media results cannot directly upgrade event stance into `偏友好` / `偏谨慎`, and cannot by themselves decide add or defense actions.
+- When official / FRED / company IR results are unavailable and at least two higher-quality media sources agree, the result can be promoted to `trusted_media_fallback` and temporarily participate in event stance and execution analysis.
+- Single-source media remains a short-term hint only and cannot directly decide add or defense actions.
 
 ## Non-Periodic Event Discovery
 
@@ -121,11 +122,12 @@ Event results use `result_source_tier`:
 |---|---|
 | `official` | Original official or company IR result, highest priority |
 | `official_proxy` | Official proxy series such as FRED, eligible for policy stance |
-| `media_confirmed` | Matching reports from multiple higher-quality media sources, temporary summary only |
+| `trusted_media_fallback` | Matching reports from multiple higher-quality media sources when official proxies are unavailable, eligible for temporary execution analysis |
+| `media_confirmed` | Legacy multi-source media marker, treated compatibly as trusted media fallback |
 | `media_single` | One media source, short-term hint only |
 | `unverified` | Pending verification |
 
-Only `official` / `official_proxy` results can influence policy stance. Media-tier results are displayed as summary and interpretation, but do not participate in formal stance upgrades.
+`official` / `official_proxy` results take priority. If they are unavailable, `trusted_media_fallback` can influence policy stance and execution notes during the 12-hour media cache window. Official data must override the media fallback once it becomes available.
 
 ## Market Data Sources and Freshness
 
