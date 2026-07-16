@@ -1,30 +1,7 @@
 {
-  "fetched_at": "2026-07-15T22:00:58.231490+00:00",
+  "fetched_at": "2026-07-16T22:00:43.528765+00:00",
   "timezone": "America/New_York",
   "events": [
-    {
-      "date": "2026-05-31",
-      "category": "美联储讲话",
-      "title": "Former Fed Chair Jerome Powell Did Something That's Only Been Done Once Before in 30 Years, and",
-      "status": "expired",
-      "importance": 88,
-      "confidence": 57,
-      "market_channels": [
-        "美债利率",
-        "FOMC预期",
-        "成长股估值"
-      ],
-      "summary": "The Motley Fool：Former Fed Chair Jerome Powell Did Something That's Only Been Done Once Before in 30 Years, and ；传导渠道：美债利率、FOMC预期、成长股估值。",
-      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
-      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
-      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
-      "impact_days": 2,
-      "first_seen": "2026-07-02T22:00:46.302099+00:00",
-      "last_seen": "2026-07-15T22:00:57.630808+00:00",
-      "sources": [
-        "https://news.google.com/rss/articles/CBMimAFBVV95cUxOaDZncG5wUTdXUEpUWUh6MXdBUlNwRlBnWGZXX0NaU2NNczlhNHA0aUl4czMwQVJxVlp4ZjRBYzhoRU10VU10emtmR1l4MUdNdTZCSkFEMV96bF9XalV3bkQ2QURGY1JuelZScm02WE9lVjBwaGdCbERKa1RhaXJNX3BqWWZ2U2RpdW5jdUJHcWNyV0IyMzBEaw?oc=5"
-      ]
-    },
     {
       "date": "2026-06-01",
       "category": "IPO",
@@ -93,7 +70,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-04T10:00:32.199907+00:00",
-      "last_seen": "2026-07-15T22:00:54.278011+00:00",
+      "last_seen": "2026-07-16T22:00:40.129344+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiaEFVX3lxTE12a09ueHB6ZlRtS3kxdFpfYzRFM1ZoT1JObWllcHlDWnV3RW5CMFRlY09JUXVDRVBMbmZnQ21UT0lSdlRkRkxUQTV2Qm9Uai1wcHZqYU1DOU5UcUdCak9EaHgwNmFHSXEy?oc=5"
       ]
@@ -141,7 +118,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-04T10:00:32.199770+00:00",
-      "last_seen": "2026-07-15T22:00:54.276210+00:00",
+      "last_seen": "2026-07-16T22:00:40.127299+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMif0FVX3lxTE4xSjA1OERrenh2U2ZHdDRlZUZxRkxDVXFQYkpaODU2WmxDaTB0bklTdW1CTk5uc3dIUXVJQVoyVm93cndTMGVFNElRaVdVbzlTLU12NU4xTWdtWFExR3FjTG9xU0JFOU1JRnFCNVE4Wm5uSllzUXV6d0JsQXFLbDA?oc=5"
       ]
@@ -286,7 +263,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-06-30T22:00:37.585565+00:00",
-      "last_seen": "2026-07-15T22:00:54.277077+00:00",
+      "last_seen": "2026-07-16T22:00:40.128256+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMisgFBVV95cUxORl9Sb2hudFE0eVNKWjVpSU5DR2dsbjlfa3g4WnBnc09ybWxEck0yR3lWTVowd0ctRzlsZ2lMU0FPWWNTNnlPdTVNWUxBandKaElRVW5LdUlVSTk0YVRiNnFydDNqSTZHdFZnWF9MOTcyTm5GcjhCY1ZXaG5iYk1fVFRQREJYOU1FZVBrRlpzWFhLSW9hdEIyM1JwSkx5Q1JlY1JDWldTNjFPSnV4cWlFUTZB0gG3AUFVX3lxTE5UenlFc3k2LWpFSk03WFB5bDEySFJqUVhla2E0eVVOQzZaaUxxd3F1Wk9wZVR1NEJpaGtfSGFyY2xvN1JQOHl4QTBRX251RmZIT1d3R3Z3R24zOU9jQXBtN0IwYXE5d0FhcllzYlhiQlVENGxueE5mQmV0OTVDZXA4dFFnZFphT1NyUElnMTlBaUFkYUNWeUxaU0ZwNVRORnlOQUFUaEFpS21hTnE2aVhUQ3JkZXFJYw?oc=5"
       ]
@@ -405,7 +382,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-06-30T22:00:37.585870+00:00",
-      "last_seen": "2026-07-15T22:00:54.276865+00:00",
+      "last_seen": "2026-07-16T22:00:40.128412+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMifkFVX3lxTE9SRlJxcGlMbnh0bHBoOXNUN2RVR3RqVW1EYkNOZXdfWTBqYVJ1QjQzZHRobC0wQlZTT3dobm43VXZLMTEyNkp6eVJpeEhwOGJwNTBPOEVIR3M5Rk1feHVzUUQtSUdJdnYtUHFSYXZjZEVvSjdsbFRMTFNMcklWdw?oc=5"
       ]
@@ -429,7 +406,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-04T10:00:32.200389+00:00",
-      "last_seen": "2026-07-15T22:00:54.277430+00:00",
+      "last_seen": "2026-07-16T22:00:40.128877+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMijAFBVV95cUxNaUZoYjN3aHVRYnNUWFhsMUpxXzdjcWhTaGtNazZFSmVaT2RQdTVVRUpiUURzQ1oxYWVKai0yaG1vV2pnVi1DV3JNQ2h2ajdvTWV0aEJWNEJUV29wQ0RDeW9Sb0tiV2RFbzJ3T0lITFA0eWw4c0dKd2EyRVNVYm5KVEh2Y2M4cXFqQXpfVQ?oc=5"
       ]
@@ -453,7 +430,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-04T10:00:32.199992+00:00",
-      "last_seen": "2026-07-15T22:00:54.277252+00:00",
+      "last_seen": "2026-07-16T22:00:40.128712+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMirAFBVV95cUxONEhKM2VqMGUweGdtYjBzWHJVUVNBTUo0QWV0eEpPVmtDNkZHN0twdVNVenlWVElxVWtSUEc0eTNzWFlUV1hjWm9sc2k5U0t4cWM5QkpSMS1sVEJIR3pjY3VfRGtuRkN6QW1FVmFneXZNMndFUFYxMi00NjlUNFdudXBUVVVVTUFWSGlRRXRxMW5IZFpyTTFEb3dfV0xjRmo1Yl8xWG5uTTM1aTVW?oc=5"
       ]
@@ -476,7 +453,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 14,
       "first_seen": "2026-06-25T22:00:43.714495+00:00",
-      "last_seen": "2026-07-15T22:00:56.806211+00:00",
+      "last_seen": "2026-07-16T22:00:42.199013+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbE1aOWpfOF8zM1psdnZ5Ui1JMU1jOEdTbTBrZ2pXaWx6R3lmd0lZYktUcXM2NTV0ZHNqcmJ0Sl96RGc5c3pfWDFvNnlSMmhiZi1Ib3FuTGpKZjRyX1pzLVJSNURiT3pySXpwbDNHZVNJeDJzdDVjb3ZLT2ZicTBZcDZlV2xnaWlw?oc=5"
       ]
@@ -665,7 +642,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-11T10:00:38.406779+00:00",
-      "last_seen": "2026-07-15T22:00:54.277867+00:00",
+      "last_seen": "2026-07-16T22:00:40.129189+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMickFVX3lxTFBtS2E3dFVudU1ONHh4UFlOZG1reXp3WXhXZlNNZnpUOTd0YzRRaVVMUk9xMUNyekFrOGh5Yjh1Zi0xZlJNQTF2bGVfQ2lTQkJucmZWRG5tRDVYUldpZWRXeFNrR3hxLTRfLWQ3WjNZU3hKdw?oc=5"
       ]
@@ -975,7 +952,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-06-29T22:00:37.081083+00:00",
-      "last_seen": "2026-07-15T22:00:53.685949+00:00",
+      "last_seen": "2026-07-16T22:00:39.675399+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMijgFBVV95cUxNcVFpZ3dqemYzNmd6a0FjdmNjOUR3YUZ4LU9ueDJ3bmJSZWM2c3g2Zk1aOFVJS2RoSnprcTlfNklWVkxCQ0J1SXJFdmhCWDZVWUNWclI2M20wYVF4aFlvWmhkSV94UWNrQ05WcDVsZlFUNnYzMVp1VWxVbEIxYzE0QjJpRnFKQy1xV3FSZklB?oc=5"
       ]
@@ -1000,7 +977,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-06-30T22:00:37.584680+00:00",
-      "last_seen": "2026-07-15T22:00:54.276428+00:00",
+      "last_seen": "2026-07-16T22:00:40.127672+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOMVhyczJEUzJvM0ktd0k2RmJwZGY2YW1CRThUTTdLNERQY0ZXVXUyNjhHMklyRFVSdnRoTlc3dTFZd0NqNDd2TDJrYk43NTc4Y0Z5R0Qta08zLU5XdVVSd05LNF94WTlDS05xRklDYzluVnpWUjFqeHg2QWVZZWdSMkJHN0VVYWQtSU9BNVA3ejg2V3YyOHM3TkhsZFRtakxoRXY2WjZxWkdUZ9IBrwFBVV95cUxNYmdiVHBYUUVMODVqaDh4ZjJmV3RyXzNJa1BtblRDRWRFbEIzb2tQNURabU1hSmEtQkZCSDhva3JCVWFIYV9leDVYaVFxWXBQeTNpeHoxbVQzRk5vMVdsa1dpZW0tLXVNRXhuVzZtLVBCSTU2U0pBRDE2NzFKOFRqT041anVxS0RfamwtcEpqeHhiTnNxZ3ZIZWotSzZsSHQ5eTRJcW8xRGdMRkdjWmxF?oc=5",
         "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOMVhyczJEUzJvM0ktd0k2RmJwZGY2YW1CRThUTTdLNERQY0ZXVXUyNjhHMklyRFVSdnRoTlc3dTFZd0NqNDd2TDJrYk43NTc4Y0Z5R0Qta08zLU5XdVVSd05LNF94WTlDS05xRklDYzluVnpWUjFqeHg2QWVZZWdSMkJHN0VVYWQtSU9BNVA3ejg2V3YyOHM3TkhsZFRtakxoRXY2WjZxWkdUZw?oc=5"
@@ -1025,7 +1002,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-11T10:00:38.406909+00:00",
-      "last_seen": "2026-07-07T22:00:55.835282+00:00",
+      "last_seen": "2026-07-16T22:00:40.130263+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMimAFBVV95cUxPd3gzSk5ab2RyaVRjajN4bG1BVldyZXBLZHdneUgxOGRtdzRYS0Fud3lTZlhhakV4cU9XUTNYYlROcllERzhSZHB2aC1VbGxLNEZ3a1phTEg1RVVnVlJId21xbzlNbWNDVHVlekFXSzc0a0NWZGNHVG5kcmxHNUpqR3hhUmNLZUhPUzdsNkloMzh4R3ZQcjdoaw?oc=5"
       ]
@@ -1049,7 +1026,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-11T10:00:38.406705+00:00",
-      "last_seen": "2026-07-15T22:00:54.278562+00:00",
+      "last_seen": "2026-07-16T22:00:40.129919+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiZEFVX3lxTE44bHlkTGNZOFAwcW9iQ1pwTUxUeExuTmVrdkhIY0JfUC1kcHo4c0tVel9tVHI1RGRvQkpMY1Y1eFVmWHJTTzVITk5meFhhT2wyRGc5YzdVaFJDS3FuMHFWMTNQSVI?oc=5"
       ]
@@ -1073,7 +1050,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-11T10:00:38.405654+00:00",
-      "last_seen": "2026-07-15T22:00:54.275861+00:00",
+      "last_seen": "2026-07-16T22:00:40.127463+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5CR3JjMnBEcjZZamdmRFRmRTIxV0N1N3RoYzFTaGFtUUFBUGstWDc1UlhwRUlXS1J3VDNGZUExUlNmR2dXTTNRMnhXN3FVdE9XRkZvTG5PaXdEVHIxZVFrMkZKdV9VRmVD?oc=5"
       ]
@@ -1121,7 +1098,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-11T10:00:38.405476+00:00",
-      "last_seen": "2026-07-15T22:00:54.275681+00:00",
+      "last_seen": "2026-07-16T22:00:40.127109+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMibkFVX3lxTE90QWIzaHhCR2xlRVVmWEZyWWNrMXkyOUtCZFJJN2dSOHp0ZWtLdkg1dGdIdU9rVEtVMG5ZeGVVRFZIemFLalZhSnQySFE0VnM4VmNmSEY3eHB1aXl6SmRpQ01QLWw4ZUdKV2h4bXpn?oc=5"
       ]
@@ -1457,7 +1434,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-06-30T22:00:37.584419+00:00",
-      "last_seen": "2026-07-15T22:00:54.276592+00:00",
+      "last_seen": "2026-07-16T22:00:40.128040+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMisgFBVV95cUxNS2FJYXdqcEJac0hlSTNib2dhTTZDeFZLY0V2T3lNTFFYWWhObmRNOFJPNVEyNGNIUFhNaThpVGk2VEFvVTNMZndvZWg4ZFBFVTN0ZUVqd1UtVk91R3lON3VHVUJUdDVYTzIxdnBHcUk2dFN2WHhOOXkyMkhkalQtZjRHb25EWHpMRTVUaEdyWmNPODlhb3daUlVWZ2JmSHhkODFOdG1OR0ZIc3IxbDl2VU1R?oc=5"
       ]
@@ -1842,7 +1819,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 21,
       "first_seen": "2026-06-15T22:00:45.997884+00:00",
-      "last_seen": "2026-07-15T22:00:53.683720+00:00",
+      "last_seen": "2026-07-16T22:00:39.673253+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMie0FVX3lxTE5fdzBHc2d3M1ptX0lfanhhZEZiLXF0WTlSTHY3bDhsVGlNMnNDV0htTHVwaVJiZnRlY1JPeXdJbkd3TWhaQjJYTl95T1VTN2Y4LUc5aGVjTl9jbDAwbzQ3RFFkdGlsNXpLa3VtT0VTb3F5bXVhcjFod2FVRQ?oc=5"
       ]
@@ -2135,7 +2112,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-01T22:00:37.200153+00:00",
-      "last_seen": "2026-07-15T22:00:53.684479+00:00",
+      "last_seen": "2026-07-16T22:00:39.673918+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMixwFBVV95cUxNYW5uWmdqdjFQTVpUNHhHVEZnNjRFY2UyWkxDR3BLRHZXdXZxaDlFdFg0TG9qNjROU2wteEVJdGJmazhHanNINWprZTY4TXc4YVZoLXBXblJoQVlSMTJFRllKNkhVckJIalJmSWJreHB3VEtWQ2FtTzBPTnVTV05WTGdQNDBqdEZaYUZnSTRDRGxTQzVpdWp2bG44bWliRWtKOUI5aG9MRV9INjF4c3IzYm16dlg4elc2Z3pLaUpfRE9vWW5RU1RZ?oc=5"
       ]
@@ -2232,7 +2209,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-06-30T22:00:37.026266+00:00",
-      "last_seen": "2026-07-15T22:00:53.684829+00:00",
+      "last_seen": "2026-07-16T22:00:39.674377+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMif0FVX3lxTE5hUDYyN2h2anp1RTctUTBQT003TzAzMV90V05YZnI2dGJYQVJoU0tHbUIyQzF5V0FHV01VcVN3ZGMyb3NvTkNmOUJMY0podE9JdHk3dDNRaGxGejlMVUtKZnJPUUdRbjBFVU5KYnEwOTF1MDNqX1EtdVktcGZKeEE?oc=5"
       ]
@@ -2280,7 +2257,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-06-19T22:00:46.602252+00:00",
-      "last_seen": "2026-07-15T22:00:55.231012+00:00",
+      "last_seen": "2026-07-16T22:00:40.967874+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOS1VZTzlvbzczd1VaYkluV1lYZ05QcGN0M1IzU3YzUHUtSTNOMUZ2dFJMQWRsbWtMNG81QU55TzhxRmd4Q05HcUFxS3E4OW9pV3FUZVFiNkJabXd0TmFZWDR5MVN1MWFOUEFGQWc4b2RydmpPcGpHdndxZU9leXN4SjFtZkhTcWxpWjIxbnQ0UFdSdVJjTXE2UWFremJZSmRVZUx1c1pDTU5wWE9aZ3gxdldlNTlsQUpfWUk3b1UwMExOQXZlNDBxYlh3OGpRLW8yZjRadXhCbXdYSFFO?oc=5"
       ]
@@ -2404,7 +2381,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 14,
       "first_seen": "2026-06-15T22:00:46.885729+00:00",
-      "last_seen": "2026-07-15T22:00:55.232435+00:00",
+      "last_seen": "2026-07-16T22:00:40.969078+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiowFBVV95cUxPNUdSV093MTIzeFFFWHRPWmstTnR0azBZRkJ6TUJuMUVYakdIcmZUSkd3MGtuaTdmVGJwZkl2MXZVa2EwSzJMWVVzQWg3THlvSzV0ZGk1M3BDQlMwVlduWlhjV2RtT2gyVmZyUkVBYVJsUldZMDdOUnpfc0N1Q1BXaFVna0swUU5hd2NmSFh3bTVNZkcyZ0FwRmVUSnNlZWYzZTlJ?oc=5",
         "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNNHFTUnBIZWZNRkNqbmI4NV9DV1g3UE9RSUJTZVRmdlpJWm1CSENtbWs2QTgwSlhrZ1c3Y0Nma2xmLVRaYUpsS1NFd0NNaWswamRCZ0R4Wl9NMXJsVlJPczR4QWZjcU1vV2JGZ2FBZzU0b2F2eUd6R211Sk9QNVQtcGVUV21ucm9IUTRz?oc=5",
@@ -2433,6 +2410,29 @@
       "last_seen": "2026-06-20T22:00:42.428995+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMimAFBVV95cUxPQzl6RjFMOVo2Q0RtSUw3MFlrVENnOWtTcUhxcGZoZ2xRUEo3WlRPdXBqV0RLUWpINEtTUDJ5cU5BODJTVHFmdVBYQkRoZXNKZTkxMTVCNF9nS0JTdVp6Y01ROUVGdTBZZFF1ZHIzNGtiUHpFMC0xNlBoQnRWMTJickJURFJQS1hHdUh0TVZCMmptOEtQTGpmUw?oc=5"
+      ]
+    },
+    {
+      "date": "2026-06-15",
+      "category": "美联储讲话",
+      "title": "Fed Chair Kevin Warsh and the FOMC Will Likely Take the First Step Toward Dropping the Hammer on",
+      "status": "expired",
+      "importance": 96,
+      "confidence": 57,
+      "market_channels": [
+        "美债利率",
+        "FOMC预期",
+        "成长股估值"
+      ],
+      "summary": "The Motley Fool：Fed Chair Kevin Warsh and the FOMC Will Likely Take the First Step Toward Dropping the Hammer on；传导渠道：美债利率、FOMC预期、成长股估值。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 2,
+      "first_seen": "2026-07-16T22:00:43.117825+00:00",
+      "last_seen": "2026-07-16T22:00:43.117825+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMilgFBVV95cUxOM2VfWHFRcEJwZDJvTUNQSTU0cUJZMDBxSXYzSWFWVE9ZcGhvcE1TdVJWaDYyNDFEZnpNcE1WckJtYkVFdnNzb1piZ2swV0JlM21icFRmNGxoZ3Y3aEUtcXR6UHprSGgzQjZtQld6NmxXczBRekdUNmx5MHdxdENodTNEQ1QzWnlJVTJ0LWIwcnRVdFQ3UFE?oc=5"
       ]
     },
     {
@@ -2595,7 +2595,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-09T22:00:52.279882+00:00",
-      "last_seen": "2026-07-15T22:00:58.227559+00:00",
+      "last_seen": "2026-07-16T22:00:43.525020+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMitwFBVV95cUxNeExtY0hraWNiOFowR2M1MnYzVjA0dTRFZE5Id3pjUHBtWGZLb09VVGhVOTZfVDJUMzNBbzFTXzFCc3RXQ2ROa2NVUjlxOWdBVHVZaEdRejAwcEJ0cHZBaEpWY0lhaFZxRjM4N1JzNEIyNENvNnhGbTdsWm5kY3JkM0YzTDhJNVcyM0Vzc0xWOXpqdzE4MVJBZUtJamVvdmY1RWRBc3d2UVZMRlByNWVVajJOQmhMWTjSAbwBQVVfeXFMTS1NTGhIbnJid2k2VjBqRWlFbjgtOGlYV0R4aFJqcU1Lc2tHLUR1RDlCdXFNSnFVRDBlTzRLOThTODNzb3BLcW1kM2ttVUFMbWt0bjZ4M25zUzBUN2RHLUp4cEljYUxBZHlKWjlvNmF2a05Fb0xJa0hjNWdoSGtnMWJIczVSd0otdmJKUC1yeTRiMUtld24zUUJzd1V1Z2pJejVMR29GMDVGOFF1Nk5HcmFKZzM5VVZQUm85ZjY?oc=5"
       ]
@@ -2618,7 +2618,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-09T22:00:52.278675+00:00",
-      "last_seen": "2026-07-14T22:00:55.835203+00:00",
+      "last_seen": "2026-07-16T22:00:43.524574+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQWEdUY1BiWVREUTMxNmNCTllZaTd1c2QtRVdLQ2dRTTY3Rk1VaFFVN002LTdhOGt0OEtzcTYwUG1xYk5WUHFMRHN4MzJycWNvejZ5bnI4a093Y3JBdHFYNi1VejhJYkRqMEFXdGU1bVkxUWZYMFNIZ3hyN0VJcVQ1UV9KVW51NWhJZlRN?oc=5"
       ]
@@ -2641,7 +2641,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-10T22:00:58.476980+00:00",
-      "last_seen": "2026-07-15T22:00:58.226217+00:00",
+      "last_seen": "2026-07-16T22:00:43.523217+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMirgFBVV95cUxObGlrWm5LOU9jWF9BTUZ3WUlNa2xDUEhhYXNVaGdiQm9hWDBCdE5pUkdfTXQybnFUSU40SnJCYUV0M0ZNYVNNdG9TTXRFd3AtcGhsMTRCNXczOGVyOURtMGVkWUY4LWhiTndBVGNhRFRrank3NTd1Zm9FZ0Y0elM2LWdVT3F3VG9RVERMS3RuN3hSZWJXUU5VQkJGY2ZSYjRjNllWN1cwYjdwV1RlUXfSAbYBQVVfeXFMTlMxZ1pZZlVNZUJWZHJaTXJHWkZsbXpscGxmYmpjdGwxU3hIekpwN0dvRkVwVDYzR0RGLWMxdU5uaGJCX1NBNWZlaW80VHRPdmpfUUVOSzlzemtEelZhc1ZFT3daaFY2bnVKbjduOXFGcVRzd1pJRDE1eWVYbVkydXUtalBSYkJSWkxqaUR2aHRFM3pOVHB3LUg0Njh6N1hEcVQydnVMakRxTUZMa1hrZGJpT1ZjNGc?oc=5"
       ]
@@ -2664,7 +2664,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-10T22:00:58.477707+00:00",
-      "last_seen": "2026-07-15T22:00:58.227317+00:00",
+      "last_seen": "2026-07-16T22:00:43.524759+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMikgFBVV95cUxOaEFjQm9OdjYweHJkeGRLRzZQWjhsQ3VDZV9wZ0hzdDhqNVREWXE5NklEN0FBTnBpS0ZUZXFIQmdBa05nNE9QRVZ1NnYyVGVremJHOGRQNXQ3bEtneW5QdDFRVGlxNzZkSWpCOUgzczhUOU5tMlMtdlQwVVowQlpoVGxjbXN3RE5YcGY3ZU81cC01QQ?oc=5"
       ]
@@ -2710,7 +2710,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-03T22:00:50.174428+00:00",
-      "last_seen": "2026-07-15T22:00:58.225979+00:00",
+      "last_seen": "2026-07-16T22:00:43.522787+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMirgFBVV95cUxNRm53RDNJRmV5TmIyZ0hmSWFhRms1Q3JRaTJQclFCSHhaLURiRWp6QWRZNmpxVVZKb2JqU0J6UkViRi1HdERQaTZuY01wdWhnLWkydUpOMFZtdFhfQU95Y3Q2ck1pXzJzSFBoOHdISkZsMzREZktoajhfQ1BVZTRvd1hnSndINTVKR3VzR05TNmU2Vm5PQS1pMkpxbGpvWHppa3NSVkNZckJqMkhXSmc?oc=5"
       ]
@@ -2810,6 +2810,30 @@
       ]
     },
     {
+      "date": "2026-06-17",
+      "category": "AI产业",
+      "title": "Ball game’s over—the US is out of the AI chip market in China",
+      "status": "expired",
+      "importance": 78,
+      "confidence": 47,
+      "market_channels": [
+        "AI产业链",
+        "盈利预期",
+        "半导体",
+        "AI"
+      ],
+      "summary": "Brookings：Ball game’s over—the US is out of the AI chip market in China；传导渠道：AI产业链、盈利预期、半导体、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 7,
+      "first_seen": "2026-07-16T22:00:42.200642+00:00",
+      "last_seen": "2026-07-16T22:00:42.200642+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMinAFBVV95cUxQOHdoMzA3Y2hoYm1lcVQ5OUhVWHpCd1FPaFdvc3ZfSzRrajc2RzFmaVRPYnhOSWJQTFpvZFg3THVhZHRiLUt0Tm52QlhYbTFKNTVpaGlCTnVwV2pDM3htbVV4cTIzYWh1WnZNU044a1dtZmlTWkNKa0xmNmhWZkpSVjQzUzJfS01LbnZuRnhXRldKaXVfUFRqck9QZXg?oc=5"
+      ]
+    },
+    {
       "date": "2026-06-18",
       "category": "美联储讲话",
       "title": "New Fed Chair Kevin Warsh Is Squarely Focused on Inflation. Get Set For Interest Rates to Stay H",
@@ -2827,7 +2851,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-02T22:00:46.755196+00:00",
-      "last_seen": "2026-07-15T22:00:58.227128+00:00",
+      "last_seen": "2026-07-16T22:00:43.524129+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMizwFBVV95cUxPQUNqWXBTRmd0RkVRYjFTUHg1YVhCNENIV2lqVGI0NGd5U0czbTcwSldYUFR2cUZGY0U5OFVtYVYzNTZkS3M0amljN2tqcWo1V2hzZnNWQlFXX0dpUnotcWQ1dWhWbFZycjVtdlVFM3pCRDFiYVZmTUkxalA0YUhpT3VwM1JEeHVhczZ0WVVxa3FOYmhEaFJtTEN3T25xSUN5N1M5aUlVbmRPWXM3cWdpZWNxOGY4LUdsYk9vV24yUk4ydnBLdnRFVkxGdkdCUmc?oc=5"
       ]
@@ -2850,7 +2874,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-10T22:00:58.476729+00:00",
-      "last_seen": "2026-07-14T22:00:55.834385+00:00",
+      "last_seen": "2026-07-16T22:00:43.522181+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQU3MyblNEaUp3T3hzc2Y1cmxpMXNJMXhmWmtJUFJ5WXhFQlFVdjF3d01MSTRBamctWmFvZ1lJTnpSZFdLbGJTZDUxMFpZZF85dXVZOGViVVBMcXdYQUpzY1VEaXRjYVhnTENmNGgtdXV6SEJaLVF6bGN4UWRfQ3o3ZUVRczlMY0pDRm1sdmtXZEJrNzFKN0VmU2lWODNMRFdRbEtCaFMzWWc2Z2ozMnZqVjRsWm5GZTAtLVBQVTlBXzFrSVU?oc=5"
       ]
@@ -2943,7 +2967,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-11T22:00:57.632199+00:00",
-      "last_seen": "2026-07-15T22:00:58.225659+00:00",
+      "last_seen": "2026-07-16T22:00:43.521517+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMikwFBVV95cUxORzR0RnJFV3gtZHRoWFd1QmVuQjM2ckR3MGh5YXcxMmZSeUhkOXlEQnNlUWoyVGF3OVN0dWZMcDcyc1kzRHJkODNua1VwNnhiRFM2VGFvcWY4TzRGcFpqNUFqNEpGa0xjX3NibG95LTZiX0RaUEJEM0xnT2hkWjZvckozZ3g2em9zckJqVjlFRWNIZ2c?oc=5"
       ]
@@ -3064,7 +3088,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 14,
       "first_seen": "2026-07-07T22:00:57.361244+00:00",
-      "last_seen": "2026-07-15T22:00:55.790189+00:00",
+      "last_seen": "2026-07-16T22:00:41.427626+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMisAFBVV95cUxPdlpuYmJ0SDAyUlgwcG1mamtIX0ZXUVJvVGlJZVZLSFdFSUc4YWN1VGQ4U21VVWNxX3E1X3VSeG9VZzJJT2c3U0FnWldVb2NKa25JRGt3eVlwbG8ybHFfYXROTkluQW5wY1dUbE9GUnRHdVQ1NTY1azdWN2ViR2ZWWXdjUVNLUGgwWWEyQzZvLVhoNDg1bE9Fc21vZVRZVVdWWnJoSkJMTmc3ZUszQ2pkdA?oc=5"
       ]
@@ -3394,7 +3418,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-02T22:00:46.753692+00:00",
-      "last_seen": "2026-07-15T22:00:58.226418+00:00",
+      "last_seen": "2026-07-16T22:00:43.522473+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMirAFBVV95cUxPQ3RJVlFqWnQwcmZWdUhpdkQ0Qzk1bnN3QVF0ZlFVVDY1TzgwOVVPNnVTaGpmN3Q1b3I0MHJCRU9DWjBNbEZlOHRJa0psRWlsbk9QREdpdXo2VU9RRTdVdGtPWTMtWVcwM2pfSHZhQlZXMWU2U18wU3NfQldoVjZneURJQXJRdFhiTUhDZXA3cTlDSThGUk5fYnNwZnB0N3VYTy1OSnd0YjhNYWRl?oc=5",
         "https://news.google.com/rss/articles/CBMinwFBVV95cUxPVnpJZjdFTHVsOFNYOHVVRVM3dGhwWTBJRmxPalY4RVNZR2NDOVRwbmwyRFBCX3JwS3hXUURjdmdCdHdGSHJJQVB4OWdlaUFQcVZ4YloxLWJhSm1YZGZFMXhORHJ6QUFHa3BvR1V4YVU5ZjRsczBmeU9JLV8wRW1fbS1pNmp3Slc4NWtfWEg0VHZZMnVHcVJwQmVzS3Zlb3fSAaQBQVVfeXFMT0VHaHZQY0V3amVSN0E5ckpXSnBpUnc2a3R2QnZqSkduNFduNXY0d3ZsNmRkd21MWVItMFlTZVBxcVVheEdyYnZHVllxVXRCZEJnOEtGTkkxUGtwU1p3bEN5ak1fMjZkc3lhckdxTlZXaDhpUDNOallyVWZ3cWxYejNWRzBla1JCNWlsZ3UtTmRWQWF5cDMwNmRtMGdrSHJqMFptYi0?oc=5"
@@ -3418,7 +3442,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-02T22:00:46.752071+00:00",
-      "last_seen": "2026-07-15T22:00:58.226768+00:00",
+      "last_seen": "2026-07-16T22:00:43.523508+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMilAFBVV95cUxOa1dfS2t5TlZHU09hXzF0QUxxbVFpMl84U092QVgyOXNhMVpGbG5UeTZkaDgzQXc2bkhfNTR5Ymxvc3J4emc2SFJKb3pUOHNFckVMSjNaWlVodF94OHBzemlUWFdUbDVNUzhUWFgydHdlUTJPeXUweGRKeG55NUgwMlI2dXN6UDhNYlFDV3c1MmRXcjhh?oc=5"
       ]
@@ -3441,7 +3465,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-02T22:00:46.753142+00:00",
-      "last_seen": "2026-07-08T22:01:10.238003+00:00",
+      "last_seen": "2026-07-16T22:00:43.521849+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMivAFBVV95cUxNeTNvWmhLWDdWbGR1bUs0dWl4YzBlZDNfdHE0QnhycGk1Y1N4LXBGbDF6VVB5NlZsRVA1d2E2bnloRDlOVWZVQk9rdnkwRXExUEZwcmE3UjlBNmVQYmJaclZwMUJlaVZ5b1RiOXBIU0cyZXhNa2laSnk0VW9rb1FmU2tGTXVVX01YU0dERFZicXJyTmhjYVFxdGdrSlQtRFBuZWV5Zzl6WFIzNmlSRHVmRUpPV2M4alRFek1vNA?oc=5"
       ]
@@ -3789,7 +3813,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-02T22:00:46.754607+00:00",
-      "last_seen": "2026-07-15T22:00:58.224576+00:00",
+      "last_seen": "2026-07-16T22:00:43.520851+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMijgFBVV95cUxQVGVWTGtLSUFIQUVrdmlDVHBQQXdfWFBqOEJjeUJ2c1JHUXJySWVuaThjUVlLb2J2ZThWdXpyaEdzUHVDbUZrOTh5U0xaVlJvcndBTEdOVFFNTy1GdHMwMlhaaFc4T01aeDU0bWUzMWcxNE83UWV3dkFmV01JTmctdy1nbzJZQmgxVC1RTGNR?oc=5"
       ]
@@ -3812,7 +3836,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-11T22:00:57.630749+00:00",
-      "last_seen": "2026-07-15T22:00:58.225237+00:00",
+      "last_seen": "2026-07-16T22:00:43.521209+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQdUF5Q0pZdzR1UV9XT1dZMVE1ZUpUd1lDbDVzUXlyV0pYUTFwdmFueTIxc3B5QjR6TjFjVXJDS1BIWm9yMi15eGh0aWVaa0ZMeExhM2llbG5IQTBKZlFQZUphY3ZjR2lkZTRGNWNneGdvc3lJQXBoM21RWnlVajVRWGtUbENnZ3ZsU25QNGVDY1FuWjhXV0VrVkVSUU9EMU82OFdJa1hSdTljNUE1b1BHZXRUZEdmMk9WaWpN?oc=5"
       ]
@@ -3883,7 +3907,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-07T22:00:56.284366+00:00",
-      "last_seen": "2026-07-15T22:00:54.814086+00:00",
+      "last_seen": "2026-07-16T22:00:40.598602+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMilgFBVV95cUxPUm4tamxzNkg1cWxfOFZWWDk4ZEQzR3dSdkxHRkoxa0ZxWkhXOHRmRFBaaUJnOFRMX01tazBkbWF1cDJiUkZXVFZJcnkyYi1rZGZrNFVUS25KcFd2Qkl6bjN1cUJKd0EyM1NmMDdUcmdXSXU1ZFdFUG9wS2dkWHJISnVMcFdETmpTeGhxUFVnMU51ZFNKa2c?oc=5"
       ]
@@ -3955,7 +3979,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-06T22:00:59.483385+00:00",
-      "last_seen": "2026-07-15T22:00:54.816564+00:00",
+      "last_seen": "2026-07-16T22:00:40.599613+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMijgFBVV95cUxNN202RjRlMDQzVDY2a21pbTk4Zjd4djN4VmRldHF0UWJudXF6R21qamJJQ0pUV092TWJneGo2dlo1X1RrOUlQc3VvbEpDYnF1ZzlmdHpHWm9YMTQ2bEFicEFCa0NFbWh0LUxvRTR5cVdYeU9QRTBDRTBTZTBSOExUYVRaZThOc2g2YjE3V0xB?oc=5"
       ]
@@ -4026,7 +4050,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 14,
       "first_seen": "2026-07-07T22:00:57.735258+00:00",
-      "last_seen": "2026-07-15T22:00:56.299248+00:00",
+      "last_seen": "2026-07-16T22:00:41.779152+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMioAFBVV95cUxOd0VPTGJoM3VKa3c4ZEd3M01LVmgwV28tbXcwTC1VajkzSmJ6Q0ZGMEV1MXZRTlh1MGJqbjFMUFVfcVkyUWM5MGN2SlE3SDg4Q0ZGWGZuUDAycFF6NVhZS3I4enQxSkZwQUtrZ2Rob0xOcU5EZGt2bS1CWnI1ckFkNlJ3WExMQW1rYVJDWkFuNE80MWREanZnWFRTMDhKWGdX?oc=5",
         "https://news.google.com/rss/articles/CBMimwFBVV95cUxOYVFYRDRVYUtZNldnSmVsRXcxaFQwMDFQdmYtX240aDlTNXl1T2ZZX2IzY0h5cnBESzEteWt2VjlpQ0FnTHItdDFGbVJpT3BWMVhxYWVPQjRtSWc3Y1BFZTZXemV3RUczWjhrNkM3VEg1Z3NFMEpXX2hQNmtXR3g0V3Y3QWhFUG9DLWEwZHJkUGs4MmkzaTRvWVFnNA?oc=5"
@@ -4074,7 +4098,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-11T22:00:57.632467+00:00",
-      "last_seen": "2026-07-15T22:00:58.224824+00:00",
+      "last_seen": "2026-07-16T22:00:43.524406+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMitwFBVV95cUxQMGxtdVZuY2duVm1ySHpORm1aNlh0a3Q2cjdod2FWOTVSUGhTaExJOHN0X2tIa0NhcmNOZlFuajU4eFlJRHVRZ2NFaUtrOUpWX0JlVEVXQ21vdldxRW44VEhrSU12REFNWGdoNkM5b3E2YTB2NDdfcjc2Y3ZWbG4yNmFrZ2tsNW9Ic1pLS01GbDkzRV9BMUZ1Zm14MGZ6akMyU1ZnaDEwcmpoM1B6Y2xab3lJclhYWHfSAbwBQVVfeXFMTmtrWHBmZXl6NnFWNkw5c3NCSUNPOHZfQjZPMVAtTGR0M1ZGRlN5U1ZtTmhSVXAzRXctVjRzSG96SE01UEhJM1dKM09rNTdma2dWcXJiSHlFMjgyNjlaem1nR2JzWGsxTzRTYkJGR0ZHUkV4YXQ0TzZqSTlSV2ZrX09TdXFaX3JBSmtTNjRfbkNHekF5YjNpUy0zMmd3M1IwakZFd2tIc1RXWWtqcjF2TkJPV05VVlNma09jU2U?oc=5"
       ]
@@ -4156,7 +4180,7 @@
       "date": "2026-07-10",
       "category": "IPO",
       "title": "SK Hynix to List on Nasdaq July 10, Raise 45 Trillion Won for Semiconductors",
-      "status": "probable",
+      "status": "expired",
       "importance": 100,
       "confidence": 77,
       "market_channels": [
@@ -4173,7 +4197,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-06-30T22:00:38.066662+00:00",
-      "last_seen": "2026-07-15T22:00:54.816153+00:00",
+      "last_seen": "2026-07-16T22:00:40.600695+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMiiAFBVV95cUxObkN4NTdNRXc5M3pINS1Takx0T0tnb1JyREFsTXVrSlN1LVdYMjNBa1hET3dRZURMSVMtbGhGTEpfRnV1WTIzR1hxYW5XSjdKU2IxeFh4bm5ZM0E3TjN0OXdnUzdtT2NNY1ZFYVVha3hBWFZOYnFPbWVQY3pjOE1nTWtTMFNxV2RI?oc=5"
       ]
@@ -4182,7 +4206,7 @@
       "date": "2026-07-10",
       "category": "IPO",
       "title": "SK Hynix stock soars in Nasdaq debut as U.S. traders seek to cash in on AI-fueled memory chip bo",
-      "status": "watch",
+      "status": "expired",
       "importance": 94,
       "confidence": 57,
       "market_channels": [
@@ -4198,7 +4222,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-10T22:00:54.609979+00:00",
-      "last_seen": "2026-07-15T22:00:53.683228+00:00",
+      "last_seen": "2026-07-16T22:00:39.672754+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMioAFBVV95cUxNYXpzbHQ1ck5ibTM0ZHVNb2JqZ2k4THlhSl8yQmUxSzJ2RUF4bENjV2xZa0Q3WVRDbXNuX3lzVGV1Wm5YVU1RVE5BNmpMbXlhWUdOZFk0Rkx1RWRGX29VMV9tQ1VRMzM3WHQzZDhGZlNjYWhUZXBaOGNMbmVZWkpvdUs4VlZhRmtud2xJQ0dWclFCbzJBYzBmbHVYQUlqR3Ra?oc=5"
       ]
@@ -4221,7 +4245,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-13T22:00:55.936575+00:00",
-      "last_seen": "2026-07-15T22:00:58.224407+00:00",
+      "last_seen": "2026-07-16T22:00:43.520192+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMimAFBVV95cUxPT3RTbVdXMzVPY1NSeXhtU01KUjZNUEFsYWtIU1lJMTZCc2JQcExwVWFKMi1tWUViSTVWTF9pNzlRNnZpTkxVZWk2TzJxNzNYNHNzZkRuQXRvOEZyVTlpX1pXODNWc3RidWlJbmg0aHdaSHl5aWhwMEdZUlhhRF9ZSXNIVVNybExWVXJscjFLclByZy1MbFJtTA?oc=5"
       ]
@@ -4230,7 +4254,7 @@
       "date": "2026-07-10",
       "category": "IPO",
       "title": "SK hynix to List on Nasdaq July 10, Targeting AI Investors",
-      "status": "probable",
+      "status": "expired",
       "importance": 88,
       "confidence": 77,
       "market_channels": [
@@ -4254,7 +4278,7 @@
       "date": "2026-07-10",
       "category": "IPO",
       "title": "SK Hynix Just Listed on Nasdaq Today. Here's Why This Chip IPO Is Different From All the Others.",
-      "status": "watch",
+      "status": "expired",
       "importance": 86,
       "confidence": 57,
       "market_channels": [
@@ -4269,7 +4293,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-11T22:00:54.194210+00:00",
-      "last_seen": "2026-07-15T22:00:54.813888+00:00",
+      "last_seen": "2026-07-16T22:00:40.598884+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMijwFBVV95cUxOMzY3LWxkendPQTJjalJlVDNMdkFOUllvZUdqdUgxQ1NmSkY4SGFHMGlpMEkxSldnLXJfUnZhcl9WLTF1OEhnSFp4SlJZZWgwWEV6bzE2bFItNUViQTZjejJKOVNCWXoyMTZRQXBZQjk2VGlpY3BtQ2tLc3hqV1Zudl85d3JrNFlzSzR3WE9KUQ?oc=5"
       ]
@@ -4278,7 +4302,7 @@
       "date": "2026-07-10",
       "category": "IPO",
       "title": "US Pre-Market: SK Hynix ADR Priced at $149 to List on Nasdaq, Memory Chip Stocks Under Pressure,",
-      "status": "watch",
+      "status": "expired",
       "importance": 86,
       "confidence": 57,
       "market_channels": [
@@ -4302,7 +4326,7 @@
       "date": "2026-07-10",
       "category": "IPO",
       "title": "SK Hynix to List on Nasdaq July 10 in Record $29 Billion ADR Offering by Foreign Firm",
-      "status": "probable",
+      "status": "expired",
       "importance": 85,
       "confidence": 77,
       "market_channels": [
@@ -4326,7 +4350,7 @@
       "date": "2026-07-10",
       "category": "IPO",
       "title": "A $28 Billion AI IPO Trading at Just 7x Earnings: Too Cheap or Too Cyclical to Trust?",
-      "status": "watch",
+      "status": "expired",
       "importance": 81,
       "confidence": 57,
       "market_channels": [
@@ -4342,7 +4366,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-10T22:00:54.609682+00:00",
-      "last_seen": "2026-07-15T22:00:53.683449+00:00",
+      "last_seen": "2026-07-16T22:00:39.672978+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMixAFBVV95cUxPLXNuSUpVOG9iVm1UVm1Fbkk4RGRTNVBTRkhsYVBYQXpRODNoS1BTLXZkMEgyT0xxRllnOG1JUzNxN19BOTdvd1B0dU1WSWtZenY1Y3pDc2JQT1lBZS1Ebm04UW5OYjlZOUJrcnNFUUFlVllTOUNkUFBWa09SdEstbDMzckpJaW5HUE5NWGg4UTZrbnk2ekFzWU1ObnVjT3hQQmFvdGNCa2ZFay16UnY5YVFCLXBkYmdoQ1d6alVCVzE1ZDRz?oc=5"
       ]
@@ -4367,7 +4391,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-12T22:00:55.496173+00:00",
-      "last_seen": "2026-07-15T22:00:55.229927+00:00",
+      "last_seen": "2026-07-16T22:00:40.966872+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMizwFBVV95cUxPMExLUjFrRzQ2NkttZDk4SDNNeEpJU2c0YkUzbnJvQmVvbm9ic1B3dXNudV9DcE8waEVDc1pXMW1MMkt3MGFYSFFEVnpvRFNWVVREU0hVTnFWRnBIbjdFTzBRbmFodWU1bmc4LTNRdzdQZlJWXzluQkFJSDAxZGptTHhlRlBvLWZQMTBwcVdxMElKUU9hdm91dGVDQVVMVHdyejRvdkxVQ3U4UUJrQ3JoVmItLWJHWDNqbFFVQ2xXUE5KT25jc3F5TmU3UnFSMkU?oc=5"
       ]
@@ -4376,7 +4400,7 @@
       "date": "2026-07-13",
       "category": "美联储讲话",
       "title": "WATCH: Fed chair Kevin Warsh testifies on inflation and monetary policy in House hearing",
-      "status": "watch",
+      "status": "expired",
       "importance": 88,
       "confidence": 57,
       "market_channels": [
@@ -4390,7 +4414,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 2,
       "first_seen": "2026-07-14T22:00:55.831467+00:00",
-      "last_seen": "2026-07-15T22:00:58.223969+00:00",
+      "last_seen": "2026-07-16T22:00:43.519853+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMitwFBVV95cUxNNGoza1B1bFlYakZUZTlfMDZXQW5lak5PUUJmazNOUTZXdzZsb0ZfaUdNRmRZSmRHQmVLM1YweXBYaG5QWko3UE9pWk13MThsazJXZnAxZXQzdjFBNS1JQndtTU5WYzNjbExBWFVmaHRiUGlzNVB6WW9yTmdwQWdyWGNvWktMMWpQcXZrVWFtVGxwYW5WUEY1WEhJUWw2MTFfaFFBREMxQkVfUmx6WGVsNzZoU1AwYjjSAbwBQVVfeXFMTmJaLU9CcDhYZjVFbnJ1OEk5MFdNTzNNNlNQcjZTNnBndmtVMUFaaGVhYVZaR05MMnVKekp6NmlLdXZRbUwyUEdmLUZvT3h1bkVsVEZoR0k3MFN2QXIxTmY5bUtPdVVBODgwMHBiSDlqbl96VU9xSHppMGY4Q1M1VTVRVXl3VldVQ1dMTHoxNndVcDd5VEUySWZhSmU1RWtsSVpvUFVWWkI5T3Bfdy1FWHN2Zy1GT0R4UnhmN1M?oc=5"
       ]
@@ -4416,6 +4440,29 @@
       "last_seen": "2026-07-15T22:00:58.224199+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQcHl0NkxMNTQyUjM2cUc3aUsxYmhDZGhlZEdsQjVmSUJjMWZKSlBDQVF1eHNVbWRDSUZFMEdCQk8xTzNFZmU1bHpZcGdUMzlVeGtMZUM4SE1sdjFXQ0U3WkRYRzUwNkFjSTA3NTg4MXhOSG5wLUZlbV9mRjk2ZXJFZmVpZ2R0c04yVEVUcVVXOE5vNWhiOXdpclRTdU5hb1VVX3pKX3dKZkQ4Z3JWVW1jWXVkbjVLaWFKU0xDaFhuZTVicXhnRTVjTTFSUlBIRUJQZG04SFdES0Y0VjROaW9aaXIxNA?oc=5"
+      ]
+    },
+    {
+      "date": "2026-07-16",
+      "category": "美联储讲话",
+      "title": "Macroscope | Silence isn’t golden for a world looking to Kevin Warsh’s Fed",
+      "status": "watch",
+      "importance": 80,
+      "confidence": 57,
+      "market_channels": [
+        "美债利率",
+        "FOMC预期",
+        "成长股估值"
+      ],
+      "summary": "South China Morning Post：Macroscope | Silence isn’t golden for a world looking to Kevin Warsh’s Fed；传导渠道：美债利率、FOMC预期、成长股估值。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 2,
+      "first_seen": "2026-07-16T22:00:43.519428+00:00",
+      "last_seen": "2026-07-16T22:00:43.519428+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMirgFBVV95cUxQbkxFcnRpaWtxTDdKaHJ4dXVKQWIxRElxZU1iWF85N3JJRVlFeUtBcmlDUzZpbjhHYXpsRGVHTWRMbDFoRmNKSHV5a1ViTWx4MFZmVEpvTHA5Y3EzOGxVdmN4Njd5N1BUaGZFdG9wQ3VhNGd0bXVGVTdsTTE0NTZ4emhoQk16UUhkYzR4czBONU9XcmRfeU1uVFVnRHdqbENYR3FiSF9JN0ctN3ZxcnfSAa4BQVVfeXFMT2U5c3NDMWkzRWZabERGVnlBLWR6X2N6c0RFa1Q4RlVHMUpVdUxaOW1QLXo1UEtzYm9sNW5SNHQ2YlVzbnpxaUhqNzdRRHZCa25aVkhRaUtkWVdfQk9xWXZYMFMyTXJwVTdGWHpmbzE4T1RKR1R2SnlDQlZtQ29aUEFMMEJJMkcweFhVUFMyZElRWHFPaE0zT0tVUlYwN3pFWlVBT0VnMll2YzlrQUt3?oc=5"
       ]
     }
   ]
