@@ -10,12 +10,11 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Iterable
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote_plus
 from urllib.request import Request, urlopen
 
 from .config import load_config
 from .news_capture import capture_news_headlines
-from .policy import DEFAULT_IMPACT_DAYS_BY_CATEGORY, GOOGLE_NEWS_RSS_URL, HTTP_HEADERS, US_EASTERN
+from .policy import DEFAULT_IMPACT_DAYS_BY_CATEGORY, HTTP_HEADERS, US_EASTERN
 
 
 DEFAULT_DISCOVERY_QUERIES = (
