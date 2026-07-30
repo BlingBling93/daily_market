@@ -120,14 +120,10 @@ Event results use `result_source_tier`:
 
 | Tier | Use |
 |---|---|
-| `official` | Original official or company IR result, highest priority |
-| `official_proxy` | Official proxy series such as FRED, eligible for policy stance |
-| `trusted_media_fallback` | Matching reports from multiple higher-quality media sources when official proxies are unavailable, eligible for temporary execution analysis |
-| `media_confirmed` | Legacy multi-source media marker, treated compatibly as trusted media fallback |
-| `media_single` | One media source, short-term hint only |
-| `unverified` | Pending verification |
+| `news_content` | Read article content from 财联社 or 华尔街见闻; eligible for event-result and short-term execution analysis |
+| `unverified` | No readable article content was obtained, or the result is pending verification |
 
-`official` / `official_proxy` results take priority. If they are unavailable, `trusted_media_fallback` can influence policy stance and execution notes during the 12-hour media cache window. Official data must override the media fallback once it becomes available.
+Event-result collection runs only for events already in the calendar. The news capturer uses search results to locate candidate articles, then reads article content only from 财联社 or 华尔街见闻; RSS titles and summaries never determine the event result. Content results refresh every 12 hours.
 
 ## Market Data Sources and Freshness
 

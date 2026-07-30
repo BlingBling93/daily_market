@@ -14,6 +14,7 @@ from urllib.parse import quote_plus
 from urllib.request import Request, urlopen
 
 from .config import load_config
+from .news_capture import capture_news_headlines
 from .policy import DEFAULT_IMPACT_DAYS_BY_CATEGORY, GOOGLE_NEWS_RSS_URL, HTTP_HEADERS, US_EASTERN
 
 
@@ -607,9 +608,8 @@ def discover_events(config_path: str) -> list[DiscoveredEvent]:
     as_of = datetime.now(US_EASTERN).date()
     fresh: list[DiscoveredEvent] = []
     for query in _queries_from_config(config.discovery_queries):
-        rss_url = GOOGLE_NEWS_RSS_URL.format(query=quote_plus(query))
         try:
-            items = _parse_google_news_items(_fetch_text(rss_url))
+            items = capture_news_headlines(query)
         except (HTTPError, URLError, TimeoutError, ET.ParseError, OSError, ValueError):
             continue
         for item in items:

@@ -10,12 +10,13 @@ from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Iterable, List
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, quote_plus
+from urllib.parse import quote
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
 from .config import PolicyConfig
 from .models import AdviceSnapshot, PolicyEvent, PolicySnapshot, QuoteSnapshot
+from .news_capture import capture_event_result_articles
 
 
 DEFAULT_IMPACT_DAYS_BY_CATEGORY = {
@@ -95,21 +96,8 @@ BLS_RELEASE_URLS = {
 }
 BEA_RELEASE_URL = "https://apps.bea.gov/API/signup/release_dates.json"
 NASDAQ_EARNINGS_URL = "https://api.nasdaq.com/api/calendar/earnings?date={event_date}"
-GOOGLE_NEWS_RSS_URL = "https://news.google.com/rss/search?q={query}&hl=en-US&gl=US&ceid=US:en"
 FRED_CSV_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
 NVIDIA_NEWS_URL = "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-{quarter_slug}-quarter-fiscal-{fiscal_year}"
-PREFERRED_MEDIA_SOURCES = {
-    "Reuters",
-    "The Wall Street Journal",
-    "WSJ",
-    "Associated Press",
-    "AP News",
-    "CNBC",
-    "Bloomberg",
-    "MarketWatch",
-    "财联社",
-    "华尔街见闻",
-}
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
     "Accept": "application/json,text/html,text/plain,*/*",
@@ -608,7 +596,7 @@ def _result_is_policy_grade(entry: dict[str, object]) -> bool:
 
 
 def _result_is_media_tier(source_tier: str) -> bool:
-    return source_tier.startswith("media") or source_tier == "trusted_media_fallback"
+    return source_tier.startswith("media") or source_tier in {"trusted_media_fallback", "news_content"}
 
 
 def _result_can_drive_policy(entry: dict[str, object]) -> bool:
@@ -617,6 +605,7 @@ def _result_can_drive_policy(entry: dict[str, object]) -> bool:
         "official_proxy",
         "trusted_media_fallback",
         "media_confirmed",
+        "news_content",
     }
 
 
@@ -642,14 +631,6 @@ def _event_needs_result(event: PolicyEvent, event_date: date) -> bool:
         return False
     result_end = event.event_date + timedelta(days=max(event.impact_days, RESULT_FETCH_GRACE_DAYS))
     return event.event_date <= event_date <= result_end
-
-
-def _direct_result_supported(event: PolicyEvent) -> bool:
-    return (
-        (event.category == "通胀" and ("CPI" in event.title or "PCE" in event.title))
-        or (event.category == "增长" and "GDP" in event.title)
-        or (event.category == "财报" and event.title.startswith("NVDA"))
-    )
 
 
 def _news_query(event: PolicyEvent) -> str:
@@ -944,8 +925,40 @@ def _select_media_items(items: list[dict[str, str]]) -> tuple[list[dict[str, str
     return selected, source_tier
 
 
-def _infer_result_conclusion(event: PolicyEvent, titles: list[str]) -> tuple[str, str]:
-    joined = " ".join(titles).lower()
+def _article_matches_event(event: PolicyEvent, body: str) -> bool:
+    text = body.lower()
+    if event.category == "FOMC":
+        return any(token in text for token in ("fomc", "美联储", "联储", "联邦基金利率"))
+    if event.category == "财报":
+        symbol = event.title.replace("财报", "").strip().lower()
+        aliases = {
+            "meta": ("meta", "脸书", "facebook"),
+            "msft": ("msft", "微软", "microsoft"),
+            "aapl": ("aapl", "苹果", "apple"),
+            "nvda": ("nvda", "英伟达", "nvidia"),
+            "amzn": ("amzn", "亚马逊", "amazon"),
+            "googl": ("googl", "谷歌", "alphabet", "google"),
+            "tsla": ("tsla", "特斯拉", "tesla"),
+        }
+        return any(token in text for token in aliases.get(symbol, (symbol,)))
+    return True
+
+
+def _extract_result_content(event: PolicyEvent, body: str) -> str:
+    sentences = [item.strip() for item in re.split(r"(?<=[。！？.!?])\s*", body) if len(item.strip()) >= 18]
+    if event.category == "FOMC":
+        keywords = ("利率", "加息", "降息", "投票", "通胀", "经济")
+    elif event.category == "财报":
+        keywords = ("营收", "收入", "eps", "每股", "利润", "指引", "资本开支", "现金流", "云", "广告")
+    else:
+        keywords = ("同比", "环比", "预期", "数据", "增长")
+    selected = [item for item in sentences if any(token in item.lower() for token in keywords)][:3]
+    return " ".join(selected or sentences[:2])[:520]
+
+
+def _infer_result_conclusion(event: PolicyEvent, bodies: list[str]) -> tuple[str, str]:
+    """Classify only text read from approved article bodies, never RSS titles."""
+    joined = " ".join(bodies).lower()
     hawkish_hits = sum(
         token in joined
         for token in (
@@ -961,6 +974,11 @@ def _infer_result_conclusion(event: PolicyEvent, titles: list[str]) -> tuple[str
             "cuts forecast",
             "weak guidance",
             "selloff",
+            "加息",
+            "通胀仍高",
+            "通胀压力",
+            "指引不及预期",
+            "自由现金流下降",
         )
     )
     dovish_hits = sum(
@@ -988,51 +1006,37 @@ def _infer_result_conclusion(event: PolicyEvent, titles: list[str]) -> tuple[str
             "shares rose",
             "closes up",
             "closed up",
+            "超预期",
+            "营收增长",
+            "上调指引",
+            "收入增长",
         )
     )
     if hawkish_hits > dovish_hits:
-        return "偏谨慎", "新闻标题偏向利率/盈利压力，事件影响期内降低追价和加仓冲动。"
+        return "偏谨慎", "正文显示利率或盈利压力偏大，事件影响期内降低追价和加仓冲动。"
     if dovish_hits > hawkish_hits:
-        return "偏友好", "新闻标题偏向利率缓和或盈利支撑，事件影响期内可维持基础动作但仍分批执行。"
-    return "待确认", "相关新闻尚未形成明确方向，事件影响期内继续观察利率、VXN和权重股反应。"
+        return "偏友好", "正文显示利率缓和或盈利支撑，事件影响期内可维持基础动作但仍分批执行。"
+    return "待确认", "已阅读正文但未形成明确方向，继续观察利率、VXN和权重股反应。"
 
 
 def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
-    direct_result = _fetch_direct_event_result(event)
-    if direct_result:
-        return direct_result
-
-    query = quote_plus(_news_query(event))
-    rss_text = _fetch_text(GOOGLE_NEWS_RSS_URL.format(query=query), HTTP_HEADERS)
-    items = _parse_google_news_items(rss_text)
-    if not items:
+    articles = capture_event_result_articles(_news_query(event))
+    articles = [article for article in articles if _article_matches_event(event, article.body)]
+    if not articles:
         return None
-    selected_items, source_tier = _select_media_items(items)
-    titles = [item["title"] for item in selected_items]
-    stance, conclusion = _infer_result_conclusion(event, titles)
-    source_text = "；".join(
-        f"{item['source'] or 'News'}: {item['title']}" for item in selected_items
+    bodies = [article.body for article in articles]
+    stance, conclusion = _infer_result_conclusion(event, bodies)
+    summary = "；".join(
+        f"{article.source}正文：{_extract_result_content(event, article.body)}" for article in articles
     )
-    trusted_media = source_tier == "media_confirmed"
-    summary_prefix = "可信媒体兜底（待官方校验）" if trusted_media else "媒体转述（待官方校验）"
-    summary = f"{summary_prefix}：{source_text}"
-    if trusted_media:
-        media_conclusion = (
-            f"多家高信源媒体标题初步指向“{stance}”，官方/FRED暂缺时作为临时仓位分析依据；"
-            "后续若官方数据冲突，以官方数据覆盖。"
-        )
-    else:
-        media_conclusion = (
-            f"媒体标题初步指向“{stance}”，仅作为临时解读；仓位动作等待官方/FRED/公司IR数据确认。"
-        )
     return {
         "fetched_at": _now_utc().isoformat(),
         "summary": summary,
-        "conclusion": media_conclusion if conclusion else "媒体结果待官方校验，暂不改变基础动作。",
-        "stance": stance if trusted_media else "待官方确认",
-        "sources": [item["link"] for item in selected_items if item.get("link")],
-        "method": "media_google_news",
-        "source_tier": "trusted_media_fallback" if trusted_media else source_tier,
+        "conclusion": f"基于财联社/华尔街见闻正文：{conclusion}",
+        "stance": stance,
+        "sources": [article.url for article in articles],
+        "method": "news_content_capture",
+        "source_tier": "news_content",
     }
 
 
@@ -1055,8 +1059,6 @@ def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> Li
             should_refresh = True
         else:
             should_refresh = not _news_cache_entry_fresh(entry, config.result_retry_hours)
-            if _direct_result_supported(event) and not _result_is_policy_grade(entry):
-                should_refresh = True
         if config.auto_fetch and _event_needs_result(event, current_et_date) and should_refresh:
             try:
                 fetched = _fetch_event_result(event)

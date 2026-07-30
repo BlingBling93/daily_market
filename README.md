@@ -81,9 +81,10 @@ Current automatic sources are:
 - Federal Reserve FOMC calendar
 - BEA release dates for PCE / Personal Income and Outlays and GDP
 - Nasdaq public earnings calendar for the configured Mag 7 symbols
-- Direct post-event result tracking where available, such as NVIDIA official
-  earnings releases and FRED/BEA PCE price-index series
-- Google News RSS only as a fallback when direct event data is unavailable
+- Post-event results are captured only for events already in the calendar.
+  The shared news capturer searches and reads article bodies from 财联社 and
+  华尔街见闻; RSS titles are used only to locate candidate articles, never to
+  infer the event result.
 
 `policy_events.csv` remains available for manual overrides or events that the
 free sources miss. It supports these columns:
