@@ -1,27 +1,132 @@
 {
-  "fetched_at": "2026-07-30T10:25:19.781383+00:00",
+  "fetched_at": "2026-07-30T22:07:45.946744+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
-      "fetched_at": "2026-07-30T10:25:16.961180+00:00"
+      "fetched_at": "2026-07-30T22:07:25.941501+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 美联储 利率决议",
+        "site:wallstreetcn.com 美联储 利率决议"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
     },
     "2026-07-29|财报|META财报": {
-      "fetched_at": "2026-07-30T10:25:17.209403+00:00"
+      "fetched_at": "2026-07-30T22:07:29.252802+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn Meta 财报",
+        "site:wallstreetcn.com Meta 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
     },
     "2026-07-29|财报|MSFT财报": {
-      "fetched_at": "2026-07-30T10:25:17.432275+00:00"
+      "fetched_at": "2026-07-30T22:07:32.497823+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 微软 财报",
+        "site:wallstreetcn.com 微软 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
     },
     "2026-07-30|通胀|PCE/个人收入支出发布": {
-      "fetched_at": "2026-07-30T10:25:17.712290+00:00"
+      "fetched_at": "2026-07-30T22:07:35.839446+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 美国 PCE 数据",
+        "site:wallstreetcn.com 美国 PCE 数据"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
     },
     "2026-07-30|财报|AAPL财报": {
-      "fetched_at": "2026-07-30T10:25:17.943646+00:00"
+      "fetched_at": "2026-07-30T22:07:39.406704+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 苹果 财报",
+        "site:wallstreetcn.com 苹果 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
     },
     "2026-07-30|财报|AMZN财报": {
-      "fetched_at": "2026-07-30T10:25:18.160676+00:00"
+      "fetched_at": "2026-07-30T22:07:42.722317+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 亚马逊 财报",
+        "site:wallstreetcn.com 亚马逊 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
     },
     "2026-07-30|增长|GDP发布": {
-      "fetched_at": "2026-07-30T10:25:19.781269+00:00"
+      "fetched_at": "2026-07-30T22:07:45.946639+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 美国 GDP 数据",
+        "site:wallstreetcn.com 美国 GDP 数据"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
     }
   }
 }
