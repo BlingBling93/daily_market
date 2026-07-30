@@ -37,9 +37,16 @@ class CapturedHeadline:
     summary: str
 
 
-def _fetch(url: str) -> tuple[str, str]:
+@dataclass(frozen=True)
+class EventCaptureOutcome:
+    articles: tuple[CapturedArticle, ...]
+    diagnostics: tuple[str, ...]
+    queries: tuple[str, ...]
+
+
+def _fetch(url: str, timeout: int = 20) -> tuple[str, str]:
     request = Request(url, headers=HTTP_HEADERS)
-    with urlopen(request, timeout=20) as response:
+    with urlopen(request, timeout=timeout) as response:
         return response.geturl(), response.read().decode("utf-8", "ignore")
 
 
@@ -106,35 +113,54 @@ def capture_news_headlines(query: str, limit: int = 20) -> list[CapturedHeadline
     return headlines
 
 
-def capture_event_result_articles(query: str, limit: int = 2) -> list[CapturedArticle]:
-    """Find and read event-result articles from the two approved publishers only."""
-    headlines = capture_news_headlines(f"{query} (财联社 OR 华尔街见闻)")
+def capture_event_result_evidence(
+    queries: list[str],
+    limit: int = 2,
+    candidates_per_query: int = 3,
+) -> EventCaptureOutcome:
+    """Read approved publisher articles and retain a reason for every rejected stage."""
     captured: list[CapturedArticle] = []
     seen_urls: set[str] = set()
-    for item in headlines:
-        link = item.link
-        source = item.source
-        if not link:
-            continue
+    diagnostics: list[str] = []
+    unique_queries = list(dict.fromkeys(item.strip() for item in queries if item.strip()))
+    for query in unique_queries:
         try:
-            resolved_url, markup = _fetch(link)
-        except Exception:  # A failed publisher page is simply not usable evidence.
+            headlines = capture_news_headlines(query, limit=candidates_per_query)
+        except Exception as exc:
+            diagnostics.append(f"候选搜索失败：{query}（{type(exc).__name__}）")
             continue
-        host = resolved_url.lower()
-        if not any(allowed in host for allowed in ALLOWED_EVENT_RESULT_HOSTS):
+        if not headlines:
+            diagnostics.append(f"无候选文章：{query}")
             continue
-        body = _article_body(markup)
-        if not body or resolved_url in seen_urls:
-            continue
-        seen_urls.add(resolved_url)
-        captured.append(
-            CapturedArticle(
-                source=source or ("财联社" if "cls.cn" in host else "华尔街见闻"),
-                url=resolved_url,
-                body=body,
-                published_at=item.published_at,
+        for item in headlines:
+            if not item.link:
+                diagnostics.append(f"候选缺少链接：{query}")
+                continue
+            try:
+                resolved_url, markup = _fetch(item.link, timeout=8)
+            except Exception as exc:
+                diagnostics.append(f"文章跳转失败：{item.source or query}（{type(exc).__name__}）")
+                continue
+            host = resolved_url.lower()
+            if not any(allowed in host for allowed in ALLOWED_EVENT_RESULT_HOSTS):
+                diagnostics.append(f"候选域名不在允许范围：{item.source or resolved_url}")
+                continue
+            body = _article_body(markup)
+            if not body:
+                diagnostics.append(f"正文解析失败：{resolved_url}")
+                continue
+            if resolved_url in seen_urls:
+                diagnostics.append(f"重复文章已忽略：{resolved_url}")
+                continue
+            seen_urls.add(resolved_url)
+            captured.append(
+                CapturedArticle(
+                    source=item.source or ("财联社" if "cls.cn" in host else "华尔街见闻"),
+                    url=resolved_url,
+                    body=body,
+                    published_at=item.published_at,
+                )
             )
-        )
-        if len(captured) >= limit:
-            break
-    return captured
+            if len(captured) >= limit:
+                return EventCaptureOutcome(tuple(captured), tuple(diagnostics), tuple(unique_queries))
+    return EventCaptureOutcome(tuple(captured), tuple(diagnostics), tuple(unique_queries))

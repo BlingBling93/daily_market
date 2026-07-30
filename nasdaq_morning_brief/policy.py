@@ -16,7 +16,7 @@ from zoneinfo import ZoneInfo
 
 from .config import PolicyConfig
 from .models import AdviceSnapshot, PolicyEvent, PolicySnapshot, QuoteSnapshot
-from .news_capture import capture_event_result_articles
+from .news_capture import ALLOWED_EVENT_RESULT_HOSTS, capture_event_result_evidence
 
 
 DEFAULT_IMPACT_DAYS_BY_CATEGORY = {
@@ -633,21 +633,33 @@ def _event_needs_result(event: PolicyEvent, event_date: date) -> bool:
     return event.event_date <= event_date <= result_end
 
 
-def _news_query(event: PolicyEvent) -> str:
+def _news_queries(event: PolicyEvent) -> list[str]:
     if event.category == "FOMC":
-        return f'Federal Reserve FOMC decision {event.event_date.isoformat()} Kevin Warsh communication rates'
-    if event.category == "通胀":
+        terms = "美联储 利率决议"
+    elif event.category == "通胀":
         if "PCE" in event.title:
-            return f'US PCE inflation personal income outlays {event.event_date.isoformat()}'
-        return f'US CPI inflation data {event.event_date.isoformat()}'
-    if event.category == "就业":
-        return f'US jobs report unemployment nonfarm payrolls {event.event_date.isoformat()}'
-    if event.category == "财报":
+            terms = "美国 PCE 数据"
+        else:
+            terms = "美国 CPI 数据"
+    elif event.category == "就业":
+        terms = "美国 非农就业 数据"
+    elif event.category == "增长":
+        terms = "美国 GDP 数据"
+    elif event.category == "财报":
         symbol = event.title.replace("财报", "").strip()
-        return f'{symbol} earnings results guidance {event.event_date.isoformat()}'
-    if event.category == "IPO":
-        return f'{event.title} IPO debut shares close Nasdaq {event.event_date.isoformat()}'
-    return f'{event.title} {event.event_date.isoformat()}'
+        names = {
+            "META": "Meta",
+            "MSFT": "微软",
+            "AAPL": "苹果",
+            "AMZN": "亚马逊",
+            "NVDA": "英伟达",
+            "GOOGL": "谷歌",
+            "TSLA": "特斯拉",
+        }
+        terms = f"{names.get(symbol.upper(), symbol)} 财报"
+    else:
+        terms = event.title
+    return [f"site:{host} {terms}" for host in ALLOWED_EVENT_RESULT_HOSTS]
 
 
 def _plain_text(markup: str) -> str:
@@ -1020,10 +1032,20 @@ def _infer_result_conclusion(event: PolicyEvent, bodies: list[str]) -> tuple[str
 
 
 def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
-    articles = capture_event_result_articles(_news_query(event))
-    articles = [article for article in articles if _article_matches_event(event, article.body)]
+    evidence = capture_event_result_evidence(_news_queries(event))
+    articles = [article for article in evidence.articles if _article_matches_event(event, article.body)]
     if not articles:
-        return None
+        diagnostics = list(evidence.diagnostics)
+        if evidence.articles:
+            diagnostics.append("正文与日历事件不匹配，未写入结果。")
+        return {
+            "fetched_at": _now_utc().isoformat(),
+            "sources": [],
+            "method": "news_content_capture",
+            "source_tier": "unverified",
+            "queries": list(evidence.queries),
+            "diagnostics": diagnostics,
+        }
     bodies = [article.body for article in articles]
     stance, conclusion = _infer_result_conclusion(event, bodies)
     summary = "；".join(
@@ -1037,6 +1059,8 @@ def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
         "sources": [article.url for article in articles],
         "method": "news_content_capture",
         "source_tier": "news_content",
+        "queries": list(evidence.queries),
+        "diagnostics": list(evidence.diagnostics),
     }
 
 
