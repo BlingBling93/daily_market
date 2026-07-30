@@ -1040,7 +1040,11 @@ def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
     }
 
 
-def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> List[PolicyEvent]:
+def _attach_event_results(
+    config: PolicyConfig,
+    events: List[PolicyEvent],
+    refresh_results: bool,
+) -> List[PolicyEvent]:
     current_et_date = datetime.now(US_EASTERN).date()
     entries = _read_news_cache(config.news_cache_path)
     changed = False
@@ -1059,7 +1063,7 @@ def _attach_event_results(config: PolicyConfig, events: List[PolicyEvent]) -> Li
             should_refresh = True
         else:
             should_refresh = not _news_cache_entry_fresh(entry, config.result_retry_hours)
-        if config.auto_fetch and _event_needs_result(event, current_et_date) and should_refresh:
+        if refresh_results and config.auto_fetch and _event_needs_result(event, current_et_date) and should_refresh:
             try:
                 fetched = _fetch_event_result(event)
             except (HTTPError, URLError, TimeoutError, ET.ParseError, OSError, ValueError):
@@ -1341,7 +1345,11 @@ def _fetch_automatic_events(config: PolicyConfig, as_of: date) -> List[PolicyEve
     return sorted(fetched, key=lambda item: (item.event_date, item.category, item.title))
 
 
-def load_policy_calendar(config: PolicyConfig, as_of: date) -> List[PolicyEvent]:
+def load_policy_calendar(
+    config: PolicyConfig,
+    as_of: date,
+    refresh_results: bool = False,
+) -> List[PolicyEvent]:
     manual_events = load_policy_events(config.events_path, config.default_impact_days)
     discovered_events = load_discovered_policy_events(config, as_of)
     cached_events, fetched_at = _read_cached_events(config.cache_path, config.default_impact_days)
@@ -1359,7 +1367,11 @@ def load_policy_calendar(config: PolicyConfig, as_of: date) -> List[PolicyEvent]
             automatic_events = fresh_events
             _write_cached_events(config.cache_path, automatic_events)
 
-    return _attach_event_results(config, _merge_events(automatic_events, discovered_events, manual_events))
+    return _attach_event_results(
+        config,
+        _merge_events(automatic_events, discovered_events, manual_events),
+        refresh_results=refresh_results,
+    )
 
 
 def _event_window(

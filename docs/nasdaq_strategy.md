@@ -125,6 +125,8 @@ Event results use `result_source_tier`:
 
 Event-result collection runs only for events already in the calendar. The news capturer uses search results to locate candidate articles, then reads article content only from 财联社 or 华尔街见闻; RSS titles and summaries never determine the event result. Content results refresh every 12 hours.
 
+An external cron triggers the independent result capturer through `workflow_dispatch`. It merges manual, automatic, and confirmed discovered events into the calendar, de-duplicates by event ID, captures content for events in their result window, and writes `policy_event_news_cache.json`. The morning brief consumes this persisted cache rather than depending on a fresh fetch during rendering.
+
 ## Market Data Sources and Freshness
 
 The market-data layer no longer depends on Yahoo Finance as a single point of failure. The morning brief uses these priorities:
