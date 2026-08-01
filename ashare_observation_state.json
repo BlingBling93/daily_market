@@ -1,5 +1,5 @@
 {
-  "last_run_date": "2026-07-31",
+  "last_run_date": "2026-08-01",
   "long_term_tracking": [
     "600900",
     "603605",
@@ -12,79 +12,79 @@
   ],
   "tickers": {
     "002371": {
-      "avoid_streak": 15,
-      "last_avoid_date": "2026-07-31",
-      "last_evaluation_date": "2026-07-31",
+      "avoid_streak": 16,
+      "last_avoid_date": "2026-08-01",
+      "last_evaluation_date": "2026-08-01",
       "last_recommended_date": "2026-07-24",
       "recommend_streak": 0
     },
     "159740": {
       "avoid_streak": 0,
       "last_avoid_date": "2026-07-19",
-      "last_evaluation_date": "2026-07-31",
+      "last_evaluation_date": "2026-08-01",
       "recommend_streak": 0
     },
     "159949": {
-      "avoid_streak": 16,
-      "last_avoid_date": "2026-07-31",
-      "last_evaluation_date": "2026-07-31",
+      "avoid_streak": 17,
+      "last_avoid_date": "2026-08-01",
+      "last_evaluation_date": "2026-08-01",
       "recommend_streak": 0
     },
     "300750": {
       "avoid_streak": 0,
       "last_avoid_date": "2026-07-24",
-      "last_evaluation_date": "2026-07-31",
+      "last_evaluation_date": "2026-08-01",
       "last_recommended_date": "2026-06-26",
       "recommend_streak": 0
     },
     "300760": {
       "avoid_streak": 0,
       "last_avoid_date": "2026-07-24",
-      "last_evaluation_date": "2026-07-31",
+      "last_evaluation_date": "2026-08-01",
       "recommend_streak": 0
     },
     "516010": {
-      "avoid_streak": 14,
-      "last_avoid_date": "2026-07-31",
-      "last_evaluation_date": "2026-07-31",
+      "avoid_streak": 15,
+      "last_avoid_date": "2026-08-01",
+      "last_evaluation_date": "2026-08-01",
       "recommend_streak": 0
     },
     "600036": {
       "avoid_streak": 0,
       "last_avoid_date": "2026-07-17",
-      "last_evaluation_date": "2026-07-31",
+      "last_evaluation_date": "2026-08-01",
       "recommend_streak": 0
     },
     "600519": {
       "avoid_streak": 0,
       "last_avoid_date": "2026-07-15",
-      "last_evaluation_date": "2026-07-31",
-      "last_recommended_date": "2026-07-31",
-      "recommend_streak": 16
+      "last_evaluation_date": "2026-08-01",
+      "last_recommended_date": "2026-08-01",
+      "recommend_streak": 17
     },
     "600900": {
       "avoid_streak": 0,
       "last_avoid_date": "2026-07-14",
-      "last_evaluation_date": "2026-07-31",
+      "last_evaluation_date": "2026-08-01",
       "recommend_streak": 0
     },
     "601899": {
       "avoid_streak": 0,
       "last_avoid_date": "2026-07-24",
-      "last_evaluation_date": "2026-07-31",
+      "last_evaluation_date": "2026-08-01",
       "last_recommended_date": "2026-07-08",
       "recommend_streak": 0
     },
     "603605": {
       "avoid_streak": 0,
       "last_avoid_date": "2026-07-19",
-      "last_evaluation_date": "2026-07-31",
+      "last_evaluation_date": "2026-08-01",
       "recommend_streak": 0
     },
     "688111": {
-      "avoid_streak": 0,
-      "last_avoid_date": "2026-07-26",
-      "last_evaluation_date": "2026-07-31",
+      "avoid_streak": 1,
+      "last_avoid_date": "2026-08-01",
+      "last_evaluation_date": "2026-08-01",
       "last_recommended_date": "2026-07-24",
       "recommend_streak": 0
     }
