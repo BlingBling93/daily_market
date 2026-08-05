@@ -1,9 +1,9 @@
 {
-  "fetched_at": "2026-08-04T22:02:27.821070+00:00",
+  "fetched_at": "2026-08-05T22:02:32.707820+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
-      "fetched_at": "2026-08-04T22:02:19.882736+00:00",
+      "fetched_at": "2026-08-05T22:02:28.202088+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -12,9 +12,9 @@
         "site:wallstreetcn.com 美联储 利率决议"
       ],
       "diagnostics": [
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：cls.cn",
+        "候选域名不在允许范围：cls.cn",
+        "候选域名不在允许范围：cls.cn",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻"
@@ -57,7 +57,7 @@
       ]
     },
     "2026-07-30|通胀|PCE/个人收入支出发布": {
-      "fetched_at": "2026-08-04T22:02:21.857135+00:00",
+      "fetched_at": "2026-08-05T22:02:30.232236+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -66,9 +66,9 @@
         "site:wallstreetcn.com 美国 PCE 数据"
       ],
       "diagnostics": [
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：cls.cn",
+        "候选域名不在允许范围：cls.cn",
+        "候选域名不在允许范围：cls.cn",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻"
@@ -111,7 +111,7 @@
       ]
     },
     "2026-07-30|增长|GDP发布": {
-      "fetched_at": "2026-08-04T22:02:27.820960+00:00",
+      "fetched_at": "2026-08-05T22:02:32.235831+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -120,12 +120,26 @@
         "site:wallstreetcn.com 美国 GDP 数据"
       ],
       "diagnostics": [
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：cls.cn",
+        "候选域名不在允许范围：cls.cn",
+        "候选域名不在允许范围：cls.cn",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-08-05|美联储讲话|Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies": {
+      "fetched_at": "2026-08-05T22:02:32.707725+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies",
+        "site:wallstreetcn.com Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies"
+      ],
+      "diagnostics": [
+        "无候选文章：site:cls.cn Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies",
+        "无候选文章：site:wallstreetcn.com Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies"
       ]
     }
   }
