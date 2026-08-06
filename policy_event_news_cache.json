@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-05T22:02:32.707820+00:00",
+  "fetched_at": "2026-08-06T22:02:12.923989+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -57,7 +57,7 @@
       ]
     },
     "2026-07-30|通胀|PCE/个人收入支出发布": {
-      "fetched_at": "2026-08-05T22:02:30.232236+00:00",
+      "fetched_at": "2026-08-06T22:02:10.203038+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -66,9 +66,9 @@
         "site:wallstreetcn.com 美国 PCE 数据"
       ],
       "diagnostics": [
-        "候选域名不在允许范围：cls.cn",
-        "候选域名不在允许范围：cls.cn",
-        "候选域名不在允许范围：cls.cn",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻"
@@ -111,7 +111,7 @@
       ]
     },
     "2026-07-30|增长|GDP发布": {
-      "fetched_at": "2026-08-05T22:02:32.235831+00:00",
+      "fetched_at": "2026-08-06T22:02:12.450073+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -120,16 +120,16 @@
         "site:wallstreetcn.com 美国 GDP 数据"
       ],
       "diagnostics": [
-        "候选域名不在允许范围：cls.cn",
-        "候选域名不在允许范围：cls.cn",
-        "候选域名不在允许范围：cls.cn",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻"
       ]
     },
     "2026-08-05|美联储讲话|Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies": {
-      "fetched_at": "2026-08-05T22:02:32.707725+00:00",
+      "fetched_at": "2026-08-06T22:02:12.923869+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
