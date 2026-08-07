@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-06T22:02:12.923989+00:00",
+  "fetched_at": "2026-08-07T22:02:11.055200+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -129,7 +129,7 @@
       ]
     },
     "2026-08-05|美联储讲话|Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies": {
-      "fetched_at": "2026-08-06T22:02:12.923869+00:00",
+      "fetched_at": "2026-08-07T22:02:08.745885+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -140,6 +140,24 @@
       "diagnostics": [
         "无候选文章：site:cls.cn Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies",
         "无候选文章：site:wallstreetcn.com Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies"
+      ]
+    },
+    "2026-08-07|就业|非农就业发布": {
+      "fetched_at": "2026-08-07T22:02:11.055105+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 美国 非农就业 数据",
+        "site:wallstreetcn.com 美国 非农就业 数据"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
       ]
     }
   }

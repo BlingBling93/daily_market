@@ -1,55 +1,7 @@
 {
-  "fetched_at": "2026-08-06T22:00:32.345803+00:00",
+  "fetched_at": "2026-08-07T22:00:28.315188+00:00",
   "timezone": "America/New_York",
   "events": [
-    {
-      "date": "2026-06-22",
-      "category": "流动性",
-      "title": "The Qs Shift Gears: Nasdaq 100 Rebalances While SpaceX Looms",
-      "status": "expired",
-      "importance": 94,
-      "confidence": 57,
-      "market_channels": [
-        "流动性",
-        "美债利率",
-        "风险偏好",
-        "Nasdaq",
-        "QQQ"
-      ],
-      "summary": "ETF Database：The Qs Shift Gears: Nasdaq 100 Rebalances While SpaceX Looms；传导渠道：流动性、美债利率、风险偏好、Nasdaq、QQQ。",
-      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
-      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
-      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
-      "impact_days": 14,
-      "first_seen": "2026-06-23T22:00:52.992176+00:00",
-      "last_seen": "2026-06-28T22:00:41.056684+00:00",
-      "sources": [
-        "https://news.google.com/rss/articles/CBMihwFBVV95cUxOaTFvYWtHSVB5RnZVemoxaWNVWG5PenJvRzJYcW9iTGtNbDJvdnlXNkNPVXZxbWVGYTJGWk5UeDNmeDViSXhNUzhPbkRiZUJUOWotdFdnV05qTDN3bUtWU1hucGhUUF96bk5NWVZZMGVSZFdVcG5KcVhmb0pfS0Q1MGotek53dHc?oc=5"
-      ]
-    },
-    {
-      "date": "2026-06-22",
-      "category": "流动性",
-      "title": "Market news and financial updates",
-      "status": "expired",
-      "importance": 70,
-      "confidence": 47,
-      "market_channels": [
-        "流动性",
-        "美债利率",
-        "风险偏好"
-      ],
-      "summary": "ThinkMarkets：Market news and financial updates；传导渠道：流动性、美债利率、风险偏好。",
-      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
-      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
-      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
-      "impact_days": 14,
-      "first_seen": "2026-06-22T22:00:46.806779+00:00",
-      "last_seen": "2026-06-29T22:00:38.492933+00:00",
-      "sources": [
-        "https://news.google.com/rss/articles/CBMilgFBVV95cUxQOWliSnRkZXlHalc2ZlpvUUNiOUtmNTM2a2FVa3l2Z0ktU3dZc0FMbzdoMThCOUhBS0NQdEdVZTNSOFJnemo0NlZMWGZodXdRSU1VLTFLdXhWUW54OVRHZ21ZUnNJWDZycTVmNjZSWjhhT1EwU01FY2VrTDN4MlY3SWdGQWxqTEdZSzBLY1dsVmUtTElCdVE?oc=5"
-      ]
-    },
     {
       "date": "2026-06-23",
       "category": "指数调整",
@@ -1536,7 +1488,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-30T08:26:55.342919+00:00",
-      "last_seen": "2026-08-06T22:00:30.155622+00:00",
+      "last_seen": "2026-08-07T22:00:26.240825+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMilwFBVV95cUxOa1R0a3NYclplR0Nmd1JnQ3c4dmhaUHpIdDhLT2xqeGg5TkFvVEZoV214UUZTN2pJdkRMdWl5emNnSTJNQ2NUV1V6MnVEaTJ6XzJUQ3BrWDZ6emdhVkx1MDFsaWFKZktaektMR3lTUThaR3NsSkV1cUpBY0w4clllNmwxX1dYZ3p3NnJubzcyUy1SV3pWdWZj?oc=5"
       ]
