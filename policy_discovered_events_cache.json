@@ -1,31 +1,7 @@
 {
-  "fetched_at": "2026-08-07T22:00:28.315188+00:00",
+  "fetched_at": "2026-08-08T22:00:29.587568+00:00",
   "timezone": "America/New_York",
   "events": [
-    {
-      "date": "2026-06-23",
-      "category": "指数调整",
-      "title": "CoreWeave stock pops on Nasdaq-100 inclusion. What to know.",
-      "status": "expired",
-      "importance": 98,
-      "confidence": 57,
-      "market_channels": [
-        "指数权重",
-        "被动资金",
-        "QQQ",
-        "Nasdaq"
-      ],
-      "summary": "MSN：CoreWeave stock pops on Nasdaq-100 inclusion. What to know.；传导渠道：指数权重、被动资金、QQQ、Nasdaq。",
-      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
-      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
-      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
-      "impact_days": 5,
-      "first_seen": "2026-06-23T22:00:52.991565+00:00",
-      "last_seen": "2026-06-26T22:00:41.612477+00:00",
-      "sources": [
-        "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNdmpvaTlpRFJiSWktSjVqM29ucnZBZzFscGhCWVUtV0JjQ2NudTNmYlA2TkVVQzBiZlkzVHRVdlhJQW1ma2VRTzI3OEpXNjFPSjUzcXlPeDdEVEk4NEJPOGRyZ3F6VzFnRGFRQUFNODFwb0d4WU5GZVl6UVFIdFZmanVEYnJ2UjQzQ0NGMU0wS2tYdjdjeWVfOFNOT0dCWEE4UXZZMFlfY0djQ0E?oc=5"
-      ]
-    },
     {
       "date": "2026-06-24",
       "category": "流动性",
@@ -1488,7 +1464,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-07-30T08:26:55.342919+00:00",
-      "last_seen": "2026-08-07T22:00:26.240825+00:00",
+      "last_seen": "2026-08-08T22:00:27.043374+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMilwFBVV95cUxOa1R0a3NYclplR0Nmd1JnQ3c4dmhaUHpIdDhLT2xqeGg5TkFvVEZoV214UUZTN2pJdkRMdWl5emNnSTJNQ2NUV1V6MnVEaTJ6XzJUQ3BrWDZ6emdhVkx1MDFsaWFKZktaektMR3lTUThaR3NsSkV1cUpBY0w4clllNmwxX1dYZ3p3NnJubzcyUy1SV3pWdWZj?oc=5"
       ]
