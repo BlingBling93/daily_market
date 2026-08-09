@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-08T22:02:26.742561+00:00",
+  "fetched_at": "2026-08-09T22:02:25.662413+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -129,7 +129,7 @@
       ]
     },
     "2026-08-05|美联储讲话|Fed讲话：Cook, Outlook for the U.S. and Alaskan Economies": {
-      "fetched_at": "2026-08-08T22:02:23.147694+00:00",
+      "fetched_at": "2026-08-09T22:02:23.315054+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -143,7 +143,7 @@
       ]
     },
     "2026-08-07|就业|非农就业发布": {
-      "fetched_at": "2026-08-08T22:02:26.742438+00:00",
+      "fetched_at": "2026-08-09T22:02:25.662298+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
