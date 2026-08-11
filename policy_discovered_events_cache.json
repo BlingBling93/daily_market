@@ -1,30 +1,7 @@
 {
-  "fetched_at": "2026-08-10T22:00:28.226940+00:00",
+  "fetched_at": "2026-08-11T22:00:30.683018+00:00",
   "timezone": "America/New_York",
   "events": [
-    {
-      "date": "2026-06-26",
-      "category": "IPO",
-      "title": "Tech stocks live: Tech sells off as OpenAI weighs delaying IPO until 2027",
-      "status": "expired",
-      "importance": 70,
-      "confidence": 51,
-      "market_channels": [
-        "Nasdaq",
-        "流动性",
-        "成长股风险偏好"
-      ],
-      "summary": "Yahoo Finance：Tech stocks live: Tech sells off as OpenAI weighs delaying IPO until 2027；传导渠道：Nasdaq、流动性、成长股风险偏好。",
-      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
-      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
-      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
-      "impact_days": 5,
-      "first_seen": "2026-07-12T22:00:53.863519+00:00",
-      "last_seen": "2026-07-25T22:00:26.381905+00:00",
-      "sources": [
-        "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNOUhvcmxKaklGYUV0aGNxaU5Xdmh0WWhGUXM3OGU2Tm51RjhjWXNId19YZER2YnVRUFdOZHVNNUhua1RiRUVwVzdRdzkyQ1ZnUkJXckdsN3lZYnF4ZGlLMTV3a1A4TjdEbzZOMnJCTV9qZXkzY2lzLVRmSkxlakV5ZG1ZMDRxLThpMVNyakZVUFZEbGluOUdfRUlJT0QyQzNhTmxFYlYtMDNJRGlJcTNHOXp3bGRTcVZkT1VxZ0RoSFp2elIySkNPNg?oc=5"
-      ]
-    },
     {
       "date": "2026-06-28",
       "category": "IPO",
