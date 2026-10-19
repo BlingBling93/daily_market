@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-12T22:02:20.877692+00:00",
+  "fetched_at": "2026-10-19T03:37:14.382278+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -158,6 +158,20 @@
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻",
         "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-10-14|美联储讲话|Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank": {
+      "fetched_at": "2026-10-19T03:37:14.382129+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank",
+        "site:wallstreetcn.com Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank"
+      ],
+      "diagnostics": [
+        "无候选文章：site:cls.cn Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank",
+        "无候选文章：site:wallstreetcn.com Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank"
       ]
     }
   }
