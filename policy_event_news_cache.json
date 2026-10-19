@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-10-19T03:37:14.382278+00:00",
+  "fetched_at": "2026-10-19T22:02:29.504255+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -161,7 +161,7 @@
       ]
     },
     "2026-10-14|美联储讲话|Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank": {
-      "fetched_at": "2026-10-19T03:37:14.382129+00:00",
+      "fetched_at": "2026-10-19T22:02:29.504143+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
