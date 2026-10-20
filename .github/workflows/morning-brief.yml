@@ -82,6 +82,8 @@ jobs:
             output/brief.png
             output/ashare.html
             output/ashare.png
+            output/etf_sector_flow.html
+            output/etf_sector_flow.png
             output/*.log
             ashare_theme_heat_history.csv
             ashare_theme_etf.csv

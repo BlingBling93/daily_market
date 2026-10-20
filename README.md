@@ -6,6 +6,7 @@ Lightweight daily brief generators split by market so Nasdaq and A-share strateg
 
 - Nasdaq script pulls `QQQ`, `^NDX`, `^VIX`, `^VXN`, cross-asset data, valuation, and policy events
 - A-share script scores the local active watchlist and ETF direction pool
+- The A-share script also produces a standalone ETF sector-flow HTML/PNG card
 - Each script produces its own HTML card and PNG screenshot
 - Each script can push its own image to Feishu when configured
 - The Nasdaq script can still fall back to WeCom when configured
@@ -146,11 +147,44 @@ The A-share module is intentionally local-first:
 This keeps the daily card useful before connecting a paid source such as Wind,
 Choice, iFinD, Tushare Pro, JQData, or Ricequant.
 
+### ETF sector-flow card
+
+The A-share run creates a second, independent market card:
+
+- `output/etf_sector_flow.html`
+- `output/etf_sector_flow.png`
+
+It is designed for the existing `13:45` daily run, giving a near-close view of
+the current trading session before a tail-session trading decision. The card
+uses the full ETF direction list in `ashare_theme_etf.csv`; each row represents
+the `proxy_ticker` ETF chosen for that theme. It is therefore an **ETF proxy
+flow** view, not an aggregate of every ETF or every stock in an industry.
+
+Data and display rules:
+
+- Source: 东方财富 real-time quote data, using the representative ETF's
+  current-session main net flow and quote timestamp.
+- Unit: values are displayed in `亿元`.
+- Layout: a shared zero axis makes flows directly comparable. Positive flows
+  extend right in orange; negative flows extend left in green.
+- Ordering: net inflows are shown from strongest to weakest at the top; net
+  outflows run from closest-to-zero to strongest at the bottom. The card also
+  lists the top three flows in each direction.
+- Freshness: the title shows the latest successful quote timestamp. When the
+  market is closed, the timestamp is absent/stale, or a flow field is missing,
+  that ETF is labeled `暂无`; the prior trading session is never reused.
+- Disclaimer: the card is for intraday research only and does not constitute
+  investment advice.
+
+When Feishu push is configured, the A-share job sends the sector-flow card
+first and then the original A-share active-ideas card. `--no-push` still writes
+both cards locally without sending either image.
+
 ## GitHub Actions
 
 The cloud workflow lives in `.github/workflows/morning-brief.yml`. One external
-cron dispatch triggers the workflow once, and the workflow generates both the
-Nasdaq image and the A-share image in sequence.
+cron dispatch triggers the workflow once, and the workflow generates the Nasdaq
+image, ETF sector-flow image, and A-share active-ideas image in sequence.
 
 Set these repository secrets before enabling it:
 

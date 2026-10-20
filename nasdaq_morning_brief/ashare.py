@@ -13,7 +13,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from .config import AShareConfig
-from .models import AShareDirection, AShareIdea, AShareSnapshot
+from .models import AShareDirection, AShareIdea, AShareSnapshot, ETFThemeFlow
 
 
 EM_QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
@@ -765,6 +765,44 @@ def _fetch_fund_flow(symbol: str) -> Optional[FundFlowSnapshot]:
         return None
 
 
+def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
+    """Return the current-session main net flow from Eastmoney's quote API."""
+    try:
+        data = _fetch_json(
+            EM_QUOTE_URL,
+            {
+                "secid": _secid(symbol),
+                "fields": "f57,f58,f62,f124,f184",
+            },
+        ).get("data") or {}
+    except (OSError, TimeoutError, ValueError, json.JSONDecodeError):
+        return None
+
+    amount = _safe_float(data.get("f62"))
+    if amount is None:
+        return None
+    updated_at = None
+    raw_updated_at = _safe_float(data.get("f124"))
+    if raw_updated_at:
+        try:
+            updated_at = datetime.fromtimestamp(raw_updated_at).strftime("%Y-%m-%d %H:%M")
+        except (OverflowError, OSError, ValueError):
+            pass
+    # A zero timestamp is returned outside the intraday quote window. Treat it
+    # as unavailable instead of presenting a misleading all-zero flow chart.
+    if not updated_at or updated_at[:10] != date.today().isoformat():
+        return None
+    return ETFThemeFlow(
+        theme="",
+        proxy_ticker=symbol,
+        proxy_name=str(data.get("f58") or ""),
+        main_net_amount=amount,
+        main_net_pct=_safe_float(data.get("f184")),
+        updated_at=updated_at,
+        source="东方财富实时行情",
+    )
+
+
 def _fetch_theme_holdings(theme: ThemeCandidate, limit: int = AUTO_HOLDINGS_PER_THEME) -> List[Dict[str, object]]:
     holdings_cache = _LOW_FREQ_CACHE.setdefault("theme_holdings", {})
     if isinstance(holdings_cache, dict):
@@ -1008,6 +1046,40 @@ def _load_theme_candidates(path: Path, market_days_ago: int) -> List[ThemeCandid
             )
         )
     return sorted(candidates, key=lambda item: item.score, reverse=True)
+
+
+def _build_sector_flows(themes: List[ThemeCandidate], market_days_ago: int) -> List[ETFThemeFlow]:
+    """Build the full ETF proxy universe for the independent sector-flow card."""
+    flows: List[ETFThemeFlow] = []
+    for theme in themes:
+        # A historical debug report cannot honestly use today's intraday flow.
+        flow = None if market_days_ago else _fetch_etf_intraday_flow(theme.proxy_ticker)
+        if flow is None:
+            flows.append(
+                ETFThemeFlow(
+                    theme=theme.theme,
+                    proxy_ticker=theme.proxy_ticker,
+                    proxy_name=theme.proxy_name,
+                    main_net_amount=None,
+                    main_net_pct=None,
+                    updated_at=None,
+                    source="东方财富实时行情",
+                    data_note="盘中资金流暂不可用",
+                )
+            )
+            continue
+        flows.append(
+            ETFThemeFlow(
+                theme=theme.theme,
+                proxy_ticker=theme.proxy_ticker,
+                proxy_name=theme.proxy_name,
+                main_net_amount=flow.main_net_amount,
+                main_net_pct=flow.main_net_pct,
+                updated_at=flow.updated_at,
+                source=flow.source,
+            )
+        )
+    return flows
 
 
 def _save_theme_heat_history(path: Path, themes: List[ThemeCandidate], keep_batches: int = 2) -> None:
@@ -2107,6 +2179,7 @@ def build_ashare_snapshot(
             market_note="A股主动推荐模块未启用。",
             validation_summary=[],
             directions=[],
+            sector_flows=[],
             top_ideas=[],
             long_term_ideas=[],
             retained_ideas=[],
@@ -2136,6 +2209,7 @@ def build_ashare_snapshot(
         rows = list(csv.DictReader(handle))
 
     themes = _load_theme_candidates(theme_path, market_days_ago)
+    sector_flows = _build_sector_flows(themes, market_days_ago)
     if write_heat_history:
         _save_theme_heat_history(theme_heat_history_path, themes)
     validation_summary = _update_prediction_feedback(
@@ -2196,6 +2270,7 @@ def build_ashare_snapshot(
         market_note=_market_note(selected, auto_rows, today_ideas, config),
         validation_summary=validation_summary,
         directions=_build_directions(selected, auto_rows, limit=config.direction_top_n),
+        sector_flows=sector_flows,
         top_ideas=today_ideas,
         long_term_ideas=long_term_ideas,
         retained_ideas=retained_ideas,

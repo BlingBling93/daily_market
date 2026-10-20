@@ -1422,6 +1422,111 @@ def build_ashare_html(ashare: AShareSnapshot, config: AppConfig, as_of: str) -> 
 """
 
 
+def _fmt_flow_yi(amount: float | None) -> str:
+    if amount is None:
+        return "暂无"
+    return f"{amount / 100_000_000:+.2f}亿"
+
+
+def _etf_flow_row(theme, max_abs_amount: float) -> str:
+    amount = theme.main_net_amount
+    if amount is None:
+        return f"""
+          <li class="flow-row unavailable">
+            <span class="flow-name">{escape(theme.theme)}</span>
+            <div class="flow-track"><span class="flow-zero"></span></div>
+            <strong>暂无</strong>
+          </li>
+        """
+    width = min(47.0, abs(amount) / max_abs_amount * 47.0) if max_abs_amount else 0.0
+    flow_class = "inflow" if amount >= 0 else "outflow"
+    direction = "left" if amount < 0 else "right"
+    return f"""
+      <li class="flow-row {flow_class}">
+        <span class="flow-name">{escape(theme.theme)}</span>
+        <div class="flow-track"><span class="flow-zero"></span><i class="flow-bar {direction}" style="width:{width:.2f}%"></i></div>
+        <strong>{_fmt_flow_yi(amount)}</strong>
+      </li>
+    """
+
+
+def build_etf_sector_flow_html(ashare: AShareSnapshot, as_of: str) -> str:
+    """Render the standalone 13:45-style ETF proxy capital-flow card."""
+    known = [item for item in ashare.sector_flows if item.main_net_amount is not None]
+    inflows = sorted(
+        (item for item in known if (item.main_net_amount or 0) >= 0),
+        key=lambda item: item.main_net_amount or 0,
+        reverse=True,
+    )
+    # Small outflows appear closest to zero; the strongest outflow lands at the bottom.
+    outflows = sorted(
+        (item for item in known if (item.main_net_amount or 0) < 0),
+        key=lambda item: item.main_net_amount or 0,
+        reverse=True,
+    )
+    unavailable = [item for item in ashare.sector_flows if item.main_net_amount is None]
+    ordered = inflows + outflows + unavailable
+    max_abs_amount = max((abs(item.main_net_amount or 0) for item in known), default=0.0)
+    rows = "".join(_etf_flow_row(item, max_abs_amount) for item in ordered)
+    if not rows:
+        rows = '<li class="flow-empty">ETF板块资金流暂不可用</li>'
+    latest_times = sorted({item.updated_at for item in known if item.updated_at})
+    latest_time = latest_times[-1] if latest_times else "暂无"
+    inflow_top = " · ".join(item.theme for item in inflows[:3]) or "暂无"
+    outflow_top = " · ".join(item.theme for item in sorted(outflows, key=lambda item: item.main_net_amount or 0)[:3]) or "暂无"
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>ETF板块资金动向</title>
+  <style>
+    * {{ box-sizing: border-box; }}
+    body {{ margin: 0; background: #f3f5f2; color: #172033; font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", sans-serif; }}
+    .card {{ width: 960px; margin: 0 auto; padding: 36px 42px 32px; background: radial-gradient(circle at 96% 3%, rgba(255, 144, 79, .12), transparent 22%), linear-gradient(180deg, #fffdfa 0%, #f8faf7 100%); }}
+    .topbar {{ display: flex; align-items: center; justify-content: space-between; gap: 18px; }}
+    .label {{ padding: 9px 18px; color: #fff; background: #182033; font-size: 14px; font-weight: 900; letter-spacing: .1em; }}
+    .time {{ color: #ef7041; font-size: 16px; font-weight: 900; }}
+    h1 {{ margin: 20px 0 7px; font-size: 43px; line-height: 1.08; letter-spacing: -.03em; }}
+    .subtitle {{ margin: 0 0 25px; color: #747b85; font-size: 14px; font-weight: 700; }}
+    .legend {{ display: flex; gap: 20px; margin: 0 0 14px; color: #4d5662; font-size: 13px; font-weight: 800; }}
+    .legend i {{ display: inline-block; width: 10px; height: 10px; margin-right: 7px; border-radius: 50%; }}
+    .legend .orange {{ background: #f27a46; }} .legend .green {{ background: #20aa80; }}
+    .axis {{ display: grid; grid-template-columns: 145px 1fr 104px; gap: 12px; color: #9ba1a8; font-size: 11px; font-weight: 800; }}
+    .axis-scale {{ display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid #dce1dc; }}
+    .flow-list {{ margin: 4px 0 0; padding: 0; list-style: none; }}
+    .flow-row {{ display: grid; grid-template-columns: 145px 1fr 104px; gap: 12px; align-items: center; min-height: 43px; }}
+    .flow-name {{ color: #394351; text-align: right; font-size: 16px; font-weight: 800; }}
+    .flow-track {{ position: relative; height: 25px; overflow: hidden; background: linear-gradient(90deg, #edf0ee 0%, #f7f8f7 49.7%, #d5dcd7 49.7%, #d5dcd7 50.3%, #f7f8f7 50.3%, #edf0ee 100%); }}
+    .flow-zero {{ position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #d5dcd7; }}
+    .flow-bar {{ position: absolute; top: 3px; height: 19px; }}
+    .flow-bar.right {{ left: 50%; background: linear-gradient(90deg, #ffb06b, #f26f42); }}
+    .flow-bar.left {{ right: 50%; background: linear-gradient(90deg, #20a87e, #69ce9e); }}
+    .flow-row strong {{ font-size: 16px; font-weight: 900; }}
+    .inflow strong {{ color: #ec7041; }} .outflow strong {{ color: #20a078; }} .unavailable strong {{ color: #9aa0a8; }}
+    .flow-empty {{ padding: 28px; color: #7d848e; text-align: center; font-weight: 800; }}
+    .summary {{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }}
+    .summary div {{ padding: 14px 15px; border: 1px solid #e3e6e1; background: rgba(255, 255, 255, .8); }}
+    .summary span {{ display: block; color: #858c95; font-size: 12px; font-weight: 800; }}
+    .summary strong {{ display: block; margin-top: 6px; color: #303a48; font-size: 15px; }}
+    .footer {{ display: flex; justify-content: space-between; gap: 20px; margin-top: 20px; padding-top: 14px; border-top: 1px solid #e4e7e2; color: #9298a0; font-size: 11px; line-height: 1.45; }}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="topbar"><span class="label">ETF SECTOR FLOW</span><span class="time">截至 {escape(latest_time)}</span></div>
+    <h1>{escape(as_of)} ETF板块资金动向</h1>
+    <p class="subtitle">当前交易日盘中主力净流 · 单位：亿元 · 代表 ETF 代理口径</p>
+    <div class="legend"><span><i class="orange"></i>主力净流入</span><span><i class="green"></i>主力净流出</span></div>
+    <div class="axis"><span></span><div class="axis-scale"><span>流出</span><span>0</span><span>流入</span></div><span>净流金额</span></div>
+    <ul class="flow-list">{rows}</ul>
+    <div class="summary"><div><span>净流入前三</span><strong>{escape(inflow_top)}</strong></div><div><span>净流出前三</span><strong>{escape(outflow_top)}</strong></div></div>
+    <div class="footer"><span>数据：东方财富实时行情；板块取自本地 ETF 方向池。</span><span>仅供研究参考，不构成投资建议</span></div>
+  </main>
+</body>
+</html>
+"""
+
+
 def write_html(brief: Brief, config: AppConfig) -> Path:
     config.render.output_dir.mkdir(parents=True, exist_ok=True)
     output_path = config.render.output_dir / "brief.html"
@@ -1446,6 +1551,22 @@ def write_ashare_snapshot_html(
     output_path = config.render.output_dir / "ashare.html"
     output_path.write_text(
         build_ashare_html(ashare, config, as_of or date.today().isoformat()),
+        encoding="utf-8",
+    )
+    return output_path
+
+
+def write_etf_sector_flow_html(
+    ashare: AShareSnapshot,
+    config: AppConfig,
+    as_of: str | None = None,
+) -> Path | None:
+    if not ashare.enabled:
+        return None
+    config.render.output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = config.render.output_dir / "etf_sector_flow.html"
+    output_path.write_text(
+        build_etf_sector_flow_html(ashare, as_of or date.today().isoformat()),
         encoding="utf-8",
     )
     return output_path

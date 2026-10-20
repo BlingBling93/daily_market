@@ -142,12 +142,25 @@ class AShareDirection:
 
 
 @dataclass
+class ETFThemeFlow:
+    theme: str
+    proxy_ticker: str
+    proxy_name: str
+    main_net_amount: Optional[float]
+    main_net_pct: Optional[float]
+    updated_at: Optional[str]
+    source: str
+    data_note: str = ""
+
+
+@dataclass
 class AShareSnapshot:
     enabled: bool
     allocation_target: float
     market_note: str
     validation_summary: List[str]
     directions: List[AShareDirection]
+    sector_flows: List[ETFThemeFlow]
     top_ideas: List[AShareIdea]
     long_term_ideas: List[AShareIdea]
     retained_ideas: List[AShareIdea]

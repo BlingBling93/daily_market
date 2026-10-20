@@ -8,9 +8,9 @@ from urllib.error import HTTPError, URLError
 
 from .ashare import build_ashare_snapshot
 from .config import load_config
-from .feishu import push_image_to_feishu
+from .feishu import push_image_to_feishu, push_images_to_feishu
 from .models import AShareSnapshot
-from .render import write_ashare_snapshot_html, write_png
+from .render import write_ashare_snapshot_html, write_etf_sector_flow_html, write_png
 
 
 def parse_args() -> argparse.Namespace:
@@ -86,26 +86,34 @@ def main() -> int:
         if output_path is None:
             raise SystemExit("A-share module is disabled in config.")
         png_path = write_png(output_path, config, "ashare.png")
+        flow_output_path = write_etf_sector_flow_html(ashare, config, date.today().isoformat())
+        if flow_output_path is None:
+            raise SystemExit("A-share ETF sector-flow card is disabled in config.")
+        flow_png_path = write_png(flow_output_path, config, "etf_sector_flow.png")
     except CalledProcessError as exc:
         raise SystemExit(f"Failed to render A-share PNG screenshot: {exc}")
 
     if args.no_push:
         print(f"A-share HTML written to {output_path}")
         print(f"A-share PNG written to {png_path}")
+        print(f"ETF sector-flow HTML written to {flow_output_path}")
+        print(f"ETF sector-flow PNG written to {flow_png_path}")
         print("Push skipped: yes")
         return 0
 
     feishu_pushed = False
     if config.push.feishu_webhook:
-        feishu_pushed = push_image_to_feishu(
+        feishu_pushed = push_images_to_feishu(
             config.push.feishu_webhook,
             config.push.feishu_secret,
-            png_path,
+            [flow_png_path, png_path],
             config.push.feishu_app_id,
             config.push.feishu_app_secret,
         )
     print(f"A-share HTML written to {output_path}")
     print(f"A-share PNG written to {png_path}")
+    print(f"ETF sector-flow HTML written to {flow_output_path}")
+    print(f"ETF sector-flow PNG written to {flow_png_path}")
     print(f"Feishu pushed: {'yes' if feishu_pushed else 'no'}")
     if args.require_push and not feishu_pushed:
         raise SystemExit("Push required but Feishu push did not succeed. Check repository secrets.")
