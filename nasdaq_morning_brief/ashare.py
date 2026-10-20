@@ -772,7 +772,10 @@ def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
             EM_QUOTE_URL,
             {
                 "secid": _secid(symbol),
-                "fields": "f57,f58,f62,f124,f184",
+                # f86 is the quote timestamp also used by the existing ETF
+                # market-series fetcher. f124 is not consistently populated
+                # for ETF proxies and caused every flow to be discarded.
+                "fields": "f57,f58,f62,f86,f184",
             },
         ).get("data") or {}
     except (OSError, TimeoutError, ValueError, json.JSONDecodeError):
@@ -782,7 +785,7 @@ def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
     if amount is None:
         return None
     updated_at = None
-    raw_updated_at = _safe_float(data.get("f124"))
+    raw_updated_at = _safe_float(data.get("f86"))
     if raw_updated_at:
         try:
             updated_at = datetime.fromtimestamp(raw_updated_at).strftime("%Y-%m-%d %H:%M")
