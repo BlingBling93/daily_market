@@ -18,6 +18,7 @@ from .models import AShareDirection, AShareIdea, AShareSnapshot, ETFThemeFlow
 
 EM_QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
 EM_KLINE_URL = "https://push2his.eastmoney.com/api/qt/stock/kline/get"
+EM_INTRADAY_FFLOW_URL = "https://push2.eastmoney.com/api/qt/stock/fflow/kline/get"
 SINA_QUOTE_URL = "https://hq.sinajs.cn/list={symbols}"
 SINA_KLINE_URL = "https://quotes.sina.cn/cn/api/jsonp_v2.php/var%20_kline=/CN_MarketDataService.getKLineData"
 EM_HEADERS = {
@@ -766,43 +767,45 @@ def _fetch_fund_flow(symbol: str) -> Optional[FundFlowSnapshot]:
 
 
 def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
-    """Return the current-session main net flow from Eastmoney's quote API."""
+    """Return the latest minute's main net flow from Eastmoney's ETF flow API."""
     try:
         data = _fetch_json(
-            EM_QUOTE_URL,
+            EM_INTRADAY_FFLOW_URL,
             {
                 "secid": _secid(symbol),
-                # f86 is the quote timestamp also used by the existing ETF
-                # market-series fetcher. f124 is not consistently populated
-                # for ETF proxies and caused every flow to be discarded.
-                "fields": "f57,f58,f62,f86,f184",
+                "lmt": "1",
+                "klt": "1",
+                "fields1": "f1,f2,f3,f7",
+                "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65",
+                "ut": "b2884a393a59ad64002292a3e90d46a5",
+                "_": int(time.time() * 1000),
             },
         ).get("data") or {}
     except (OSError, TimeoutError, ValueError, json.JSONDecodeError):
         return None
 
-    amount = _safe_float(data.get("f62"))
+    rows = list(data.get("klines") or [])
+    if not rows:
+        return None
+    parts = str(rows[-1]).split(",")
+    if len(parts) < 2:
+        return None
+    updated_at = parts[0].strip()
+    amount = _safe_float(parts[1])
     if amount is None:
         return None
-    updated_at = None
-    raw_updated_at = _safe_float(data.get("f86"))
-    if raw_updated_at:
-        try:
-            updated_at = datetime.fromtimestamp(raw_updated_at).strftime("%Y-%m-%d %H:%M")
-        except (OverflowError, OSError, ValueError):
-            pass
-    # A zero timestamp is returned outside the intraday quote window. Treat it
-    # as unavailable instead of presenting a misleading all-zero flow chart.
+    # The minute-flow endpoint returns the last settled minute outside market
+    # hours. Do not display it as today's live card on another trading date.
     if not updated_at or updated_at[:10] != date.today().isoformat():
         return None
     return ETFThemeFlow(
         theme="",
         proxy_ticker=symbol,
-        proxy_name=str(data.get("f58") or ""),
+        proxy_name=str(data.get("name") or ""),
         main_net_amount=amount,
-        main_net_pct=_safe_float(data.get("f184")),
+        main_net_pct=None,
         updated_at=updated_at,
-        source="东方财富实时行情",
+        source="东方财富盘中资金流",
     )
 
 

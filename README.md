@@ -162,8 +162,8 @@ flow** view, not an aggregate of every ETF or every stock in an industry.
 
 Data and display rules:
 
-- Source: 东方财富 real-time quote data, using the representative ETF's
-  current-session main net flow and quote timestamp.
+- Source: 东方财富 minute-level fund-flow data, using the representative ETF's
+  latest current-session main net flow and minute timestamp.
 - Unit: values are displayed in `亿元`.
 - Layout: a shared zero axis makes flows directly comparable. Positive flows
   extend right in orange; negative flows extend left in green.
