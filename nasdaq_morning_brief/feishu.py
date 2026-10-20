@@ -8,7 +8,7 @@ import time
 import uuid
 from pathlib import Path
 from typing import Optional
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from .models import Brief
@@ -17,6 +17,8 @@ from .wechat import build_text_summary
 
 TENANT_TOKEN_URL = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
 IMAGE_UPLOAD_URL = "https://open.feishu.cn/open-apis/im/v1/images"
+IMAGE_UPLOAD_ATTEMPTS = 3
+IMAGE_UPLOAD_RETRY_SECONDS = (1, 2)
 
 
 def _post_json(url: str, payload: dict, headers: Optional[dict] = None) -> dict:
@@ -86,32 +88,53 @@ def _build_multipart_image(image_path: Path) -> tuple[bytes, str]:
 
 
 def _upload_image(image_path: Path, app_id: str, app_secret: str) -> str:
-    token = _get_tenant_access_token(app_id, app_secret)
     body, boundary = _build_multipart_image(image_path)
-    request = Request(
-        IMAGE_UPLOAD_URL,
-        data=body,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": f"multipart/form-data; boundary={boundary}",
-        },
-        method="POST",
+    last_error: Exception | None = None
+    for attempt in range(IMAGE_UPLOAD_ATTEMPTS):
+        try:
+            # Refreshing the tenant token for each retry avoids retrying with a
+            # token that expired while the original request was stalled.
+            token = _get_tenant_access_token(app_id, app_secret)
+            request = Request(
+                IMAGE_UPLOAD_URL,
+                data=body,
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": f"multipart/form-data; boundary={boundary}",
+                },
+                method="POST",
+            )
+            with urlopen(request, timeout=30) as response:
+                response_body = response.read().decode("utf-8")
+                if response.status >= 400:
+                    raise RuntimeError(
+                        f"Feishu image upload failed with status {response.status}: {response_body}"
+                    )
+                data = json.loads(response_body or "{}")
+            if data.get("code") != 0:
+                raise RuntimeError(f"Feishu image upload returned error: {data}")
+            image_key = data.get("data", {}).get("image_key")
+            if not image_key:
+                raise RuntimeError(f"Feishu image key missing: {data}")
+            return image_key
+        except HTTPError as exc:
+            # Client errors are not transient: retrying a malformed request or
+            # bad credentials only delays the daily report.
+            error_body = exc.read().decode("utf-8", "ignore")
+            if exc.code < 500 and exc.code != 429:
+                raise RuntimeError(f"Feishu image upload failed with status {exc.code}: {error_body}") from exc
+            last_error = RuntimeError(f"Feishu image upload failed with status {exc.code}: {error_body}")
+        except (TimeoutError, URLError, OSError) as exc:
+            last_error = exc
+
+        if attempt < IMAGE_UPLOAD_ATTEMPTS - 1:
+            delay = IMAGE_UPLOAD_RETRY_SECONDS[attempt]
+            print(f"Feishu image upload retry {attempt + 1}/{IMAGE_UPLOAD_ATTEMPTS - 1} in {delay}s: {last_error}")
+            time.sleep(delay)
+
+    raise RuntimeError(
+        f"Feishu image upload failed after {IMAGE_UPLOAD_ATTEMPTS} attempts: {last_error}"
     )
-    try:
-        with urlopen(request, timeout=30) as response:
-            response_body = response.read().decode("utf-8")
-            if response.status >= 400:
-                raise RuntimeError(f"Feishu image upload failed with status {response.status}: {response_body}")
-            data = json.loads(response_body or "{}")
-    except HTTPError as exc:
-        error_body = exc.read().decode("utf-8", "ignore")
-        raise RuntimeError(f"Feishu image upload failed with status {exc.code}: {error_body}") from exc
-    if data.get("code") != 0:
-        raise RuntimeError(f"Feishu image upload returned error: {data}")
-    image_key = data.get("data", {}).get("image_key")
-    if not image_key:
-        raise RuntimeError(f"Feishu image key missing: {data}")
-    return image_key
 
 
 def _send_webhook(webhook: str, payload: dict, secret: Optional[str]) -> None:
@@ -174,16 +197,21 @@ def push_images_to_feishu(
 
     sent_any = False
     for image_path in image_paths:
-        image_key = _upload_image(image_path, app_id, app_secret)
-        _send_webhook(
-            webhook,
-            {
-                "msg_type": "image",
-                "content": {"image_key": image_key},
-            },
-            secret,
-        )
-        sent_any = True
+        try:
+            image_key = _upload_image(image_path, app_id, app_secret)
+            _send_webhook(
+                webhook,
+                {
+                    "msg_type": "image",
+                    "content": {"image_key": image_key},
+                },
+                secret,
+            )
+            sent_any = True
+        except (RuntimeError, TimeoutError, URLError, OSError) as exc:
+            # A failed sector card must not prevent the original A-share card
+            # (or the Nasdaq card in the combined workflow) from being sent.
+            print(f"Feishu image push failed for {image_path.name}; continuing: {exc}")
     return sent_any
 
 

@@ -178,7 +178,9 @@ Data and display rules:
 
 When Feishu push is configured, the A-share job sends the sector-flow card
 first and then the original A-share active-ideas card. `--no-push` still writes
-both cards locally without sending either image.
+both cards locally without sending either image. Image upload is retried up to
+three times for transient network failures; if one card still cannot be sent,
+the job continues with the next card and fails only when no image was sent.
 
 ## GitHub Actions
 
