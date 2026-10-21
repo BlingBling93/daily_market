@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-10-20T22:02:38.210260+00:00",
+  "fetched_at": "2026-10-21T22:02:43.473300+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -161,7 +161,7 @@
       ]
     },
     "2026-10-14|美联储讲话|Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank": {
-      "fetched_at": "2026-10-20T22:02:38.210127+00:00",
+      "fetched_at": "2026-10-21T22:02:37.484149+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -172,6 +172,42 @@
       "diagnostics": [
         "无候选文章：site:cls.cn Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank",
         "无候选文章：site:wallstreetcn.com Fed讲话：Bowman, Supervisory Modernization After Silicon Valley Bank"
+      ]
+    },
+    "2026-10-21|财报|META财报": {
+      "fetched_at": "2026-10-21T22:02:40.344849+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn Meta 财报",
+        "site:wallstreetcn.com Meta 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-10-21|财报|TSLA财报": {
+      "fetched_at": "2026-10-21T22:02:43.473211+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 特斯拉 财报",
+        "site:wallstreetcn.com 特斯拉 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
       ]
     }
   }
