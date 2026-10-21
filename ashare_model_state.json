@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-10-20T08:05:54",
-  "evaluated_samples": 1069,
-  "latest_evaluated_date": "2026-10-19",
+  "updated_at": "2026-10-21T05:49:58",
+  "evaluated_samples": 1090,
+  "latest_evaluated_date": "2026-10-20",
   "window_days": 20,
   "benchmark": "上证指数",
   "universe_excess_weight": 0.65,
@@ -10,22 +10,22 @@
     "1d": {
       "sample_count": 414,
       "date_count": 20,
-      "top_hit_rate": 0.4,
-      "strong_hit_rate": 0.4696,
-      "avg_effective_excess": -0.002,
-      "avg_universe_excess": -0.0292,
-      "avg_benchmark_excess": 0.0483,
-      "avg_loss": 0.2146
+      "top_hit_rate": 0.3833,
+      "strong_hit_rate": 0.4566,
+      "avg_effective_excess": -0.0157,
+      "avg_universe_excess": -0.0372,
+      "avg_benchmark_excess": 0.0242,
+      "avg_loss": 0.2118
     },
     "2d": {
       "sample_count": 414,
       "date_count": 20,
       "top_hit_rate": 0.4,
-      "strong_hit_rate": 0.5016,
-      "avg_effective_excess": 0.0329,
-      "avg_universe_excess": 0.0035,
-      "avg_benchmark_excess": 0.0875,
-      "avg_loss": 0.2134
+      "strong_hit_rate": 0.4952,
+      "avg_effective_excess": 0.03,
+      "avg_universe_excess": -0.0039,
+      "avg_benchmark_excess": 0.093,
+      "avg_loss": 0.2128
     },
     "5d": {
       "sample_count": 414,
@@ -61,30 +61,30 @@
   "parameter_diagnostics": [
     {
       "group": "动作:暂不配置",
-      "samples": "307",
-      "hit_1d": "47%",
+      "samples": "305",
+      "hit_1d": "46%",
       "hit_5d": "48%",
-      "hit_20d": "67%",
-      "excess_1d": "+0.12%",
+      "hit_20d": "68%",
+      "excess_1d": "+0.14%",
       "loss_1d": "0.21"
     },
     {
       "group": "动作:持有观察",
-      "samples": "78",
-      "hit_1d": "45%",
+      "samples": "82",
+      "hit_1d": "43%",
       "hit_5d": "56%",
-      "hit_20d": "88%",
-      "excess_1d": "-0.15%",
+      "hit_20d": "87%",
+      "excess_1d": "-0.21%",
       "loss_1d": "0.22"
     },
     {
       "group": "动作:等回调",
-      "samples": "23",
-      "hit_1d": "4%",
+      "samples": "21",
+      "hit_1d": "5%",
       "hit_5d": "0%",
       "hit_20d": "0%",
-      "excess_1d": "-0.96%",
-      "loss_1d": "0.16"
+      "excess_1d": "-1.02%",
+      "loss_1d": "0.15"
     },
     {
       "group": "动作:减仓降温",
@@ -106,20 +106,20 @@
     },
     {
       "group": "分数:<58",
-      "samples": "302",
+      "samples": "301",
       "hit_1d": "44%",
       "hit_5d": "45%",
-      "hit_20d": "67%",
-      "excess_1d": "+0.08%",
+      "hit_20d": "68%",
+      "excess_1d": "+0.07%",
       "loss_1d": "0.20"
     },
     {
       "group": "分数:58-67",
-      "samples": "102",
-      "hit_1d": "44%",
-      "hit_5d": "56%",
-      "hit_20d": "71%",
-      "excess_1d": "-0.24%",
+      "samples": "103",
+      "hit_1d": "42%",
+      "hit_5d": "55%",
+      "hit_20d": "72%",
+      "excess_1d": "-0.22%",
       "loss_1d": "0.24"
     },
     {
@@ -133,29 +133,29 @@
     },
     {
       "group": "状态:非过热",
-      "samples": "385",
-      "hit_1d": "47%",
+      "samples": "387",
+      "hit_1d": "45%",
       "hit_5d": "50%",
-      "hit_20d": "71%",
-      "excess_1d": "+0.07%",
+      "hit_20d": "72%",
+      "excess_1d": "+0.06%",
       "loss_1d": "0.21"
     },
     {
       "group": "状态:短线过热",
-      "samples": "29",
-      "hit_1d": "10%",
-      "hit_5d": "21%",
-      "hit_20d": "21%",
-      "excess_1d": "-0.87%",
+      "samples": "27",
+      "hit_1d": "11%",
+      "hit_5d": "22%",
+      "hit_20d": "22%",
+      "excess_1d": "-0.91%",
       "loss_1d": "0.25"
     },
     {
       "group": "风格:tech",
       "samples": "99",
-      "hit_1d": "46%",
-      "hit_5d": "55%",
-      "hit_20d": "90%",
-      "excess_1d": "-0.74%",
+      "hit_1d": "41%",
+      "hit_5d": "53%",
+      "hit_20d": "91%",
+      "excess_1d": "-0.51%",
       "loss_1d": "0.24"
     },
     {
@@ -163,8 +163,8 @@
       "samples": "40",
       "hit_1d": "48%",
       "hit_5d": "39%",
-      "hit_20d": "45%",
-      "excess_1d": "+0.17%",
+      "hit_20d": "44%",
+      "excess_1d": "+0.20%",
       "loss_1d": "0.14"
     }
   ]
