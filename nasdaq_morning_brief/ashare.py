@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import logging
 import math
 import statistics
 import time
@@ -26,6 +27,8 @@ EM_HEADERS = {
     "Referer": "https://quote.eastmoney.com/",
     "Accept": "application/json,text/plain,*/*",
 }
+
+LOGGER = logging.getLogger(__name__)
 
 
 @dataclass
@@ -310,16 +313,18 @@ def _scale_price(raw_value: object, symbol: str) -> float:
     return float(raw_value) / divisor
 
 
-def _fetch_json(url: str, params: Dict[str, object]) -> Dict[str, object]:
+def _fetch_json(url: str, params: Dict[str, object], attempts: int = 1) -> Dict[str, object]:
     request = Request(f"{url}?{urlencode(params)}", headers=EM_HEADERS)
     last_error: Exception | None = None
-    for attempt in range(1):
+    attempts = max(1, attempts)
+    for attempt in range(attempts):
         try:
             with urlopen(request, timeout=15) as response:
                 return json.loads(response.read().decode("utf-8"))
         except (OSError, TimeoutError, json.JSONDecodeError) as exc:
             last_error = exc
-            time.sleep(0.8 * (attempt + 1))
+            if attempt + 1 < attempts:
+                time.sleep(0.8 * (attempt + 1))
     raise ValueError(f"Eastmoney request failed: {last_error}")
 
 
@@ -768,45 +773,66 @@ def _fetch_fund_flow(symbol: str) -> Optional[FundFlowSnapshot]:
 
 def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
     """Return the latest minute's main net flow from Eastmoney's ETF flow API."""
-    try:
-        data = _fetch_json(
-            EM_INTRADAY_FFLOW_URL,
-            {
-                "secid": _secid(symbol),
-                "lmt": "1",
-                "klt": "1",
-                "fields1": "f1,f2,f3,f7",
-                "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65",
-                "ut": "b2884a393a59ad64002292a3e90d46a5",
-                "_": int(time.time() * 1000),
-            },
-        ).get("data") or {}
-    except (OSError, TimeoutError, ValueError, json.JSONDecodeError):
-        return None
+    last_reason = "unknown response"
+    for attempt in range(3):
+        try:
+            data = _fetch_json(
+                EM_INTRADAY_FFLOW_URL,
+                {
+                    "secid": _secid(symbol),
+                    "lmt": "1",
+                    "klt": "1",
+                    "fields1": "f1,f2,f3,f7",
+                    "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65",
+                    "ut": "b2884a393a59ad64002292a3e90d46a5",
+                    # Refresh this cache-busting value on every retry.
+                    "_": int(time.time() * 1000),
+                },
+            ).get("data") or {}
+        except (OSError, TimeoutError, ValueError, json.JSONDecodeError) as exc:
+            last_reason = f"request failed: {type(exc).__name__}: {exc}"
+        else:
+            rows = list(data.get("klines") or [])
+            if not rows:
+                last_reason = "empty minute-flow kline response"
+            else:
+                parts = str(rows[-1]).split(",")
+                if len(parts) < 2:
+                    last_reason = "malformed minute-flow kline"
+                else:
+                    updated_at = parts[0].strip()
+                    amount = _safe_float(parts[1])
+                    if amount is None:
+                        last_reason = "minute-flow amount is missing"
+                    # The endpoint returns the prior settled minute outside
+                    # market hours. It is not a retryable failure: never show
+                    # a prior trading session as today's live card.
+                    elif not updated_at or updated_at[:10] != date.today().isoformat():
+                        LOGGER.warning(
+                            "ETF intraday flow unavailable for %s: stale timestamp %r",
+                            symbol,
+                            updated_at,
+                        )
+                        return None
+                    else:
+                        return ETFThemeFlow(
+                            theme="",
+                            proxy_ticker=symbol,
+                            proxy_name=str(data.get("name") or ""),
+                            main_net_amount=amount,
+                            main_net_pct=None,
+                            updated_at=updated_at,
+                            source="东方财富盘中资金流",
+                        )
+        if attempt < 2:
+            time.sleep(0.8 * (attempt + 1))
 
-    rows = list(data.get("klines") or [])
-    if not rows:
-        return None
-    parts = str(rows[-1]).split(",")
-    if len(parts) < 2:
-        return None
-    updated_at = parts[0].strip()
-    amount = _safe_float(parts[1])
-    if amount is None:
-        return None
-    # The minute-flow endpoint returns the last settled minute outside market
-    # hours. Do not display it as today's live card on another trading date.
-    if not updated_at or updated_at[:10] != date.today().isoformat():
-        return None
-    return ETFThemeFlow(
-        theme="",
-        proxy_ticker=symbol,
-        proxy_name=str(data.get("name") or ""),
-        main_net_amount=amount,
-        main_net_pct=None,
-        updated_at=updated_at,
-        source="东方财富盘中资金流",
+    LOGGER.warning(
+        "ETF intraday flow unavailable for %s after 3 attempts: %s",
+        symbol,
+        last_reason,
     )
+    return None
 
 
 def _fetch_theme_holdings(theme: ThemeCandidate, limit: int = AUTO_HOLDINGS_PER_THEME) -> List[Dict[str, object]]:
