@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-23T05:57:12",
-  "evaluated_samples": 1129,
+  "updated_at": "2026-10-24T05:51:19",
+  "evaluated_samples": 1132,
   "latest_evaluated_date": "2026-10-22",
   "window_days": 20,
   "benchmark": "上证指数",
@@ -8,24 +8,24 @@
   "benchmark_excess_weight": 0.35,
   "horizons": {
     "1d": {
-      "sample_count": 411,
+      "sample_count": 414,
       "date_count": 20,
-      "top_hit_rate": 0.4483,
-      "strong_hit_rate": 0.4677,
-      "avg_effective_excess": 0.0168,
-      "avg_universe_excess": -0.008,
-      "avg_benchmark_excess": 0.0628,
-      "avg_loss": 0.1989
+      "top_hit_rate": 0.45,
+      "strong_hit_rate": 0.4662,
+      "avg_effective_excess": 0.0155,
+      "avg_universe_excess": -0.0096,
+      "avg_benchmark_excess": 0.0621,
+      "avg_loss": 0.1987
     },
     "2d": {
-      "sample_count": 411,
+      "sample_count": 414,
       "date_count": 20,
-      "top_hit_rate": 0.4576,
-      "strong_hit_rate": 0.5016,
-      "avg_effective_excess": 0.0408,
-      "avg_universe_excess": 0.0047,
-      "avg_benchmark_excess": 0.1078,
-      "avg_loss": 0.205
+      "top_hit_rate": 0.4667,
+      "strong_hit_rate": 0.5,
+      "avg_effective_excess": 0.0414,
+      "avg_universe_excess": 0.0052,
+      "avg_benchmark_excess": 0.1085,
+      "avg_loss": 0.204
     },
     "5d": {
       "sample_count": 414,
@@ -74,8 +74,8 @@
       "hit_1d": "49%",
       "hit_5d": "65%",
       "hit_20d": "90%",
-      "excess_1d": "+0.00%",
-      "loss_1d": "0.20"
+      "excess_1d": "-0.01%",
+      "loss_1d": "0.19"
     },
     {
       "group": "动作:等回调",
@@ -119,8 +119,8 @@
       "hit_1d": "47%",
       "hit_5d": "62%",
       "hit_20d": "73%",
-      "excess_1d": "+0.02%",
-      "loss_1d": "0.22"
+      "excess_1d": "+0.01%",
+      "loss_1d": "0.21"
     },
     {
       "group": "分数:68-71",
@@ -152,10 +152,10 @@
     {
       "group": "风格:tech",
       "samples": "99",
-      "hit_1d": "45%",
+      "hit_1d": "44%",
       "hit_5d": "57%",
       "hit_20d": "90%",
-      "excess_1d": "-0.71%",
+      "excess_1d": "-0.69%",
       "loss_1d": "0.22"
     },
     {
