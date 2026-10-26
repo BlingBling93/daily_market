@@ -1472,6 +1472,15 @@ def build_etf_sector_flow_html(ashare: AShareSnapshot, as_of: str) -> str:
         rows = '<li class="flow-empty">ETF板块资金流暂不可用</li>'
     latest_times = sorted({item.updated_at for item in known if item.updated_at})
     latest_time = latest_times[-1] if latest_times else "暂无"
+    latest_dates = {timestamp[:10] for timestamp in latest_times if len(timestamp) >= 10}
+    is_current_session = latest_dates == {as_of}
+    flow_subtitle = (
+        "当前交易日主力净流 · 单位：亿元 · 代表 ETF 代理口径"
+        if is_current_session
+        else "最近可用交易日主力净流 · 单位：亿元 · 数据日期详见右上角"
+    )
+    sources = sorted({item.source for item in known if item.source})
+    source_label = " / ".join(sources) if sources else "暂不可用"
     inflow_top = " · ".join(item.theme for item in inflows[:3]) or "暂无"
     outflow_top = " · ".join(item.theme for item in sorted(outflows, key=lambda item: item.main_net_amount or 0)[:3]) or "暂无"
     return f"""<!DOCTYPE html>
@@ -1515,12 +1524,12 @@ def build_etf_sector_flow_html(ashare: AShareSnapshot, as_of: str) -> str:
   <main class="card">
     <div class="topbar"><span class="label">ETF SECTOR FLOW</span><span class="time">截至 {escape(latest_time)}</span></div>
     <h1>{escape(as_of)} ETF板块资金动向</h1>
-    <p class="subtitle">当前交易日盘中主力净流 · 单位：亿元 · 代表 ETF 代理口径</p>
+    <p class="subtitle">{escape(flow_subtitle)}</p>
     <div class="legend"><span><i class="orange"></i>主力净流入</span><span><i class="green"></i>主力净流出</span></div>
     <div class="axis"><span></span><div class="axis-scale"><span>流出</span><span>0</span><span>流入</span></div><span>净流金额</span></div>
     <ul class="flow-list">{rows}</ul>
     <div class="summary"><div><span>净流入前三</span><strong>{escape(inflow_top)}</strong></div><div><span>净流出前三</span><strong>{escape(outflow_top)}</strong></div></div>
-    <div class="footer"><span>数据：东方财富实时行情；板块取自本地 ETF 方向池。</span><span>仅供研究参考，不构成投资建议</span></div>
+    <div class="footer"><span>数据：{escape(source_label)}；板块取自本地 ETF 方向池。</span><span>仅供研究参考，不构成投资建议</span></div>
   </main>
 </body>
 </html>

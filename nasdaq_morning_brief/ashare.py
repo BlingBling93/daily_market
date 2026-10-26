@@ -22,6 +22,7 @@ EM_KLINE_URL = "https://push2his.eastmoney.com/api/qt/stock/kline/get"
 EM_INTRADAY_FFLOW_URL = "https://push2.eastmoney.com/api/qt/stock/fflow/kline/get"
 SINA_QUOTE_URL = "https://hq.sinajs.cn/list={symbols}"
 SINA_KLINE_URL = "https://quotes.sina.cn/cn/api/jsonp_v2.php/var%20_kline=/CN_MarketDataService.getKLineData"
+SINA_ETF_FLOW_URL = "https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/MoneyFlow.ssl_qsfx_zjlrqs?daima={symbol}"
 EM_HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "Referer": "https://quote.eastmoney.com/",
@@ -776,7 +777,38 @@ def _fetch_fund_flow(symbol: str) -> Optional[FundFlowSnapshot]:
         return None
 
 
-def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
+def _fetch_sina_etf_flow(symbol: str) -> ETFThemeFlow | None:
+    """Return Sina's latest ETF main-flow record (usually delayed 5-10 minutes)."""
+    try:
+        payload = json.loads(_fetch_text(SINA_ETF_FLOW_URL.format(symbol=_sina_symbol(symbol))))
+    except (OSError, TimeoutError, ValueError, json.JSONDecodeError) as exc:
+        LOGGER.warning("Sina ETF flow unavailable for %s: %s", symbol, exc)
+        return None
+    if not isinstance(payload, list) or not payload:
+        LOGGER.warning("Sina ETF flow unavailable for %s: empty response", symbol)
+        return None
+    latest = payload[0]
+    if not isinstance(latest, dict):
+        LOGGER.warning("Sina ETF flow unavailable for %s: malformed response", symbol)
+        return None
+    amount = _safe_float(latest.get("r0_net"))
+    updated_at = str(latest.get("opendate") or "").strip()
+    if amount is None or not updated_at:
+        LOGGER.warning("Sina ETF flow unavailable for %s: missing amount or date", symbol)
+        return None
+    return ETFThemeFlow(
+        theme="",
+        proxy_ticker=symbol,
+        proxy_name="",
+        main_net_amount=amount,
+        main_net_pct=_safe_float(latest.get("r0_ratio")),
+        updated_at=updated_at,
+        source="新浪财经资金流向",
+        data_note="新浪Level-1统计；通常延迟5-10分钟",
+    )
+
+
+def _fetch_eastmoney_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
     """Return the latest minute's main net flow from Eastmoney's ETF flow API."""
     last_reason = "unknown response"
     for attempt in range(3):
@@ -838,6 +870,11 @@ def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
         last_reason,
     )
     return None
+
+
+def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
+    """Fetch ETF flow from Sina first, then use Eastmoney as a live fallback."""
+    return _fetch_sina_etf_flow(symbol) or _fetch_eastmoney_etf_intraday_flow(symbol)
 
 
 def _fetch_theme_holdings(theme: ThemeCandidate, limit: int = AUTO_HOLDINGS_PER_THEME) -> List[Dict[str, object]]:

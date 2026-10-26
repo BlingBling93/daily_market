@@ -162,17 +162,19 @@ flow** view, not an aggregate of every ETF or every stock in an industry.
 
 Data and display rules:
 
-- Source: 东方财富 minute-level fund-flow data, using the representative ETF's
-  latest current-session main net flow and minute timestamp.
+- Primary source: 新浪财经资金流向，using the representative ETF's `r0_net`
+  (main-net-flow) field. 新浪 computes the indicator from Level-1 quotes and
+  normally publishes it with a 5–10 minute delay. 东方财富 minute-level flow
+  remains a fallback when 新浪 is unavailable.
 - Unit: values are displayed in `亿元`.
 - Layout: a shared zero axis makes flows directly comparable. Positive flows
   extend right in orange; negative flows extend left in green.
 - Ordering: net inflows are shown from strongest to weakest at the top; net
   outflows run from closest-to-zero to strongest at the bottom. The card also
   lists the top three flows in each direction.
-- Freshness: the title shows the latest successful quote timestamp. When the
-  market is closed, the timestamp is absent/stale, or a flow field is missing,
-  that ETF is labeled `暂无`; the prior trading session is never reused.
+- Freshness: the title shows the source's actual data timestamp. When the
+  source has not published the current session yet, the subtitle explicitly
+  says `最近可用交易日`; it never labels prior-session data as today's live flow.
 - Disclaimer: the card is for intraday research only and does not constitute
   investment advice.
 
