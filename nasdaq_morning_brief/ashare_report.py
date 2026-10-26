@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import math
 from datetime import date
 from pathlib import Path
 from subprocess import CalledProcessError
@@ -8,9 +9,24 @@ from urllib.error import HTTPError, URLError
 
 from .ashare import build_ashare_snapshot
 from .config import load_config
-from .feishu import push_image_to_feishu, push_images_to_feishu
+from .feishu import push_image_to_feishu, push_images_to_feishu, push_text_to_feishu
 from .models import AShareSnapshot
 from .render import write_ashare_snapshot_html, write_etf_sector_flow_html, write_png
+
+
+ETF_FLOW_MIN_COVERAGE = 0.80
+
+
+def _current_etf_flow_coverage(ashare: AShareSnapshot, as_of: str) -> tuple[int, int, bool]:
+    total = len(ashare.sector_flows)
+    valid = sum(
+        flow.main_net_amount is not None
+        and bool(flow.updated_at)
+        and flow.updated_at[:10] == as_of
+        for flow in ashare.sector_flows
+    )
+    required = math.ceil(total * ETF_FLOW_MIN_COVERAGE)
+    return valid, total, valid >= required
 
 
 def parse_args() -> argparse.Namespace:
@@ -101,19 +117,32 @@ def main() -> int:
         print("Push skipped: yes")
         return 0
 
+    as_of = date.today().isoformat()
+    valid_flow_count, total_flow_count, flow_ready = _current_etf_flow_coverage(ashare, as_of)
     feishu_pushed = False
     if config.push.feishu_webhook:
-        feishu_pushed = push_images_to_feishu(
-            config.push.feishu_webhook,
-            config.push.feishu_secret,
-            [flow_png_path, png_path],
-            config.push.feishu_app_id,
-            config.push.feishu_app_secret,
-        )
+        if flow_ready:
+            feishu_pushed = push_images_to_feishu(
+                config.push.feishu_webhook,
+                config.push.feishu_secret,
+                [flow_png_path, png_path],
+                config.push.feishu_app_id,
+                config.push.feishu_app_secret,
+            )
+        else:
+            feishu_pushed = push_text_to_feishu(
+                config.push.feishu_webhook,
+                config.push.feishu_secret,
+                (
+                    f"ETF资金流卡片未发送：当日有效数据 {valid_flow_count}/{total_flow_count}，"
+                    f"低于 {ETF_FLOW_MIN_COVERAGE:.0%} 覆盖率门槛。"
+                ),
+            )
     print(f"A-share HTML written to {output_path}")
     print(f"A-share PNG written to {png_path}")
     print(f"ETF sector-flow HTML written to {flow_output_path}")
     print(f"ETF sector-flow PNG written to {flow_png_path}")
+    print(f"ETF flow coverage for {as_of}: {valid_flow_count}/{total_flow_count}; ready: {'yes' if flow_ready else 'no'}")
     print(f"Feishu pushed: {'yes' if feishu_pushed else 'no'}")
     if args.require_push and not feishu_pushed:
         raise SystemExit("Push required but Feishu push did not succeed. Check repository secrets.")

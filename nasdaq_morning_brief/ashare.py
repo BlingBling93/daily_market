@@ -4,6 +4,7 @@ import csv
 import json
 import logging
 import math
+import os
 import statistics
 import time
 from dataclasses import dataclass, field
@@ -873,7 +874,10 @@ def _fetch_eastmoney_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
 
 
 def _fetch_etf_intraday_flow(symbol: str) -> ETFThemeFlow | None:
-    """Fetch ETF flow from Sina first, then use Eastmoney as a live fallback."""
+    """Fetch ETF flow using the deployment's configured primary source."""
+    primary = os.environ.get("ETF_FLOW_PRIMARY", "sina").strip().lower()
+    if primary == "eastmoney":
+        return _fetch_eastmoney_etf_intraday_flow(symbol) or _fetch_sina_etf_flow(symbol)
     return _fetch_sina_etf_flow(symbol) or _fetch_eastmoney_etf_intraday_flow(symbol)
 
 

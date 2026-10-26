@@ -141,6 +141,21 @@ def _send_webhook(webhook: str, payload: dict, secret: Optional[str]) -> None:
     _post_json(webhook, _with_webhook_auth(payload, secret))
 
 
+def push_text_to_feishu(webhook: Optional[str], secret: Optional[str], message: str) -> bool:
+    """Send a concise operational alert to the configured Feishu webhook."""
+    if not webhook:
+        return False
+    _send_webhook(
+        webhook,
+        {
+            "msg_type": "text",
+            "content": {"text": message},
+        },
+        secret,
+    )
+    return True
+
+
 def push_to_feishu(
     webhook: Optional[str],
     secret: Optional[str],

@@ -21,6 +21,10 @@ jobs:
       NODE_BIN: node
       NODE_MODULES: ${{ github.workspace }}/node_modules
       CHROME_PATH: auto
+      # GitHub-hosted runners cannot reliably reach Eastmoney's intraday-flow
+      # endpoint. Use the independent Sina source here; the report's quality
+      # gate blocks stale data from being sent as a same-day flow card.
+      ETF_FLOW_PRIMARY: sina
 
     steps:
       - name: Checkout

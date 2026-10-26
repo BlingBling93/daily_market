@@ -1,7 +1,9 @@
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from nasdaq_morning_brief import ashare
+from nasdaq_morning_brief import ashare_report
 
 
 class ETFIntradayFlowTests(unittest.TestCase):
@@ -89,6 +91,33 @@ class ETFIntradayFlowTests(unittest.TestCase):
 
         self.assertIs(flow, sina_flow)
         fetch_eastmoney.assert_not_called()
+
+    @patch.dict("os.environ", {"ETF_FLOW_PRIMARY": "eastmoney"})
+    @patch("nasdaq_morning_brief.ashare._fetch_eastmoney_etf_intraday_flow")
+    @patch("nasdaq_morning_brief.ashare._fetch_sina_etf_flow")
+    def test_uses_eastmoney_first_for_local_collector(self, fetch_sina, fetch_eastmoney):
+        eastmoney_flow = ashare.ETFThemeFlow("", "512890", "", 1.0, None, "2026-10-26 13:45", "东方财富盘中资金流")
+        fetch_eastmoney.return_value = eastmoney_flow
+
+        flow = ashare._fetch_etf_intraday_flow("512890")
+
+        self.assertIs(flow, eastmoney_flow)
+        fetch_sina.assert_not_called()
+
+    def test_requires_current_date_and_eighty_percent_coverage_before_send(self):
+        flows = [
+            ashare.ETFThemeFlow("", str(index), "", 1.0, None, "2026-10-26 13:45", "东方财富盘中资金流")
+            for index in range(16)
+        ] + [
+            ashare.ETFThemeFlow("", str(index), "", None, None, "2026-10-23", "新浪财经资金流向")
+            for index in range(4)
+        ]
+
+        valid, total, ready = ashare_report._current_etf_flow_coverage(
+            SimpleNamespace(sector_flows=flows), "2026-10-26"
+        )
+
+        self.assertEqual((valid, total, ready), (16, 20, True))
 
     @patch("nasdaq_morning_brief.ashare.time.sleep")
     @patch("nasdaq_morning_brief.ashare._fetch_etf_intraday_flow")
