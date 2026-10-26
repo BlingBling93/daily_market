@@ -29,6 +29,11 @@ EM_HEADERS = {
 }
 
 LOGGER = logging.getLogger(__name__)
+# Eastmoney's minute-flow endpoint starts returning HTTP 502 when a hosted
+# runner queries several ETF symbols back-to-back.  Keep the entire batch
+# below its per-client request threshold instead of only retrying a request
+# after the threshold has already been hit.
+ETF_INTRADAY_FLOW_REQUEST_INTERVAL_SECONDS = 8.0
 
 
 @dataclass
@@ -1083,8 +1088,12 @@ def _load_theme_candidates(path: Path, market_days_ago: int) -> List[ThemeCandid
 def _build_sector_flows(themes: List[ThemeCandidate], market_days_ago: int) -> List[ETFThemeFlow]:
     """Build the full ETF proxy universe for the independent sector-flow card."""
     flows: List[ETFThemeFlow] = []
-    for theme in themes:
+    for index, theme in enumerate(themes):
         # A historical debug report cannot honestly use today's intraday flow.
+        # The flow endpoint is noticeably stricter than quote/kline endpoints
+        # on GitHub-hosted runners; pace only these live requests.
+        if market_days_ago == 0 and index > 0:
+            time.sleep(ETF_INTRADAY_FLOW_REQUEST_INTERVAL_SECONDS)
         flow = None if market_days_ago else _fetch_etf_intraday_flow(theme.proxy_ticker)
         if flow is None:
             flows.append(

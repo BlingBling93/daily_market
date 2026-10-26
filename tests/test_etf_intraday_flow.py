@@ -5,6 +5,22 @@ from nasdaq_morning_brief import ashare
 
 
 class ETFIntradayFlowTests(unittest.TestCase):
+    @staticmethod
+    def _theme(theme, ticker):
+        return ashare.ThemeCandidate(
+            theme=theme,
+            proxy_ticker=ticker,
+            proxy_name=f"{theme}ETF",
+            style="test",
+            risk_level="low",
+            max_theme_weight=0.1,
+            market=None,
+            score=50,
+            action="观察",
+            etf_action="持有观察",
+            rationale="test",
+        )
+
     @patch("nasdaq_morning_brief.ashare.time.sleep")
     @patch("nasdaq_morning_brief.ashare._fetch_json")
     def test_retries_empty_minute_flow_before_returning_data(self, fetch_json, sleep):
@@ -49,6 +65,24 @@ class ETFIntradayFlowTests(unittest.TestCase):
         self.assertIsNone(flow)
         fetch_json.assert_called_once()
         sleep.assert_not_called()
+
+    @patch("nasdaq_morning_brief.ashare.time.sleep")
+    @patch("nasdaq_morning_brief.ashare._fetch_etf_intraday_flow")
+    def test_paces_live_flow_requests_across_the_batch(self, fetch_flow, sleep):
+        fetch_flow.side_effect = [
+            ashare.ETFThemeFlow("", "512890", "", 1.0, None, "", ""),
+            ashare.ETFThemeFlow("", "512800", "", 2.0, None, "", ""),
+        ]
+
+        flows = ashare._build_sector_flows(
+            [self._theme("红利低波", "512890"), self._theme("银行", "512800")],
+            market_days_ago=0,
+        )
+
+        self.assertEqual([flow.main_net_amount for flow in flows], [1.0, 2.0])
+        self.assertEqual(fetch_flow.call_args_list[0].args, ("512890",))
+        self.assertEqual(fetch_flow.call_args_list[1].args, ("512800",))
+        sleep.assert_called_once_with(ashare.ETF_INTRADAY_FLOW_REQUEST_INTERVAL_SECONDS)
 
 
 if __name__ == "__main__":
