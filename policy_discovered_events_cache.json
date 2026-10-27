@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-10-26T22:00:41.223434+00:00",
+  "fetched_at": "2026-10-27T22:00:39.759390+00:00",
   "timezone": "America/New_York",
   "events": [
     {
@@ -23,6 +23,53 @@
       "last_seen": "2026-10-21T22:00:41.200249+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMitAFBVV95cUxNWmtTNjVLb0ZxZ3hlSlBLSDR5ODgwaWh1UmttdEtwdkVyOVg4cFFxSFpFT3VaRlk5TFFYX2pFb3lJYTBHWkhhazJOSFZiVUdwY3kyU1JkQ3hXQ2dUR1VySjg2N0UyandPb09UTVRONHdMMDZLcmhVb2dQT0s1UzNVSU9nLTVjNmo2Mm00V3dhdU5uNHZFdU9uM3VzMmxlYjNOMEliOHV2eEs1X0VGZC0xaHE2aS0?oc=5"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "category": "IPO",
+      "title": "Anthropic Unveils IPO Filing: To List as ANT on Nasdaq. AI Trade Roars Back?",
+      "status": "watch",
+      "importance": 88,
+      "confidence": 57,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "Moomoo：Anthropic Unveils IPO Filing: To List as ANT on Nasdaq. AI Trade Roars Back?；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 5,
+      "first_seen": "2026-10-27T22:00:37.142624+00:00",
+      "last_seen": "2026-10-27T22:00:37.699225+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMirAFBVV95cUxPV0RidUVXRm1qTWw0Zk90MnV6RnltaUxzbXR6NjREVWw1aml3QU1MTUxTNVA1UGJIVUFpeF95cFBCb1dIOUU0ZVEwdy00cVlYdmFfQ3ZjR3libXZhWFFiRGxSRnFnMHZXRnhyX1F4NHFwOE90REtNY0RVdUFvQkl0VGFZZ2l6SHNhOTRMck1HWGUySVJNVkJnbkRWU3J0NWhSZk90cl9wS0RCRDBy?oc=5"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "category": "美联储讲话",
+      "title": "Kevin Warsh Wanted the Fed to Be Quiet. Instead, It's as Noisy as Ever",
+      "status": "watch",
+      "importance": 80,
+      "confidence": 57,
+      "market_channels": [
+        "美债利率",
+        "FOMC预期",
+        "成长股估值"
+      ],
+      "summary": "Moomoo：Kevin Warsh Wanted the Fed to Be Quiet. Instead, It's as Noisy as Ever；传导渠道：美债利率、FOMC预期、成长股估值。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 2,
+      "first_seen": "2026-10-27T22:00:39.758793+00:00",
+      "last_seen": "2026-10-27T22:00:39.758793+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMinwFBVV95cUxOa0h6QnNDaEhXeE1jQ2V5a1pNYUhSbno2ZE9yamt4Ykd6RHQzVkkxbXY1dGpBc3B5VDZlSGlBQnhpVWdaamN1SGtpdFU4T1ZtMTBQSVo3MGg5cTMtT1lfR3VUQmwtRlpWNG1yYXdPTE5ieHdyRFFhX0hZWTl0VnZuMlZ5Tzl6d1Jzc3oyTFd4OFRQTjN2QklaSVVhXzZhX2M?oc=5"
       ]
     }
   ]
