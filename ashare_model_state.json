@@ -1,41 +1,41 @@
 {
-  "updated_at": "2026-10-26T07:01:54",
-  "evaluated_samples": 1153,
-  "latest_evaluated_date": "2026-10-23",
+  "updated_at": "2026-10-27T05:54:49",
+  "evaluated_samples": 1167,
+  "latest_evaluated_date": "2026-10-26",
   "window_days": 20,
   "benchmark": "上证指数",
   "universe_excess_weight": 0.65,
   "benchmark_excess_weight": 0.35,
   "horizons": {
     "1d": {
-      "sample_count": 414,
+      "sample_count": 407,
       "date_count": 20,
-      "top_hit_rate": 0.4677,
-      "strong_hit_rate": 0.4635,
-      "avg_effective_excess": 0.0212,
-      "avg_universe_excess": -0.0053,
-      "avg_benchmark_excess": 0.0705,
-      "avg_loss": 0.1983
+      "top_hit_rate": 0.4754,
+      "strong_hit_rate": 0.4595,
+      "avg_effective_excess": 0.0108,
+      "avg_universe_excess": -0.0146,
+      "avg_benchmark_excess": 0.058,
+      "avg_loss": 0.197
     },
     "2d": {
-      "sample_count": 414,
+      "sample_count": 407,
       "date_count": 20,
-      "top_hit_rate": 0.5167,
-      "strong_hit_rate": 0.5113,
-      "avg_effective_excess": 0.0805,
-      "avg_universe_excess": 0.0434,
-      "avg_benchmark_excess": 0.1493,
-      "avg_loss": 0.1949
+      "top_hit_rate": 0.541,
+      "strong_hit_rate": 0.5049,
+      "avg_effective_excess": 0.0762,
+      "avg_universe_excess": 0.0393,
+      "avg_benchmark_excess": 0.1446,
+      "avg_loss": 0.195
     },
     "5d": {
-      "sample_count": 414,
+      "sample_count": 407,
       "date_count": 20,
-      "top_hit_rate": 0.45,
-      "strong_hit_rate": 0.4952,
-      "avg_effective_excess": 0.3562,
-      "avg_universe_excess": 0.2652,
-      "avg_benchmark_excess": 0.5251,
-      "avg_loss": 0.2192
+      "top_hit_rate": 0.4667,
+      "strong_hit_rate": 0.5016,
+      "avg_effective_excess": 0.3698,
+      "avg_universe_excess": 0.2828,
+      "avg_benchmark_excess": 0.5313,
+      "avg_loss": 0.2158
     },
     "10d": {
       "sample_count": 414,
@@ -62,29 +62,29 @@
     {
       "group": "动作:暂不配置",
       "samples": "309",
-      "hit_1d": "47%",
-      "hit_5d": "49%",
+      "hit_1d": "46%",
+      "hit_5d": "50%",
       "hit_20d": "67%",
-      "excess_1d": "+0.07%",
+      "excess_1d": "+0.09%",
       "loss_1d": "0.19"
     },
     {
       "group": "动作:持有观察",
-      "samples": "82",
-      "hit_1d": "52%",
-      "hit_5d": "61%",
-      "hit_20d": "91%",
-      "excess_1d": "+0.03%",
-      "loss_1d": "0.19"
+      "samples": "81",
+      "hit_1d": "51%",
+      "hit_5d": "60%",
+      "hit_20d": "94%",
+      "excess_1d": "-0.04%",
+      "loss_1d": "0.20"
     },
     {
       "group": "动作:等回调",
-      "samples": "17",
+      "samples": "18",
       "hit_1d": "0%",
       "hit_5d": "0%",
       "hit_20d": "0%",
-      "excess_1d": "-1.16%",
-      "loss_1d": "0.15"
+      "excess_1d": "-1.11%",
+      "loss_1d": "0.14"
     },
     {
       "group": "动作:减仓降温",
@@ -106,35 +106,35 @@
     },
     {
       "group": "分数:<58",
-      "samples": "306",
+      "samples": "308",
       "hit_1d": "44%",
       "hit_5d": "47%",
       "hit_20d": "67%",
-      "excess_1d": "-0.02%",
+      "excess_1d": "+0.01%",
       "loss_1d": "0.19"
     },
     {
       "group": "分数:58-67",
-      "samples": "101",
-      "hit_1d": "50%",
-      "hit_5d": "59%",
+      "samples": "100",
+      "hit_1d": "48%",
+      "hit_5d": "58%",
       "hit_20d": "72%",
-      "excess_1d": "+0.05%",
-      "loss_1d": "0.21"
+      "excess_1d": "-0.04%",
+      "loss_1d": "0.22"
     },
     {
       "group": "分数:68-71",
-      "samples": "7",
-      "hit_1d": "43%",
-      "hit_5d": "57%",
-      "hit_20d": "71%",
-      "excess_1d": "+0.08%",
-      "loss_1d": "0.29"
+      "samples": "6",
+      "hit_1d": "50%",
+      "hit_5d": "67%",
+      "hit_20d": "83%",
+      "excess_1d": "+0.42%",
+      "loss_1d": "0.26"
     },
     {
       "group": "状态:非过热",
-      "samples": "391",
-      "hit_1d": "48%",
+      "samples": "390",
+      "hit_1d": "47%",
       "hit_5d": "52%",
       "hit_20d": "72%",
       "excess_1d": "+0.06%",
@@ -142,29 +142,29 @@
     },
     {
       "group": "状态:短线过热",
-      "samples": "23",
-      "hit_1d": "9%",
+      "samples": "24",
+      "hit_1d": "8%",
       "hit_5d": "26%",
       "hit_20d": "26%",
-      "excess_1d": "-0.99%",
-      "loss_1d": "0.27"
+      "excess_1d": "-0.96%",
+      "loss_1d": "0.26"
     },
     {
       "group": "风格:tech",
       "samples": "99",
-      "hit_1d": "46%",
-      "hit_5d": "54%",
-      "hit_20d": "89%",
-      "excess_1d": "-0.83%",
+      "hit_1d": "45%",
+      "hit_5d": "52%",
+      "hit_20d": "88%",
+      "excess_1d": "-0.76%",
       "loss_1d": "0.21"
     },
     {
       "group": "风格:advanced_manufacturing",
       "samples": "40",
-      "hit_1d": "38%",
-      "hit_5d": "38%",
+      "hit_1d": "35%",
+      "hit_5d": "34%",
       "hit_20d": "43%",
-      "excess_1d": "+0.52%",
+      "excess_1d": "+0.44%",
       "loss_1d": "0.16"
     }
   ]
