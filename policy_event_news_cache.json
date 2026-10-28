@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-10-26T22:02:34.602489+00:00",
+  "fetched_at": "2026-10-28T22:02:32.981182+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -200,6 +200,60 @@
       "queries": [
         "site:cls.cn 特斯拉 财报",
         "site:wallstreetcn.com 特斯拉 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-10-28|FOMC|FOMC利率决议": {
+      "fetched_at": "2026-10-28T22:02:29.136052+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 美联储 利率决议",
+        "site:wallstreetcn.com 美联储 利率决议"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-10-28|财报|GOOGL财报": {
+      "fetched_at": "2026-10-28T22:02:30.869592+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 谷歌 财报",
+        "site:wallstreetcn.com 谷歌 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-10-28|财报|MSFT财报": {
+      "fetched_at": "2026-10-28T22:02:32.981033+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 微软 财报",
+        "site:wallstreetcn.com 微软 财报"
       ],
       "diagnostics": [
         "候选域名不在允许范围：财联社",
