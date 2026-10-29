@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-10-28T22:02:32.981182+00:00",
+  "fetched_at": "2026-10-29T22:02:44.342534+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -211,7 +211,7 @@
       ]
     },
     "2026-10-28|FOMC|FOMC利率决议": {
-      "fetched_at": "2026-10-28T22:02:29.136052+00:00",
+      "fetched_at": "2026-10-29T22:02:32.029346+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -229,7 +229,7 @@
       ]
     },
     "2026-10-28|财报|GOOGL财报": {
-      "fetched_at": "2026-10-28T22:02:30.869592+00:00",
+      "fetched_at": "2026-10-29T22:02:34.618851+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -247,13 +247,67 @@
       ]
     },
     "2026-10-28|财报|MSFT财报": {
-      "fetched_at": "2026-10-28T22:02:32.981033+00:00",
+      "fetched_at": "2026-10-29T22:02:37.073329+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
       "queries": [
         "site:cls.cn 微软 财报",
         "site:wallstreetcn.com 微软 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-10-29|通胀|PCE/个人收入支出发布": {
+      "fetched_at": "2026-10-29T22:02:39.565416+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 美国 PCE 数据",
+        "site:wallstreetcn.com 美国 PCE 数据"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-10-29|财报|AMZN财报": {
+      "fetched_at": "2026-10-29T22:02:41.982601+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 亚马逊 财报",
+        "site:wallstreetcn.com 亚马逊 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-10-29|增长|GDP发布": {
+      "fetched_at": "2026-10-29T22:02:44.342422+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 美国 GDP 数据",
+        "site:wallstreetcn.com 美国 GDP 数据"
       ],
       "diagnostics": [
         "候选域名不在允许范围：财联社",

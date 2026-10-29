@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-10-28T22:00:39.602673+00:00",
+  "fetched_at": "2026-10-29T22:00:43.997984+00:00",
   "timezone": "America/New_York",
   "events": [
     {
@@ -23,6 +23,53 @@
       "last_seen": "2026-10-21T22:00:41.200249+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMitAFBVV95cUxNWmtTNjVLb0ZxZ3hlSlBLSDR5ODgwaWh1UmttdEtwdkVyOVg4cFFxSFpFT3VaRlk5TFFYX2pFb3lJYTBHWkhhazJOSFZiVUdwY3kyU1JkQ3hXQ2dUR1VySjg2N0UyandPb09UTVRONHdMMDZLcmhVb2dQT0s1UzNVSU9nLTVjNmo2Mm00V3dhdU5uNHZFdU9uM3VzMmxlYjNOMEliOHV2eEs1X0VGZC0xaHE2aS0?oc=5"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "category": "IPO",
+      "title": "Anthropic Unveils IPO Filing: To List as ANT on Nasdaq. AI Trade Roars Back?",
+      "status": "expired",
+      "importance": 88,
+      "confidence": 57,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好",
+        "AI"
+      ],
+      "summary": "Moomoo：Anthropic Unveils IPO Filing: To List as ANT on Nasdaq. AI Trade Roars Back?；传导渠道：Nasdaq、流动性、成长股风险偏好、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 5,
+      "first_seen": "2026-10-29T22:00:41.529589+00:00",
+      "last_seen": "2026-10-29T22:00:41.529589+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMipgFBVV95cUxOUzM4bTktZlhHd095MzFZMGJtc0FSbWFsSzRtYll0OVFiQmJRT05JQ0lhRHZKSl9WcS1ITXZqVDUxWUdrdmRIUDZWR0xjYWtnTURfQm1TaTlXNG1aTmxsSmhQX3N5Z3FvbVg4dVhuNi1fbkJFeHVuaFRzYkRiQ1pGWlU5bXVyWEdmYlhtQmQwMUhpSzRTcG85Ty1CYW91YlZFYlc0RUNB?oc=5"
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "category": "美联储讲话",
+      "title": "The Federal Reserve's decision this week will focus less on interest rates and more on whether C",
+      "status": "expired",
+      "importance": 88,
+      "confidence": 57,
+      "market_channels": [
+        "美债利率",
+        "FOMC预期",
+        "成长股估值"
+      ],
+      "summary": "富途牛牛：The Federal Reserve's decision this week will focus less on interest rates and more on whether C；传导渠道：美债利率、FOMC预期、成长股估值。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 2,
+      "first_seen": "2026-10-29T22:00:43.997680+00:00",
+      "last_seen": "2026-10-29T22:00:43.997680+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMioAFBVV95cUxQVExaZWRGck5ydkp5dms3Z1JpYW1TanR6d0tvWGYxZkNCaGoyMjR3dEpyWHc4cFVITTg3UFRWSUJyZE9POUh6WHVnYUx1SkdzUWcwQlNiUFdnNmNUdV90SmJtTHdiVzRueHNTOTkyNkJFQ2RxNTZiZnF2T21YV1pxM2R6WW4zZTV2cHRuLU1fYlYzVldhd09vSmdUWllYdUVD?oc=5"
       ]
     },
     {
