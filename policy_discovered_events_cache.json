@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-01T22:00:38.351830+00:00",
+  "fetched_at": "2026-11-02T22:00:42.290933+00:00",
   "timezone": "America/New_York",
   "events": [
     {
@@ -76,7 +76,7 @@
       "date": "2026-10-27",
       "category": "IPO",
       "title": "Anthropic Unveils IPO Filing: To List as ANT on Nasdaq. AI Trade Roars Back?",
-      "status": "watch",
+      "status": "expired",
       "importance": 88,
       "confidence": 57,
       "market_channels": [
