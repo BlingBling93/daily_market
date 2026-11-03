@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-02T22:02:48.949546+00:00",
+  "fetched_at": "2026-11-03T22:02:35.741281+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -211,7 +211,7 @@
       ]
     },
     "2026-10-28|FOMC|FOMC利率决议": {
-      "fetched_at": "2026-11-02T22:02:30.357050+00:00",
+      "fetched_at": "2026-11-03T22:02:27.130262+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -265,7 +265,7 @@
       ]
     },
     "2026-10-29|通胀|PCE/个人收入支出发布": {
-      "fetched_at": "2026-11-02T22:02:39.581848+00:00",
+      "fetched_at": "2026-11-03T22:02:29.404279+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -283,7 +283,7 @@
       ]
     },
     "2026-10-29|财报|AMZN财报": {
-      "fetched_at": "2026-11-02T22:02:42.739074+00:00",
+      "fetched_at": "2026-11-03T22:02:31.647582+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -301,7 +301,7 @@
       ]
     },
     "2026-10-29|增长|GDP发布": {
-      "fetched_at": "2026-11-02T22:02:45.744618+00:00",
+      "fetched_at": "2026-11-03T22:02:33.766829+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -319,7 +319,7 @@
       ]
     },
     "2026-11-02|财报|AAPL财报": {
-      "fetched_at": "2026-11-02T22:02:48.949428+00:00",
+      "fetched_at": "2026-11-03T22:02:35.741140+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
