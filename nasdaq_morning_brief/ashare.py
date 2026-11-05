@@ -1127,41 +1127,20 @@ def _load_theme_candidates(path: Path, market_days_ago: int) -> List[ThemeCandid
 
 
 def _build_sector_flows(themes: List[ThemeCandidate], market_days_ago: int) -> List[ETFThemeFlow]:
-    """Build the full ETF proxy universe for the independent sector-flow card."""
-    flows: List[ETFThemeFlow] = []
-    for index, theme in enumerate(themes):
-        # A historical debug report cannot honestly use today's intraday flow.
-        # The flow endpoint is noticeably stricter than quote/kline endpoints
-        # on GitHub-hosted runners; pace only these live requests.
-        if market_days_ago == 0 and index > 0:
-            time.sleep(ETF_INTRADAY_FLOW_REQUEST_INTERVAL_SECONDS)
-        flow = None if market_days_ago else _fetch_etf_intraday_flow(theme.proxy_ticker)
-        if flow is None:
-            flows.append(
-                ETFThemeFlow(
-                    theme=theme.theme,
-                    proxy_ticker=theme.proxy_ticker,
-                    proxy_name=theme.proxy_name,
-                    main_net_amount=None,
-                    main_net_pct=None,
-                    updated_at=None,
-                    source="东方财富实时行情",
-                    data_note="盘中资金流暂不可用",
-                )
-            )
-            continue
-        flows.append(
-            ETFThemeFlow(
-                theme=theme.theme,
-                proxy_ticker=theme.proxy_ticker,
-                proxy_name=theme.proxy_name,
-                main_net_amount=flow.main_net_amount,
-                main_net_pct=flow.main_net_pct,
-                updated_at=flow.updated_at,
-                source=flow.source,
-            )
+    """Build ETF labels without making the obsolete per-minute flow requests."""
+    return [
+        ETFThemeFlow(
+            theme=theme.theme,
+            proxy_ticker=theme.proxy_ticker,
+            proxy_name=theme.proxy_name,
+            main_net_amount=None,
+            main_net_pct=None,
+            updated_at=None,
+            source="东方财富历史资金流",
+            data_note="日线历史流由独立资金流报告支路获取",
         )
-    return flows
+        for theme in themes
+    ]
 
 
 def _save_theme_heat_history(path: Path, themes: List[ThemeCandidate], keep_batches: int = 2) -> None:

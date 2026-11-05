@@ -1,5 +1,4 @@
 import unittest
-from types import SimpleNamespace
 from unittest.mock import patch
 
 from nasdaq_morning_brief import ashare
@@ -104,38 +103,15 @@ class ETFIntradayFlowTests(unittest.TestCase):
         self.assertIs(flow, eastmoney_flow)
         fetch_sina.assert_not_called()
 
-    def test_requires_current_date_and_eighty_percent_coverage_before_send(self):
-        flows = [
-            ashare.ETFThemeFlow("", str(index), "", 1.0, None, "2026-10-26 13:45", "东方财富盘中资金流")
-            for index in range(16)
-        ] + [
-            ashare.ETFThemeFlow("", str(index), "", None, None, "2026-10-23", "新浪财经资金流向")
-            for index in range(4)
-        ]
-
-        valid, total, ready = ashare_report._current_etf_flow_coverage(
-            SimpleNamespace(sector_flows=flows), "2026-10-26"
-        )
-
-        self.assertEqual((valid, total, ready), (16, 20, True))
-
-    @patch("nasdaq_morning_brief.ashare.time.sleep")
     @patch("nasdaq_morning_brief.ashare._fetch_etf_intraday_flow")
-    def test_paces_live_flow_requests_across_the_batch(self, fetch_flow, sleep):
-        fetch_flow.side_effect = [
-            ashare.ETFThemeFlow("", "512890", "", 1.0, None, "", ""),
-            ashare.ETFThemeFlow("", "512800", "", 2.0, None, "", ""),
-        ]
-
+    def test_sector_snapshot_does_not_request_obsolete_intraday_flows(self, fetch_flow):
         flows = ashare._build_sector_flows(
             [self._theme("红利低波", "512890"), self._theme("银行", "512800")],
             market_days_ago=0,
         )
 
-        self.assertEqual([flow.main_net_amount for flow in flows], [1.0, 2.0])
-        self.assertEqual(fetch_flow.call_args_list[0].args, ("512890",))
-        self.assertEqual(fetch_flow.call_args_list[1].args, ("512800",))
-        sleep.assert_called_once_with(ashare.ETF_INTRADAY_FLOW_REQUEST_INTERVAL_SECONDS)
+        self.assertEqual([flow.main_net_amount for flow in flows], [None, None])
+        fetch_flow.assert_not_called()
 
 
 if __name__ == "__main__":

@@ -1450,8 +1450,25 @@ def _etf_flow_row(theme, max_abs_amount: float) -> str:
     """
 
 
-def build_etf_sector_flow_html(ashare: AShareSnapshot, as_of: str) -> str:
-    """Render the standalone 13:45-style ETF proxy capital-flow card."""
+def build_etf_sector_flow_html(ashare: AShareSnapshot, as_of: str, histories: list[dict] | None = None) -> str:
+    """Render a standalone recent daily ETF main-flow table."""
+    if histories is not None:
+        dates = sorted({day["date"] for item in histories for day in item.get("days", [])})
+        headers = "".join(f"<th>{escape(day)}</th>" for day in dates)
+        if not headers:
+            headers = '<th colspan="3">数据暂不可用</th>'
+        rows = []
+        for item in histories:
+            day_map = {day["date"]: day.get("amount") for day in item.get("days", [])}
+            cells = "".join(
+                f'<td class="{"in" if day_map.get(day) is not None and day_map[day] > 0 else "out" if day_map.get(day) is not None and day_map[day] < 0 else ""}">{_fmt_flow_yi(day_map[day]) if day_map.get(day) is not None else "—"}</td>'
+                for day in dates
+            )
+            badge = f'<span class="badge">{escape(item["streak"])}</span>' if item.get("streak") else ""
+            rows.append(f'<tr><th>{escape(str(item.get("theme", "")))}<small>{escape(str(item.get("name", "")))} {escape(str(item.get("ticker", "")))}</small></th>{cells}<td>{badge or "—"}</td></tr>')
+        return f'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>ETF最近三日日线资金流</title>
+<style>body{{margin:0;background:#f3f5f2;color:#182033;font-family:-apple-system,"PingFang SC",sans-serif}}main{{max-width:1120px;margin:28px auto;padding:32px;background:white;border-radius:18px;box-shadow:0 12px 40px #17203312}}h1{{margin:0 0 8px;font-size:30px}}p{{color:#737c86;margin:0 0 22px}}table{{width:100%;border-collapse:collapse;font-size:14px}}th,td{{padding:10px 12px;border-bottom:1px solid #e8ece8;text-align:right;white-space:nowrap}}thead th{{color:#75808b;background:#f7f8f6}}th:first-child,td:first-child{{text-align:left}}tbody th{{font-weight:700}}small{{display:block;color:#9299a0;font-weight:400;margin-top:3px}}.in{{color:#d85e36;font-weight:700}}.out{{color:#168761;font-weight:700}}.badge{{display:inline-block;padding:4px 8px;border-radius:10px;background:#fff0e9;color:#c85631;font-size:11px;font-weight:700}}tr:has(.badge){{background:#fffaf7}}.foot{{margin-top:18px;font-size:12px;color:#9299a0}}</style>
+<main class="card"><h1>{escape(as_of)} ETF 最近三日日线资金流</h1><p>东方财富日线主力净流额 · 单位：亿元 · 当前交易日数据可能为盘中累计</p><table><thead><tr><th>ETF方向 / 代码</th>{headers}<th>连续趋势</th></tr></thead><tbody>{''.join(rows)}</tbody></table><div class="foot">连续趋势标记只在最近三个交易日每日同向净流入或净流出时显示。数据来自东方财富历史资金流接口。</div></main></html>'''
     known = [item for item in ashare.sector_flows if item.main_net_amount is not None]
     inflows = sorted(
         (item for item in known if (item.main_net_amount or 0) >= 0),
@@ -1569,13 +1586,14 @@ def write_etf_sector_flow_html(
     ashare: AShareSnapshot,
     config: AppConfig,
     as_of: str | None = None,
+    histories: list[dict] | None = None,
 ) -> Path | None:
     if not ashare.enabled:
         return None
     config.render.output_dir.mkdir(parents=True, exist_ok=True)
     output_path = config.render.output_dir / "etf_sector_flow.html"
     output_path.write_text(
-        build_etf_sector_flow_html(ashare, as_of or date.today().isoformat()),
+        build_etf_sector_flow_html(ashare, as_of or date.today().isoformat(), histories),
         encoding="utf-8",
     )
     return output_path
