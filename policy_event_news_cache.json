@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-05T22:02:33.480351+00:00",
+  "fetched_at": "2026-11-06T22:02:30.773943+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -319,13 +319,31 @@
       ]
     },
     "2026-11-02|财报|AAPL财报": {
-      "fetched_at": "2026-11-05T22:02:33.480205+00:00",
+      "fetched_at": "2026-11-06T22:02:27.394835+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
       "queries": [
         "site:cls.cn 苹果 财报",
         "site:wallstreetcn.com 苹果 财报"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻",
+        "候选域名不在允许范围：华尔街见闻"
+      ]
+    },
+    "2026-11-06|就业|非农就业发布": {
+      "fetched_at": "2026-11-06T22:02:30.773807+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn 美国 非农就业 数据",
+        "site:wallstreetcn.com 美国 非农就业 数据"
       ],
       "diagnostics": [
         "候选域名不在允许范围：财联社",
