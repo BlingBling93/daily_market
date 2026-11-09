@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-08T22:02:28.459450+00:00",
+  "fetched_at": "2026-11-09T22:02:45.299507+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -337,7 +337,7 @@
       ]
     },
     "2026-11-06|就业|非农就业发布": {
-      "fetched_at": "2026-11-08T22:02:28.459326+00:00",
+      "fetched_at": "2026-11-09T22:02:45.299383+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
