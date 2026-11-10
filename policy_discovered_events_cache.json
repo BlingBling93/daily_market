@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-09T22:00:39.579917+00:00",
+  "fetched_at": "2026-11-10T22:00:40.056660+00:00",
   "timezone": "America/New_York",
   "events": [
     {
@@ -70,6 +70,29 @@
       "last_seen": "2026-10-30T22:00:46.148410+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMioAFBVV95cUxQVExaZWRGck5ydkp5dms3Z1JpYW1TanR6d0tvWGYxZkNCaGoyMjR3dEpyWHc4cFVITTg3UFRWSUJyZE9POUh6WHVnYUx1SkdzUWcwQlNiUFdnNmNUdV90SmJtTHdiVzRueHNTOTkyNkJFQ2RxNTZiZnF2T21YV1pxM2R6WW4zZTV2cHRuLU1fYlYzVldhd09vSmdUWllYdUVD?oc=5"
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "category": "IPO",
+      "title": "Anthropic publicly files for a Nasdaq IPO under the ticker symbol 'ANT.'",
+      "status": "expired",
+      "importance": 80,
+      "confidence": 57,
+      "market_channels": [
+        "Nasdaq",
+        "流动性",
+        "成长股风险偏好"
+      ],
+      "summary": "Moomoo：Anthropic publicly files for a Nasdaq IPO under the ticker symbol 'ANT.'；传导渠道：Nasdaq、流动性、成长股风险偏好。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 5,
+      "first_seen": "2026-11-10T22:00:37.558945+00:00",
+      "last_seen": "2026-11-10T22:00:37.558945+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMipgFBVV95cUxOWlZ4WTNMZ04xNUtpVEt4YkE0U1RsLVl5NVUwTXliRmY2RURpUGJTT01YendJNkJiUEJGeHl2enNpaWJralZpLXlPZGRkMkVPdzVkTEtsV1JyS2ZJSml1azFYMGNSUHdZTTc0UDhrclA0VkdxMkRWLVFFRFVGYzRSLXVIdS03V2VJd21fOEZpVnBzNnhoUDFrV1hSbm1TYzg4NU5XWE53?oc=5"
       ]
     },
     {
