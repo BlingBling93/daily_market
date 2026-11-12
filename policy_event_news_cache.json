@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-11T22:00:51.520820+00:00",
+  "fetched_at": "2026-11-12T22:00:47.506702+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -337,7 +337,7 @@
       ]
     },
     "2026-11-06|就业|非农就业发布": {
-      "fetched_at": "2026-11-11T22:00:50.319933+00:00",
+      "fetched_at": "2026-11-12T22:00:45.831045+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -355,7 +355,7 @@
       ]
     },
     "2026-11-10|美联储讲话|Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy": {
-      "fetched_at": "2026-11-11T22:00:50.935339+00:00",
+      "fetched_at": "2026-11-12T22:00:46.378077+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -369,7 +369,7 @@
       ]
     },
     "2026-11-10|美联储讲话|Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism": {
-      "fetched_at": "2026-11-11T22:00:51.520636+00:00",
+      "fetched_at": "2026-11-12T22:00:46.971003+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -380,6 +380,20 @@
       "diagnostics": [
         "无候选文章：site:cls.cn Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism",
         "无候选文章：site:wallstreetcn.com Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism"
+      ]
+    },
+    "2026-11-12|美联储讲话|Fed讲话：Barr, American Inequality and the Future of AI": {
+      "fetched_at": "2026-11-12T22:00:47.506567+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn Fed讲话：Barr, American Inequality and the Future of AI",
+        "site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI"
+      ],
+      "diagnostics": [
+        "无候选文章：site:cls.cn Fed讲话：Barr, American Inequality and the Future of AI",
+        "无候选文章：site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI"
       ]
     }
   }
