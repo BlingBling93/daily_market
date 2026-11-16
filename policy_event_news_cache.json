@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-15T22:03:01.952628+00:00",
+  "fetched_at": "2026-11-16T22:02:36.516489+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -355,7 +355,7 @@
       ]
     },
     "2026-11-10|美联储讲话|Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy": {
-      "fetched_at": "2026-11-15T22:02:19.914936+00:00",
+      "fetched_at": "2026-11-16T22:02:32.290894+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -364,12 +364,12 @@
         "site:wallstreetcn.com Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy"
       ],
       "diagnostics": [
-        "候选搜索失败：site:cls.cn Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy（HTTPError）",
-        "候选搜索失败：site:wallstreetcn.com Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy（HTTPError）"
+        "无候选文章：site:cls.cn Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy",
+        "无候选文章：site:wallstreetcn.com Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy"
       ]
     },
     "2026-11-10|美联储讲话|Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism": {
-      "fetched_at": "2026-11-15T22:02:33.424487+00:00",
+      "fetched_at": "2026-11-16T22:02:32.816295+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -378,12 +378,12 @@
         "site:wallstreetcn.com Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism"
       ],
       "diagnostics": [
-        "候选搜索失败：site:cls.cn Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism（HTTPError）",
-        "候选搜索失败：site:wallstreetcn.com Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism（HTTPError）"
+        "无候选文章：site:cls.cn Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism",
+        "无候选文章：site:wallstreetcn.com Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism"
       ]
     },
     "2026-11-12|美联储讲话|Fed讲话：Barr, American Inequality and the Future of AI": {
-      "fetched_at": "2026-11-15T22:02:48.156853+00:00",
+      "fetched_at": "2026-11-16T22:02:33.512799+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -392,12 +392,12 @@
         "site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI"
       ],
       "diagnostics": [
-        "候选搜索失败：site:cls.cn Fed讲话：Barr, American Inequality and the Future of AI（HTTPError）",
-        "候选搜索失败：site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI（HTTPError）"
+        "无候选文章：site:cls.cn Fed讲话：Barr, American Inequality and the Future of AI",
+        "无候选文章：site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI"
       ]
     },
     "2026-11-13|美联储讲话|Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy": {
-      "fetched_at": "2026-11-15T22:03:01.952368+00:00",
+      "fetched_at": "2026-11-16T22:02:34.002110+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -406,8 +406,36 @@
         "site:wallstreetcn.com Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy"
       ],
       "diagnostics": [
-        "候选搜索失败：site:cls.cn Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy（HTTPError）",
-        "候选搜索失败：site:wallstreetcn.com Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy（HTTPError）"
+        "无候选文章：site:cls.cn Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy",
+        "无候选文章：site:wallstreetcn.com Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy"
+      ]
+    },
+    "2026-11-16|美联储讲话|Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence": {
+      "fetched_at": "2026-11-16T22:02:34.852790+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence",
+        "site:wallstreetcn.com Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence"
+      ],
+      "diagnostics": [
+        "无候选文章：site:cls.cn Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence",
+        "候选搜索失败：site:wallstreetcn.com Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence（HTTPError）"
+      ]
+    },
+    "2026-11-16|美联储讲话|Fed讲话：Warsh, Opening Remarks": {
+      "fetched_at": "2026-11-16T22:02:36.516332+00:00",
+      "sources": [],
+      "method": "news_content_capture",
+      "source_tier": "unverified",
+      "queries": [
+        "site:cls.cn Fed讲话：Warsh, Opening Remarks",
+        "site:wallstreetcn.com Fed讲话：Warsh, Opening Remarks"
+      ],
+      "diagnostics": [
+        "候选域名不在允许范围：财联社",
+        "文章跳转失败：华尔街见闻（HTTPError）"
       ]
     }
   }
