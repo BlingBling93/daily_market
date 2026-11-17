@@ -1,7 +1,16 @@
 name: Event Discovery
 
 on:
+  # Daily GitHub-native backstop. 23:30 UTC is 07:30 Asia/Shanghai the next day.
+  # Keep workflow_dispatch as well: the external trigger can still request an
+  # immediate refresh, but a failed external cron must not leave the cache stale.
+  schedule:
+    - cron: "30 23 * * *"
   workflow_dispatch:
+
+concurrency:
+  group: event-discovery-cache
+  cancel-in-progress: false
 
 permissions:
   contents: write

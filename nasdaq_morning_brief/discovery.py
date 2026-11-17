@@ -28,6 +28,8 @@ DEFAULT_DISCOVERY_QUERIES = (
     "Treasury refunding debt ceiling shutdown liquidity Nasdaq rates",
     "Federal Reserve Chair speech rate guidance FOMC Nasdaq",
     "Fed Chair Warsh speech rates inflation forward guidance",
+    "CEO resigns board appoints interim CEO Nasdaq AI semiconductor",
+    "CEO ousted board transition technology Nvidia AI",
 )
 
 SOURCE_WEIGHTS = {
@@ -117,6 +119,25 @@ EVENT_PATTERNS = (
         "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["AI产业"],
     },
     {
+        "category": "公司治理",
+        "tokens": (
+            "ceo resigns",
+            "ceo resignation",
+            "chief executive resigns",
+            "chief executive officer resigns",
+            "ceo steps down",
+            "chief executive steps down",
+            "board appoints interim ceo",
+            "board names interim ceo",
+            "ceo ousted",
+            "board ousts",
+            "ceo transition",
+        ),
+        "channels": ("公司治理", "权重股", "科技估值"),
+        "base_importance": 70,
+        "impact_days": DEFAULT_IMPACT_DAYS_BY_CATEGORY["公司治理"],
+    },
+    {
         "category": "流动性",
         "tokens": (
             "treasury refunding",
@@ -197,6 +218,19 @@ STRUCTURAL_EVENT_TOKENS_BY_CATEGORY = {
         "gpu",
         "export license",
         "ai infrastructure",
+    ),
+    "公司治理": (
+        "ceo resigns",
+        "ceo resignation",
+        "chief executive resigns",
+        "chief executive officer resigns",
+        "ceo steps down",
+        "chief executive steps down",
+        "board appoints interim ceo",
+        "board names interim ceo",
+        "ceo ousted",
+        "board ousts",
+        "ceo transition",
     ),
     "流动性": (
         "treasury refunding",
@@ -366,6 +400,37 @@ def _extract_event_date(text: str, as_of: date) -> date | None:
     return parsed
 
 
+def _extract_relative_event_date(text: str, as_of: date) -> date | None:
+    """Resolve news-style relative dates against the discovery run date."""
+    lowered = text.lower()
+    weekdays = {
+        "monday": 0,
+        "tuesday": 1,
+        "wednesday": 2,
+        "thursday": 3,
+        "friday": 4,
+        "saturday": 5,
+        "sunday": 6,
+    }
+    match = re.search(r"\b(?:(this|next|last)\s+)?(" + "|".join(weekdays) + r")\b", lowered)
+    if match:
+        modifier, weekday = match.groups()
+        delta = weekdays[weekday] - as_of.weekday()
+        if modifier == "next":
+            delta = delta + 7 if delta <= 0 else delta
+        elif modifier == "last":
+            delta = delta - 7 if delta >= 0 else delta
+        elif delta < 0:
+            # An unqualified weekday in a news headline refers to the next occurrence.
+            delta += 7
+        return as_of + timedelta(days=delta)
+    if "today" in lowered or "this week" in lowered:
+        return as_of
+    if "tomorrow" in lowered:
+        return as_of + timedelta(days=1)
+    return None
+
+
 def _contains_token(text: str, token: str) -> bool:
     if len(token) <= 3 and token.isalnum():
         return re.search(rf"\b{re.escape(token)}\b", text) is not None
@@ -472,7 +537,7 @@ def _build_event(item: NewsItem, as_of: date) -> DiscoveredEvent | None:
     pattern = _category_match(text)
     if pattern is None:
         return None
-    event_date = _extract_event_date(text, as_of)
+    event_date = _extract_event_date(text, as_of) or _extract_relative_event_date(text, as_of)
     has_explicit_date = event_date is not None
     if event_date is None:
         published = item.published_at.astimezone(US_EASTERN).date() if item.published_at else as_of
@@ -480,7 +545,14 @@ def _build_event(item: NewsItem, as_of: date) -> DiscoveredEvent | None:
     source_weight = _source_weight(item.source)
     market_bonus, market_channels = _market_bonus(text)
     importance = min(100, int(pattern["base_importance"]) + source_weight + market_bonus)
-    status, confidence = _status_and_confidence(has_explicit_date, importance, source_weight)
+    # A reported CEO departure is a completed, date-sensitive corporate action.
+    # When the headline omits the calendar date, the publication timestamp is
+    # sufficient to surface it rather than silently classifying it as "watch".
+    status, confidence = _status_and_confidence(
+        has_explicit_date or str(pattern["category"]) == "公司治理",
+        importance,
+        source_weight,
+    )
     channels = list(dict.fromkeys([*pattern["channels"], *market_channels]))
     today = _now_utc().isoformat()
     title = _compact_title(item.title)

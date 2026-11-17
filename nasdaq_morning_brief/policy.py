@@ -32,6 +32,7 @@ DEFAULT_IMPACT_DAYS_BY_CATEGORY = {
     "指数调整": 5,
     "科技监管": 14,
     "AI产业": 7,
+    "公司治理": 7,
     "流动性": 14,
 }
 LEGACY_IMPACT_DAYS_BY_CATEGORY = {
@@ -47,6 +48,7 @@ LEGACY_IMPACT_DAYS_BY_CATEGORY = {
     "指数调整": 14,
     "科技监管": 30,
     "AI产业": 14,
+    "公司治理": 14,
     "流动性": 21,
 }
 EXECUTION_LOOKAHEAD_DAYS_BY_CATEGORY = {
@@ -62,6 +64,7 @@ EXECUTION_LOOKAHEAD_DAYS_BY_CATEGORY = {
     "指数调整": 2,
     "科技监管": 7,
     "AI产业": 3,
+    "公司治理": 3,
     "流动性": 5,
 }
 MAJOR_POLICY_CATEGORIES = {
@@ -77,6 +80,7 @@ MAJOR_POLICY_CATEGORIES = {
     "指数调整",
     "科技监管",
     "AI产业",
+    "公司治理",
     "流动性",
 }
 DISCOVERED_EVENT_NOISE_PATTERNS = (
@@ -265,6 +269,7 @@ def _category_priority(category: str) -> int:
         "指数调整": 9,
         "科技监管": 9,
         "AI产业": 10,
+        "公司治理": 10,
         "流动性": 11,
     }
     return priorities.get(category, 9)
@@ -343,7 +348,7 @@ def load_policy_events(path: Path, default_impact_days: int) -> List[PolicyEvent
 def _stance_from_discovered_category(category: str) -> str:
     if category in {"科技监管", "流动性"}:
         return "偏谨慎"
-    if category in {"IPO", "指数调整", "AI产业", "美联储讲话"}:
+    if category in {"IPO", "指数调整", "AI产业", "公司治理", "美联储讲话"}:
         return "事件待确认"
     return "待确认"
 
@@ -1496,6 +1501,7 @@ def _execution_note(
         "指数调整",
         "科技监管",
         "AI产业",
+        "公司治理",
         "流动性",
     }
     near_events = [item for item in upcoming if item.category in execution_categories]
@@ -1546,6 +1552,8 @@ def _event_label(event: PolicyEvent) -> str:
         return "指数调整事件"
     if event.category == "AI产业":
         return "AI产业催化"
+    if event.category == "公司治理":
+        return "重大公司治理变动"
     if event.category == "科技监管":
         return "科技监管事件"
     if event.category == "流动性":
@@ -1584,6 +1592,12 @@ def _no_result_reasoning(event: PolicyEvent) -> tuple[str, str, str]:
             "暂无可靠落地数据时，短线不把传闻当成买入理由；先看首日定价、收盘涨跌、成交额和VXN是否确认风险偏好。",
             f"中期按资金再平衡事件处理，{focus}若高开回落或带动波动率上行，新增仓位继续延后；若放量收涨且科技股广度扩散，事件约束可降级。",
             "长期只有当IPO改变纳指权重结构、被动资金需求或科技股风险偏好中枢时，才调整核心仓位框架。",
+        )
+    if event.category == "公司治理":
+        return (
+            "重大管理层变动先按事件风险处理，观察权重股盘后反应、成交额和公司正式继任安排。",
+            "中期看战略连续性、客户/供应链预期和分析师盈利预测是否同步调整，再决定是否改变风险暴露。",
+            "长期只在治理变动改变资本开支、产品路线或竞争格局时调整核心配置框架。",
         )
     if event.category == "通胀":
         return (
