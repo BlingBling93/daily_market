@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-17T08:05:43.528270+00:00",
+  "fetched_at": "2026-11-17T22:02:28.905771+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -427,20 +427,27 @@
       "source_tier": "official"
     },
     "2026-11-17|财报|NVDA财报": {
-      "fetched_at": "2026-11-17T08:05:43.528175+00:00",
-      "sources": [],
-      "method": "news_content_capture",
-      "source_tier": "unverified",
-      "queries": [
-        "site:cls.cn 英伟达 财报",
-        "site:wallstreetcn.com 英伟达 财报"
+      "fetched_at": "2026-11-17T22:02:28.741210+00:00",
+      "summary": "NVIDIA官方财报：收入$115.8B，同比+103%；数据中心收入$107.6B；Non-GAAP毛利率74.9%；Non-GAAP EPS $2.68；下季收入指引$130.0B。",
+      "conclusion": "NVIDIA官方财报显示收入、数据中心业务和下季收入指引仍强，事件影响期内盈利基本面对纳指偏友好，但估值高位仍需分批执行。",
+      "stance": "偏友好",
+      "sources": [
+        "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027"
       ],
-      "diagnostics": [
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：财联社电报",
-        "候选搜索失败：site:wallstreetcn.com 英伟达 财报（HTTPError）"
-      ]
+      "method": "direct_nvidia_release",
+      "source_tier": "official"
+    },
+    "2026-11-17|美联储讲话|Fed讲话：Waller, Considerations at the Intersection of Payments and Tokenized Markets": {
+      "fetched_at": "2026-11-17T22:02:28.904780+00:00",
+      "summary": "美联储官网讲稿：﻿ Speech by Governor Waller on payments - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use . gov website belongs to an official government organization in the United States.",
+      "conclusion": "基于美联储官网讲稿：正文显示利率缓和或盈利支撑，事件影响期内可维持基础动作但仍分批执行。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "偏友好",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/waller20261117a.htm"
+      ],
+      "method": "direct_fed_speech",
+      "source_tier": "official"
     }
   }
 }
