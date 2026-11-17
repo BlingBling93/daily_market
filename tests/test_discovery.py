@@ -1,9 +1,10 @@
 import unittest
 from datetime import date, datetime, timezone
+from unittest.mock import patch
 
 from nasdaq_morning_brief.discovery import NewsItem, _build_event
 from nasdaq_morning_brief.models import PolicyEvent
-from nasdaq_morning_brief.policy import _combined_event_impacts
+from nasdaq_morning_brief.policy import _combined_event_impacts, _fetch_event_result, _news_queries
 
 
 class DiscoveryTests(unittest.TestCase):
@@ -56,6 +57,31 @@ class DiscoveryTests(unittest.TestCase):
         self.assertIn("重点IPO事件还有3天", short)
         self.assertIn("已落地事件", mid)
         self.assertIn("待发生事件", long)
+
+    def test_fed_speech_queries_use_speaker_alias_instead_of_full_english_title(self):
+        event = PolicyEvent(
+            event_date=date(2026, 11, 16), category="美联储讲话", title="Fed讲话：Warsh, Opening Remarks",
+            stance="待确认", summary="", short_term="", mid_term="", long_term="", impact_days=2,
+        )
+
+        queries = _news_queries(event)
+
+        self.assertTrue(any("沃什" in query for query in queries))
+        self.assertFalse(any("Opening Remarks" in query for query in queries))
+
+    @patch("nasdaq_morning_brief.policy.capture_event_result_evidence")
+    @patch("nasdaq_morning_brief.policy._fetch_direct_event_result")
+    def test_official_result_is_used_before_media_search(self, fetch_direct, capture_media):
+        event = PolicyEvent(
+            event_date=date(2026, 11, 16), category="美联储讲话", title="Fed讲话：Warsh, Opening Remarks",
+            stance="待确认", summary="", short_term="", mid_term="", long_term="", impact_days=2,
+        )
+        fetch_direct.return_value = {"summary": "美联储官网讲稿", "conclusion": "官方结论"}
+
+        result = _fetch_event_result(event)
+
+        self.assertEqual(result["conclusion"], "官方结论")
+        capture_media.assert_not_called()
 
 
 if __name__ == "__main__":

@@ -662,6 +662,27 @@ def _news_queries(event: PolicyEvent) -> list[str]:
             "TSLA": "特斯拉",
         }
         terms = f"{names.get(symbol.upper(), symbol)} 财报"
+    elif event.category == "美联储讲话":
+        raw_title = event.title.removeprefix("Fed讲话：").strip()
+        speaker = raw_title.split(",", 1)[0].strip()
+        chinese_names = {
+            "warsh": "沃什",
+            "barr": "巴尔",
+            "bowman": "鲍曼",
+            "waller": "沃勒",
+            "jefferson": "杰斐逊",
+            "williams": "威廉姆斯",
+        }
+        chinese_name = chinese_names.get(speaker.lower(), speaker)
+        # Media headlines usually translate a speaker and paraphrase the topic,
+        # so querying the full official English speech title misses valid coverage.
+        event_day = event.event_date.isoformat()
+        terms = f"美联储 {chinese_name} 讲话 {event_day}"
+        broad_terms = f"美联储 {chinese_name} 发言"
+        return [
+            *(f"site:{host} {terms}" for host in ALLOWED_EVENT_RESULT_HOSTS),
+            *(f"site:{host} {broad_terms}" for host in ALLOWED_EVENT_RESULT_HOSTS),
+        ]
     else:
         terms = event.title
     return [f"site:{host} {terms}" for host in ALLOWED_EVENT_RESULT_HOSTS]
@@ -904,7 +925,43 @@ def _fetch_nvda_direct_result(event: PolicyEvent) -> dict[str, object] | None:
     }
 
 
+def _fed_speech_key(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", value.lower().removeprefix("fed"))
+
+
+def _fetch_fed_speech_direct_result(event: PolicyEvent) -> dict[str, object] | None:
+    """Read the Fed's own speech page before relying on media paraphrases."""
+    if event.category != "美联储讲话":
+        return None
+    target_title = event.title.removeprefix("Fed讲话：").strip()
+    target_key = _fed_speech_key(target_title)
+    root = ET.fromstring(_fetch_text(FED_SPEECHES_RSS_URL))
+    for item in root.findall(".//item"):
+        title = html.unescape((item.findtext("title") or "").strip())
+        link = (item.findtext("link") or "").strip()
+        if not title or not link or _fed_speech_key(title) != target_key:
+            continue
+        markup = _fetch_text(link)
+        body = _plain_text(markup)
+        if len(body) < 80:
+            return None
+        stance, inferred = _infer_result_conclusion(event, [body])
+        return {
+            "fetched_at": _now_utc().isoformat(),
+            "summary": f"美联储官网讲稿：{_extract_result_content(event, body)}",
+            "conclusion": f"基于美联储官网讲稿：{inferred}",
+            "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+            "stance": stance,
+            "sources": [link],
+            "method": "direct_fed_speech",
+            "source_tier": "official",
+        }
+    return None
+
+
 def _fetch_direct_event_result(event: PolicyEvent) -> dict[str, object] | None:
+    if event.category == "美联储讲话":
+        return _fetch_fed_speech_direct_result(event)
     if event.category == "通胀" and "CPI" in event.title:
         return _fetch_cpi_direct_result(event)
     if event.category == "通胀" and "PCE" in event.title:
@@ -1056,6 +1113,12 @@ def _infer_result_conclusion(event: PolicyEvent, bodies: list[str]) -> tuple[str
 
 
 def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
+    # Official releases are the primary source of the event conclusion. This
+    # path used to exist but was never invoked, leaving completed Fed speeches
+    # dependent on a brittle headline search of Chinese media.
+    direct_result = _fetch_direct_event_result(event)
+    if direct_result:
+        return direct_result
     evidence = capture_event_result_evidence(_news_queries(event))
     articles = [article for article in evidence.articles if _article_matches_event(event, article.body)]
     if not articles:
