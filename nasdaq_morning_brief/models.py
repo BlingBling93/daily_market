@@ -73,6 +73,7 @@ class PolicyEvent:
     impact_days: int
     result_summary: str = ""
     result_conclusion: str = ""
+    result_market_impact: str = ""
     result_sources: List[str] = field(default_factory=list)
     result_source_tier: str = ""
 

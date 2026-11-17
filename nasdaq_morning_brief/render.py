@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import os
 import re
 import subprocess
+import tempfile
 from datetime import date, datetime
 from html import escape
 from pathlib import Path
@@ -96,6 +96,9 @@ def _temperature_class(label: str) -> str:
 
 
 def _policy_event_line(event: PolicyEvent) -> str:
+    pre_event_html = (
+        f"<small>事前提示：{escape(event.event_date.isoformat())} · 待验证：{escape(event.short_term)}</small>"
+    )
     data_html = ""
     if event.result_summary:
         label = _result_source_label(event.result_source_tier)
@@ -103,11 +106,14 @@ def _policy_event_line(event: PolicyEvent) -> str:
     result_html = ""
     if event.result_conclusion:
         result_html = f"<small>结论：{escape(event.result_conclusion)}</small>"
+    market_html = ""
+    if event.result_market_impact:
+        market_html = f"<small>实际市场影响：{escape(event.result_market_impact)}</small>"
     return (
         f"<li><span>{event.event_date.isoformat()} · {escape(event.category)}</span>"
         f"<strong>{escape(event.title)}</strong>"
         f"<small>{escape(event.stance)} · 影响期{event.impact_days}天 · {escape(event.summary)}</small>"
-        f"{data_html}{result_html}</li>"
+        f"{pre_event_html}{data_html}{result_html}{market_html}</li>"
     )
 
 
@@ -1601,23 +1607,25 @@ def write_etf_sector_flow_html(
 
 def write_png(html_path: Path, config: AppConfig, filename: str = "brief.png") -> Path:
     png_path = config.render.output_dir / filename
-    script_path = Path(__file__).with_name("screenshot.js")
-    env = os.environ.copy()
-    env["NODE_PATH"] = str(config.render.node_modules)
-    chrome_path = str(config.render.chrome_path)
-    if chrome_path in {"", "."}:
-        chrome_path = ""
+    # Never let a failed WebKit render leave a previous day's image looking current.
+    if png_path.exists():
+        png_path.unlink()
+    script_path = Path(__file__).with_name("screenshot.swift")
+    module_cache = Path(tempfile.gettempdir()) / "ashare-brief-swift-module-cache"
+    module_cache.mkdir(parents=True, exist_ok=True)
     subprocess.run(
         [
-            str(config.render.node_bin),
+            "swift",
+            "-module-cache-path",
+            str(module_cache),
             str(script_path),
             str(html_path),
             str(png_path),
             str(config.render.viewport_width),
             str(config.render.viewport_height),
-            chrome_path,
         ],
         check=True,
-        env=env,
     )
+    if not png_path.is_file() or png_path.stat().st_size == 0:
+        raise RuntimeError(f"WebKit did not produce a PNG at {png_path}")
     return png_path

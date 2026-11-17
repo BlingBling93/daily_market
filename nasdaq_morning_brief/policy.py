@@ -973,6 +973,25 @@ def _extract_result_content(event: PolicyEvent, body: str) -> str:
     return " ".join(selected or sentences[:2])[:520]
 
 
+def _extract_market_impact(bodies: list[str]) -> str:
+    """Return only market reaction stated in the captured article bodies."""
+    market_terms = (
+        "nasdaq", "s&p", "dow", "qqq", "stocks", "shares", "index", "vix", "vxn",
+        "yield", "yields", "treasury", "dollar", "rally", "selloff", "surge", "slump",
+        "上涨", "下跌", "美债", "收益率", "纳指", "标普", "股市", "美元", "波动率",
+    )
+    sentences = [
+        sentence.strip()
+        for body in bodies
+        for sentence in re.split(r"(?<=[。！？.!?])\s*", body)
+        if len(sentence.strip()) >= 18
+    ]
+    selected = [sentence for sentence in sentences if any(token in sentence.lower() for token in market_terms)]
+    if not selected:
+        return "可核验正文未披露即时市场反应；继续用QQQ、10年美债与VXN验证传导。"
+    return " ".join(selected[:2])[:420]
+
+
 def _infer_result_conclusion(event: PolicyEvent, bodies: list[str]) -> tuple[str, str]:
     """Classify only text read from approved article bodies, never RSS titles."""
     joined = " ".join(bodies).lower()
@@ -1060,6 +1079,7 @@ def _fetch_event_result(event: PolicyEvent) -> dict[str, object] | None:
         "fetched_at": _now_utc().isoformat(),
         "summary": summary,
         "conclusion": f"基于财联社/华尔街见闻正文：{conclusion}",
+        "market_impact": _extract_market_impact(bodies),
         "stance": stance,
         "sources": [article.url for article in articles],
         "method": "news_content_capture",
@@ -1109,6 +1129,7 @@ def _attach_event_results(
         if entry:
             event.result_summary = str(entry.get("summary") or "")
             event.result_conclusion = str(entry.get("conclusion") or "")
+            event.result_market_impact = str(entry.get("market_impact") or "")
             event.result_sources = list(entry.get("sources") or [])
             event.result_source_tier = _result_source_tier(entry)
             stance = str(entry.get("stance") or "")
@@ -1624,15 +1645,11 @@ def _no_result_reasoning(event: PolicyEvent) -> tuple[str, str, str]:
     )
 
 
-def _impact_event(upcoming: List[PolicyEvent], recent: List[PolicyEvent]) -> PolicyEvent | None:
-    if upcoming:
-        return upcoming[0]
-    resulted_recent = [item for item in recent if _event_has_result(item)]
-    if resulted_recent:
-        return sorted(resulted_recent, key=lambda item: (item.event_date, _category_priority(item.category), item.title))[-1]
-    if recent:
-        return recent[-1]
-    return None
+def _latest_result_event(recent: List[PolicyEvent]) -> PolicyEvent | None:
+    resulted = [item for item in recent if _event_has_result(item)]
+    if not resulted:
+        return None
+    return sorted(resulted, key=lambda item: (item.event_date, _category_priority(item.category), item.title))[-1]
 
 
 def _short_term_impact(event: PolicyEvent, as_of: date) -> str:
@@ -1659,6 +1676,48 @@ def _long_term_impact(event: PolicyEvent, as_of: date) -> str:
     return _no_result_reasoning(event)[2]
 
 
+def _combined_event_impacts(
+    upcoming: List[PolicyEvent],
+    recent: List[PolicyEvent],
+    as_of: date,
+) -> tuple[str, str, str]:
+    """Combine the most recent realised result with the next pending risk."""
+    realised = _latest_result_event(recent)
+    pending = upcoming[0] if upcoming else None
+
+    if realised and pending:
+        short = (
+            f"已落地：{_short_term_impact(realised, as_of)} "
+            f"同时{_short_term_impact(pending, as_of)}"
+        )
+        mid = (
+            f"已落地事件：{_mid_term_impact(realised, as_of)} "
+            f"待发生事件：{_mid_term_impact(pending, as_of)}"
+        )
+        long = (
+            f"已落地事件：{_long_term_impact(realised, as_of)} "
+            f"待发生事件：{_long_term_impact(pending, as_of)}"
+        )
+        return short, mid, long
+    if realised:
+        return (
+            _short_term_impact(realised, as_of),
+            _mid_term_impact(realised, as_of),
+            _long_term_impact(realised, as_of),
+        )
+    if pending:
+        return (
+            _short_term_impact(pending, as_of),
+            _mid_term_impact(pending, as_of),
+            _long_term_impact(pending, as_of),
+        )
+    return (
+        "没有明确事件催化时，短线仍以价格趋势、VXN和美债变化为主。",
+        "中期等待通胀、就业和财报数据形成连续方向后，再调整仓位中枢。",
+        "长期核心逻辑仍取决于盈利增长、实际利率中枢和监管环境。",
+    )
+
+
 def build_policy_snapshot(
     config: PolicyConfig,
     as_of: date,
@@ -1675,7 +1734,6 @@ def build_policy_snapshot(
     rate_note = _rate_note(us10y, oil)
     stance = _stance_from_events(upcoming, recent, rate_note)
     execution_note = _execution_note(advice, execution_upcoming, execution_recent, stance)
-    impact_event = _impact_event(upcoming, recent)
 
     if upcoming:
         first = upcoming[0]
@@ -1690,14 +1748,7 @@ def build_policy_snapshot(
     else:
         summary = f"未配置未来{config.lookahead_days}天重大事件；{rate_note}"
 
-    if impact_event:
-        short_term = _short_term_impact(impact_event, as_of)
-        mid_term = _mid_term_impact(impact_event, as_of)
-        long_term = _long_term_impact(impact_event, as_of)
-    else:
-        short_term = "没有明确事件催化时，短线仍以价格趋势、VXN和美债变化为主。"
-        mid_term = "中期等待通胀、就业和财报数据形成连续方向后，再调整仓位中枢。"
-        long_term = "长期核心逻辑仍取决于盈利增长、实际利率中枢和监管环境。"
+    short_term, mid_term, long_term = _combined_event_impacts(upcoming, recent, as_of)
 
     return PolicySnapshot(
         stance=stance,
