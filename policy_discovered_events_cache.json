@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-16T22:00:41.816428+00:00",
+  "fetched_at": "2026-11-17T06:44:58.650736+00:00",
   "timezone": "America/New_York",
   "events": [
     {
@@ -170,7 +170,7 @@
       "date": "2026-11-11",
       "category": "IPO",
       "title": "Alibaba’s Chip Design Unit T-Head Files for Hong Kong IPO",
-      "status": "watch",
+      "status": "expired",
       "importance": 74,
       "confidence": 47,
       "market_channels": [
@@ -185,7 +185,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-11-12T22:00:38.629172+00:00",
-      "last_seen": "2026-11-16T22:00:39.456969+00:00",
+      "last_seen": "2026-11-17T06:44:54.963362+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMipgFBVV95cUxPaXVYYktrU1E1ZExhRHBxcFlqUHl0am5ZeTYxWklPNndUWTZFbks3QWk5dV9RdGV0azIxLWFkdUkwLWNIamZadjExeTBqOGlkRHRsTjdSWklPb010am5TZzJtS3F0U1ZEUDNWMVpOSWFNWGcwVmdIeVFTM0ZtVWhOTGVGYTAxajh5aDVsUnpIUWVVZ3l1XzlmbGNqbUlCMWxubzN5VUZn?oc=5"
       ]
