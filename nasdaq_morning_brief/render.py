@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import subprocess
+import sys
 import tempfile
 from datetime import date, datetime
 from html import escape
@@ -1610,11 +1611,11 @@ def write_png(html_path: Path, config: AppConfig, filename: str = "brief.png") -
     # Never let a failed WebKit render leave a previous day's image looking current.
     if png_path.exists():
         png_path.unlink()
-    script_path = Path(__file__).with_name("screenshot.swift")
-    module_cache = Path(tempfile.gettempdir()) / "ashare-brief-swift-module-cache"
-    module_cache.mkdir(parents=True, exist_ok=True)
-    subprocess.run(
-        [
+    if sys.platform == "darwin":
+        script_path = Path(__file__).with_name("screenshot.swift")
+        module_cache = Path(tempfile.gettempdir()) / "ashare-brief-swift-module-cache"
+        module_cache.mkdir(parents=True, exist_ok=True)
+        command = [
             "swift",
             "-module-cache-path",
             str(module_cache),
@@ -1623,9 +1624,20 @@ def write_png(html_path: Path, config: AppConfig, filename: str = "brief.png") -
             str(png_path),
             str(config.render.viewport_width),
             str(config.render.viewport_height),
-        ],
-        check=True,
-    )
+        ]
+    else:
+        # GitHub Actions runs on Ubuntu, where macOS WebKit and Swift are not
+        # available. The workflow already installs Playwright Chromium.
+        script_path = Path(__file__).with_name("screenshot.js")
+        command = [
+            "node",
+            str(script_path),
+            str(html_path),
+            str(png_path),
+            str(config.render.viewport_width),
+            str(config.render.viewport_height),
+        ]
+    subprocess.run(command, check=True)
     if not png_path.is_file() or png_path.stat().st_size == 0:
-        raise RuntimeError(f"WebKit did not produce a PNG at {png_path}")
+        raise RuntimeError(f"Screenshot renderer did not produce a PNG at {png_path}")
     return png_path
