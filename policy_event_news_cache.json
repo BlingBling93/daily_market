@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-17T06:56:52.995194+00:00",
+  "fetched_at": "2026-11-17T08:05:43.528270+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -355,91 +355,79 @@
       ]
     },
     "2026-11-10|美联储讲话|Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy": {
-      "fetched_at": "2026-11-17T06:56:46.422927+00:00",
-      "sources": [],
-      "method": "news_content_capture",
-      "source_tier": "unverified",
-      "queries": [
-        "site:cls.cn Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy",
-        "site:wallstreetcn.com Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy"
+      "fetched_at": "2026-11-17T08:05:40.576791+00:00",
+      "summary": "美联储官网讲稿：﻿ Speech by Vice Chair for Supervision Bowman on the U. economy and considerations for monetary policy - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use .",
+      "conclusion": "基于美联储官网讲稿：正文显示利率缓和或盈利支撑，事件影响期内可维持基础动作但仍分批执行。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "偏友好",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/bowman20261110a.htm"
       ],
-      "diagnostics": [
-        "无候选文章：site:cls.cn Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy",
-        "无候选文章：site:wallstreetcn.com Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy"
-      ]
+      "method": "direct_fed_speech",
+      "source_tier": "official"
     },
     "2026-11-10|美联储讲话|Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism": {
-      "fetched_at": "2026-11-17T06:56:46.974941+00:00",
-      "sources": [],
-      "method": "news_content_capture",
-      "source_tier": "unverified",
-      "queries": [
-        "site:cls.cn Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism",
-        "site:wallstreetcn.com Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism"
+      "fetched_at": "2026-11-17T08:05:40.770793+00:00",
+      "summary": "美联储官网讲稿：﻿ Speech by Governor Waller on the economic outlook - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use . gov website belongs to an official government organization in the United States.",
+      "conclusion": "基于美联储官网讲稿：正文显示利率缓和或盈利支撑，事件影响期内可维持基础动作但仍分批执行。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "偏友好",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/waller20261110a.htm"
       ],
-      "diagnostics": [
-        "无候选文章：site:cls.cn Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism",
-        "无候选文章：site:wallstreetcn.com Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism"
-      ]
+      "method": "direct_fed_speech",
+      "source_tier": "official"
     },
     "2026-11-12|美联储讲话|Fed讲话：Barr, American Inequality and the Future of AI": {
-      "fetched_at": "2026-11-17T06:56:47.469171+00:00",
-      "sources": [],
-      "method": "news_content_capture",
-      "source_tier": "unverified",
-      "queries": [
-        "site:cls.cn Fed讲话：Barr, American Inequality and the Future of AI",
-        "site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI"
+      "fetched_at": "2026-11-17T08:05:40.957037+00:00",
+      "summary": "美联储官网讲稿：﻿ Speech by Governor Barr on artificial intelligence and inequality - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use . gov website belongs to an official government organization in the United States.",
+      "conclusion": "基于美联储官网讲稿：已阅读正文但未形成明确方向，继续观察利率、VXN和权重股反应。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "待确认",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/barr20261112a.htm"
       ],
-      "diagnostics": [
-        "无候选文章：site:cls.cn Fed讲话：Barr, American Inequality and the Future of AI",
-        "无候选文章：site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI"
-      ]
+      "method": "direct_fed_speech",
+      "source_tier": "official"
     },
     "2026-11-13|美联储讲话|Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy": {
-      "fetched_at": "2026-11-17T06:56:48.229865+00:00",
-      "sources": [],
-      "method": "news_content_capture",
-      "source_tier": "unverified",
-      "queries": [
-        "site:cls.cn Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy",
-        "site:wallstreetcn.com Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy"
+      "fetched_at": "2026-11-17T08:05:41.141811+00:00",
+      "summary": "美联储官网讲稿：﻿ Speech by Vice Chair Jefferson on new technology, old questions: productivity puzzles and the macroeconomy - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use . gov website belongs to an official government organization in the United States.",
+      "conclusion": "基于美联储官网讲稿：已阅读正文但未形成明确方向，继续观察利率、VXN和权重股反应。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "待确认",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/jefferson20261113a.htm"
       ],
-      "diagnostics": [
-        "无候选文章：site:cls.cn Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy",
-        "候选搜索失败：site:wallstreetcn.com Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy（HTTPError）"
-      ]
+      "method": "direct_fed_speech",
+      "source_tier": "official"
     },
     "2026-11-16|美联储讲话|Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence": {
-      "fetched_at": "2026-11-17T06:56:48.949946+00:00",
-      "sources": [],
-      "method": "news_content_capture",
-      "source_tier": "unverified",
-      "queries": [
-        "site:cls.cn Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence",
-        "site:wallstreetcn.com Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence"
+      "fetched_at": "2026-11-17T08:05:41.343870+00:00",
+      "summary": "美联储官网讲稿：﻿ Speech by Governor Barr on some potential financial stability implications of artificial intelligence - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use . gov website belongs to an official government organization in the United States.",
+      "conclusion": "基于美联储官网讲稿：已阅读正文但未形成明确方向，继续观察利率、VXN和权重股反应。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "待确认",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/barr20261116a.htm"
       ],
-      "diagnostics": [
-        "无候选文章：site:cls.cn Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence",
-        "候选搜索失败：site:wallstreetcn.com Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence（HTTPError）"
-      ]
+      "method": "direct_fed_speech",
+      "source_tier": "official"
     },
     "2026-11-16|美联储讲话|Fed讲话：Warsh, Opening Remarks": {
-      "fetched_at": "2026-11-17T06:56:50.106544+00:00",
-      "sources": [],
-      "method": "news_content_capture",
-      "source_tier": "unverified",
-      "queries": [
-        "site:cls.cn Fed讲话：Warsh, Opening Remarks",
-        "site:wallstreetcn.com Fed讲话：Warsh, Opening Remarks"
+      "fetched_at": "2026-11-17T08:05:41.531471+00:00",
+      "summary": "美联储官网讲稿：﻿ Opening remarks by Chairman Warsh at the Federal Reserve’s Productivity and Jobs Task Force Conference - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use . gov website belongs to an official government organization in the United States.",
+      "conclusion": "基于美联储官网讲稿：正文显示利率缓和或盈利支撑，事件影响期内可维持基础动作但仍分批执行。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "偏友好",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/warsh20261116a.htm"
       ],
-      "diagnostics": [
-        "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：华尔街见闻"
-      ]
+      "method": "direct_fed_speech",
+      "source_tier": "official"
     },
     "2026-11-17|财报|NVDA财报": {
-      "fetched_at": "2026-11-17T06:56:52.995086+00:00",
+      "fetched_at": "2026-11-17T08:05:43.528175+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -448,12 +436,10 @@
         "site:wallstreetcn.com 英伟达 财报"
       ],
       "diagnostics": [
-        "文章跳转失败：财联社（HTTPError）",
         "候选域名不在允许范围：财联社",
         "候选域名不在允许范围：财联社",
-        "候选域名不在允许范围：华尔街见闻",
-        "文章跳转失败：华尔街见闻（HTTPError）",
-        "候选域名不在允许范围：华尔街见闻"
+        "候选域名不在允许范围：财联社电报",
+        "候选搜索失败：site:wallstreetcn.com 英伟达 财报（HTTPError）"
       ]
     }
   }
