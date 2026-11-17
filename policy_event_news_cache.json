@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-17T06:47:00.329148+00:00",
+  "fetched_at": "2026-11-17T06:56:52.995194+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -355,7 +355,7 @@
       ]
     },
     "2026-11-10|美联储讲话|Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy": {
-      "fetched_at": "2026-11-17T06:46:55.522013+00:00",
+      "fetched_at": "2026-11-17T06:56:46.422927+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -364,12 +364,12 @@
         "site:wallstreetcn.com Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy"
       ],
       "diagnostics": [
-        "候选搜索失败：site:cls.cn Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy（HTTPError）",
+        "无候选文章：site:cls.cn Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy",
         "无候选文章：site:wallstreetcn.com Fed讲话：Bowman, The U.S. Economy and Considerations for Monetary Policy"
       ]
     },
     "2026-11-10|美联储讲话|Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism": {
-      "fetched_at": "2026-11-17T06:46:56.107309+00:00",
+      "fetched_at": "2026-11-17T06:56:46.974941+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -378,12 +378,12 @@
         "site:wallstreetcn.com Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism"
       ],
       "diagnostics": [
-        "候选搜索失败：site:cls.cn Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism（HTTPError）",
+        "无候选文章：site:cls.cn Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism",
         "无候选文章：site:wallstreetcn.com Fed讲话：Waller, The Economic Outlook and Some Thoughts on Labor Market Dynamism"
       ]
     },
     "2026-11-12|美联储讲话|Fed讲话：Barr, American Inequality and the Future of AI": {
-      "fetched_at": "2026-11-17T06:46:56.739417+00:00",
+      "fetched_at": "2026-11-17T06:56:47.469171+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -393,11 +393,11 @@
       ],
       "diagnostics": [
         "无候选文章：site:cls.cn Fed讲话：Barr, American Inequality and the Future of AI",
-        "候选搜索失败：site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI（HTTPError）"
+        "无候选文章：site:wallstreetcn.com Fed讲话：Barr, American Inequality and the Future of AI"
       ]
     },
     "2026-11-13|美联储讲话|Fed讲话：Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy": {
-      "fetched_at": "2026-11-17T06:46:57.366659+00:00",
+      "fetched_at": "2026-11-17T06:56:48.229865+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -411,7 +411,7 @@
       ]
     },
     "2026-11-16|美联储讲话|Fed讲话：Barr, Some Potential Financial Stability Implications of Artificial Intelligence": {
-      "fetched_at": "2026-11-17T06:46:58.201169+00:00",
+      "fetched_at": "2026-11-17T06:56:48.949946+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -425,7 +425,7 @@
       ]
     },
     "2026-11-16|美联储讲话|Fed讲话：Warsh, Opening Remarks": {
-      "fetched_at": "2026-11-17T06:46:59.511517+00:00",
+      "fetched_at": "2026-11-17T06:56:50.106544+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -434,12 +434,12 @@
         "site:wallstreetcn.com Fed讲话：Warsh, Opening Remarks"
       ],
       "diagnostics": [
-        "文章跳转失败：财联社（HTTPError）",
+        "候选域名不在允许范围：财联社",
         "候选域名不在允许范围：华尔街见闻"
       ]
     },
     "2026-11-17|财报|NVDA财报": {
-      "fetched_at": "2026-11-17T06:47:00.329014+00:00",
+      "fetched_at": "2026-11-17T06:56:52.995086+00:00",
       "sources": [],
       "method": "news_content_capture",
       "source_tier": "unverified",
@@ -448,8 +448,12 @@
         "site:wallstreetcn.com 英伟达 财报"
       ],
       "diagnostics": [
-        "候选搜索失败：site:cls.cn 英伟达 财报（HTTPError）",
-        "候选搜索失败：site:wallstreetcn.com 英伟达 财报（HTTPError）"
+        "文章跳转失败：财联社（HTTPError）",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：财联社",
+        "候选域名不在允许范围：华尔街见闻",
+        "文章跳转失败：华尔街见闻（HTTPError）",
+        "候选域名不在允许范围：华尔街见闻"
       ]
     }
   }
