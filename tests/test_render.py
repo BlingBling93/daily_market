@@ -4,10 +4,36 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from nasdaq_morning_brief.render import write_png
+from nasdaq_morning_brief.render import build_etf_sector_flow_html, write_png
 
 
 class RenderTests(unittest.TestCase):
+    def test_three_day_outflow_streak_uses_green_badge(self):
+        html = build_etf_sector_flow_html(
+            None,
+            "2026-11-18",
+            histories=[
+                {
+                    "theme": "红利",
+                    "name": "红利 ETF",
+                    "ticker": "510880",
+                    "days": [{"date": "2026-11-14", "amount": -100_000_000}],
+                    "streak": "连续3日净流出",
+                },
+                {
+                    "theme": "科技",
+                    "name": "科技 ETF",
+                    "ticker": "159915",
+                    "days": [{"date": "2026-11-14", "amount": 100_000_000}],
+                    "streak": "连续3日净流入",
+                },
+            ],
+        )
+
+        self.assertIn('class="badge outflow">连续3日净流出', html)
+        self.assertIn('.badge.outflow{background:#e8f7ef;color:#168761}', html)
+        self.assertIn('class="badge inflow">连续3日净流入', html)
+
     def test_linux_uses_playwright_renderer(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
