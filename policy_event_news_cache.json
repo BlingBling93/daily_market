@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-18T22:02:34.588575+00:00",
+  "fetched_at": "2026-11-19T22:02:30.230356+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -457,6 +457,18 @@
       "stance": "待确认",
       "sources": [
         "https://www.federalreserve.gov/newsevents/speech/barr20261118a.htm"
+      ],
+      "method": "direct_fed_speech",
+      "source_tier": "official"
+    },
+    "2026-11-19|美联储讲话|Fed讲话：Jefferson, Monetary Policy amid Frequent and Complex Shocks": {
+      "fetched_at": "2026-11-19T22:02:30.229662+00:00",
+      "summary": "美联储官网讲稿：﻿ Speech by Vice Chair Jefferson on economic shocks - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use . gov website belongs to an official government organization in the United States.",
+      "conclusion": "基于美联储官网讲稿：已阅读正文但未形成明确方向，继续观察利率、VXN和权重股反应。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "待确认",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/jefferson20261119a.htm"
       ],
       "method": "direct_fed_speech",
       "source_tier": "official"
