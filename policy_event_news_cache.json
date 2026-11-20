@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-19T22:02:30.230356+00:00",
+  "fetched_at": "2026-11-20T22:02:30.982253+00:00",
   "timezone": "America/New_York",
   "entries": {
     "2026-07-29|FOMC|FOMC利率决议": {
@@ -469,6 +469,30 @@
       "stance": "待确认",
       "sources": [
         "https://www.federalreserve.gov/newsevents/speech/jefferson20261119a.htm"
+      ],
+      "method": "direct_fed_speech",
+      "source_tier": "official"
+    },
+    "2026-11-20|美联储讲话|Fed讲话：Cook, The U.S. Economy in Global Context": {
+      "fetched_at": "2026-11-20T22:02:30.761636+00:00",
+      "summary": "美联储官网讲稿：﻿ Speech by Governor Cook on the U. economy in global context - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use .",
+      "conclusion": "基于美联储官网讲稿：已阅读正文但未形成明确方向，继续观察利率、VXN和权重股反应。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "待确认",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/cook20261120a.htm"
+      ],
+      "method": "direct_fed_speech",
+      "source_tier": "official"
+    },
+    "2026-11-20|美联储讲话|Fed讲话：Waller, Opening Remarks": {
+      "fetched_at": "2026-11-20T22:02:30.981698+00:00",
+      "summary": "美联储官网讲稿：﻿ Welcoming remarks by Governor Waller at the 2026 National College Fed Challenge Finals - Federal Reserve Board Skip to main content An official website of the United States Government Here's how you know Official websites use . gov website belongs to an official government organization in the United States.",
+      "conclusion": "基于美联储官网讲稿：已阅读正文但未形成明确方向，继续观察利率、VXN和权重股反应。",
+      "market_impact": "官网讲稿未披露即时市场反应；再以QQQ、10年美债与VXN验证实际传导。",
+      "stance": "待确认",
+      "sources": [
+        "https://www.federalreserve.gov/newsevents/speech/waller20261120a.htm"
       ],
       "method": "direct_fed_speech",
       "source_tier": "official"
