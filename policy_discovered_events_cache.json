@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-20T22:00:42.426959+00:00",
+  "fetched_at": "2026-11-21T04:08:20.315108+00:00",
   "timezone": "America/New_York",
   "events": [
     {
@@ -143,6 +143,30 @@
       ]
     },
     {
+      "date": "2026-11-06",
+      "category": "科技监管",
+      "title": "China’s Proposed Biopharma And AI Technology Export Controls: Pre-Export Registration Already Ap",
+      "status": "watch",
+      "importance": 80,
+      "confidence": 57,
+      "market_channels": [
+        "监管风险",
+        "半导体",
+        "科技估值",
+        "AI"
+      ],
+      "summary": "Legal 500：China’s Proposed Biopharma And AI Technology Export Controls: Pre-Export Registration Already Ap；传导渠道：监管风险、半导体、科技估值、AI。",
+      "short_term": "非常规催化进入发酵期，短线观察QQQ、VXN、相关权重股和成交额是否确认风险偏好变化。",
+      "mid_term": "中期看事件是否改变资金流向、盈利预期、监管约束或指数权重预期。",
+      "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
+      "impact_days": 14,
+      "first_seen": "2026-11-21T04:08:19.113734+00:00",
+      "last_seen": "2026-11-21T04:08:19.113734+00:00",
+      "sources": [
+        "https://news.google.com/rss/articles/CBMi_wFBVV95cUxPUTFfdXRMbFhrQUh6WS1sNDhYWkJaYUhOWnlwNjg3MzhqbFE2R0NteEc5c3hBV0UzdExSRFdva0x3V0tTeDhhckg3ckdhWlFjVnBETEZaZ0RBNXB0WFZidGRySGI3VEZlMWhna1VYRmt1RHFFaFA2XzlxMmg1OVVTNFlPZThueVhnczNmdkk2YUowSUVZdlRJNHJLYmVmWnhvWFVLZkZMRlcyazE0dWNmYUFQcVpBaWZrV2w0VHprUnRTMm1rRnllbGJFMXBCU25EbWlBTGpCbHRCWHJPZFFqdFNjRU9PX0JGZEh2RjhVUVRPQzlzam1ZVm1QUjBwbHM?oc=5"
+      ]
+    },
+    {
       "date": "2026-11-10",
       "category": "IPO",
       "title": "Alibaba’s Chip Design Unit T-Head Files for Hong Kong IPO",
@@ -185,7 +209,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-11-12T22:00:38.629172+00:00",
-      "last_seen": "2026-11-20T22:00:40.113573+00:00",
+      "last_seen": "2026-11-21T04:08:17.818509+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMipgFBVV95cUxPaXVYYktrU1E1ZExhRHBxcFlqUHl0am5ZeTYxWklPNndUWTZFbks3QWk5dV9RdGV0azIxLWFkdUkwLWNIamZadjExeTBqOGlkRHRsTjdSWklPb010am5TZzJtS3F0U1ZEUDNWMVpOSWFNWGcwVmdIeVFTM0ZtVWhOTGVGYTAxajh5aDVsUnpIUWVVZ3l1XzlmbGNqbUlCMWxubzN5VUZn?oc=5"
       ]
@@ -208,7 +232,7 @@
       "long_term": "长期只有当事件改变科技股盈利中枢、监管框架或流动性环境时才调整核心配置。",
       "impact_days": 5,
       "first_seen": "2026-11-20T04:08:59.170847+00:00",
-      "last_seen": "2026-11-20T22:00:40.322959+00:00",
+      "last_seen": "2026-11-21T04:08:18.114902+00:00",
       "sources": [
         "https://news.google.com/rss/articles/CBMisAFBVV95cUxNSkp6T1NrMW9EeW52Ml8xb3ZWMkg2NFB3Qkp3Wk5xM1lCR3UxMHpjODVHQ2poUVRDN3Q4UWk1MV82SnJ0cWdrN083M1FyOF9icWo5alhKUWtHaDRUcHNvX3J0c0xfT0d0Q3V1eUcxVk53QW8yY2l3eWdIdV9FSWNiQVRoZzhycjJxTFlsQ1RoaUEyakgwNlBrYlBaVlBHTGtsaEQ0dTRjbklwX2FneThGUg?oc=5"
       ]
